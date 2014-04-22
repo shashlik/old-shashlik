@@ -1,0 +1,23 @@
+The buildsystem contained here is meant to be used to build a set of git repositories
+which are forks of their Android counterparts or the upstream versions themselves on
+a "normal" desktop-oriented Linux distribution.
+
+The shashlik repository must be in a directory alongside the following repositories:
+
+* shashlik/android-core
+* shashlik/android-libcore
+* shashlik/dalvik
+
+The paths in the CMakeLists.txt files all assume this relative positioning of
+repositories.
+
+To start the build, create a build directory (e.g. shashlik/build) and start cmake
+pointed to the top-level buildsyste directory (shashlik/buildsystem). This will
+create a series of subdirectories, one for each shared library and binary artifact
+required. They will be built in the order of dependencies, building up a working
+system one piece at a time.
+
+All the artifacts will be installed in a directory structure prepended with shashlik,
+i.e. shashlik/lib/, shashlik/bin, etc. This will be created beneath whatever install
+prefix is passed to cmake.
+
