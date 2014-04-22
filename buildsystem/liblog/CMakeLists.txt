@@ -12,18 +12,18 @@ set(log_SRCS
 )
 
 set(log_HEADERS
-    ${REPO_PATH}/include/logevent_tag_map.h
-    ${REPO_PATH}/include/logd.h
-    ${REPO_PATH}/include/logger.h
-    ${REPO_PATH}/include/log.h
-    ${REPO_PATH}/include/logprint.h
-    ${REPO_PATH}/include/uio.h
+    ${REPO_PATH}/include/log/event_tag_map.h
+    ${REPO_PATH}/include/log/logd.h
+    ${REPO_PATH}/include/log/logger.h
+    ${REPO_PATH}/include/log/log.h
+    ${REPO_PATH}/include/log/logprint.h
+    ${REPO_PATH}/include/log/uio.h
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH}/include)
 add_library(log SHARED ${log_SRCS})
-install(TARGETS log DESTINATION ${PROJ_PREFIX}/lib)
+install(TARGETS log DESTINATION lib)
 install(FILES
         ${log_HEADERS}
-        DESTINATION ${PROJ_PREFIX}/include/log)
+        DESTINATION include/log)
 

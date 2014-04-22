@@ -17,7 +17,3 @@ create a series of subdirectories, one for each shared library and binary artifa
 required. They will be built in the order of dependencies, building up a working
 system one piece at a time.
 
-All the artifacts will be installed in a directory structure prepended with shashlik,
-i.e. shashlik/lib/, shashlik/bin, etc. This will be created beneath whatever install
-prefix is passed to cmake.
-
