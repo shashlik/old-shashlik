@@ -1,0 +1,67 @@
+= libcutils
+
+Module: core
+
+== dependencies
+
+none
+
+= liblog
+
+Module: core
+
+== dependencies
+
+=== android
+* libcutils
+
+=== system integration points
+
+* properties.c -> sys/_system_properties.h
+    used to set system properties; very android system specific, can be stubbed out
+    removing this dependency on the android system<C-S-F5>
+
+= libutils
+
+Module: core
+
+== dependencies
+
+none
+
+== system integration points
+
+none
+
+
+= libziparchive
+
+Module: core
+
+== dependencies
+
+=== android
+* liblog
+* lubutils
+* libnativehelper -> can be removed as we can rely on TEMP_FAILURE_RETRY being in unistd.h
+
+== system integration points
+
+none
+
+
+= libdex
+
+Module: dalvik
+
+== dependencies
+
+=== system
+* zlib
+
+=== android
+* core/libziparchive
+* libnativehelper -> can be removed as we can rely on TEMP_FAILURE_RETRY being in unistd.h
+
+== system integration points
+
