@@ -2,7 +2,7 @@ project(cutils)
 
 #add_definitions(-DHAVE_POSIX_FILEMAP -DHAVE_OFF64_T -DHAVE_SYS_UIO_H -DHAVE_PTHREADS -DOS_PATH_SEPARATOR='/' -DANDROID_SMP=1)
 add_definitions(-D_GNU_SOURCE -DHAVE_LINUX_LOCAL_SOCKET_NAMESPACE -DHAVE_SYS_UIO_H -DHAVE_SYS_SOCKET_H -DHAVE_PTHREADS -DANDROID_SMP=1)
-set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../android-core)
+set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../android-core)
 
 set(cutils_SRCS
     ${REPO_PATH}/libcutils/android_reboot.c

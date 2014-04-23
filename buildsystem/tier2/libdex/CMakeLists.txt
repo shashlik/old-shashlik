@@ -1,7 +1,7 @@
 project(dex)
 
 #add_definitions(-DHAVE_SYS_UIO_H)
-set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../dalvik)
+set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../dalvik)
 
 set(dex_SRCS
     ${REPO_PATH}/libdex/CmdUtils.cpp

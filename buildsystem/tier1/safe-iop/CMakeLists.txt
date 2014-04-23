@@ -1,7 +1,7 @@
 project(safe-iop)
 
 add_definitions(-DHAVE_SYS_UIO_H)
-set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../safe-iop)
+set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../safe-iop)
 
 set(safe-iop_SRCS
     ${REPO_PATH}/src/safe_iop.c
