@@ -1,7 +1,7 @@
 project(vm)
 
 #add_definitions(-DHAVE_SYS_UIO_H)
-set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../vm)
+set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../dalvik)
 
 #set(vm_SRCS
 #    ${REPO_PATH}/vm/
