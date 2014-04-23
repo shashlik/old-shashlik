@@ -12,9 +12,16 @@ The shashlik repository must be in a directory alongside the following repositor
 The paths in the CMakeLists.txt files all assume this relative positioning of
 repositories.
 
-To start the build, create a build directory (e.g. shashlik/build) and start cmake
-pointed to the top-level buildsyste directory (shashlik/buildsystem). This will
-create a series of subdirectories, one for each shared library and binary artifact
-required. They will be built in the order of dependencies, building up a working
-system one piece at a time.
+To start the build, create a build directory (e.g. shashlik/build) that contains one
+subdirectory for each of the tierN directories in shashlik/buildsystem. Change into
+each of these tier directories in order (tier1, tier2, .. tierN) and start cmake
+pointed to the buildsystem directories of the same name.
+
+This will create a series of subdirectories, one for each shared library and
+binary artifact required. They will be built in the order of dependencies,
+building up a working system one piece at a time.
+
+All components in tier1 rely on only 'normal' Linux system libraries (libc, etc).
+Components in tier2 are libraries that rely on components in tier1, and tier3
+contains the various executables built on top of tier2/tier1 libraries.
 
