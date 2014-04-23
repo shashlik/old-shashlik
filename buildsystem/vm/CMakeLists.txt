@@ -8,8 +8,8 @@ set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../dalvik)
 #)
 
 set(vm_HEADERS
-    ${REPO_PATH}/include/vm/Common.h
-    ${REPO_PATH}/include/vm/DalvikVersion.h
+    ${REPO_PATH}/vm/Common.h
+    ${REPO_PATH}/vm/DalvikVersion.h
 )
 
 #include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH}/include)
