@@ -1,6 +1,7 @@
 project(dex)
 
-#add_definitions(-DHAVE_SYS_UIO_H)
+#add_definitions(-D_GNU_SOURCE -DHAVE_LINUX_LOCAL_SOCKET_NAMESPACE -DHAVE_SYS_UIO_H -DHAVE_SYS_SOCKET_H -DHAVE_PTHREADS -DANDROID_SMP=1)
+add_definitions(-DHAVE_SYS_UIO_H -DHAVE_OFF64_T)
 set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../dalvik)
 
 set(dex_SRCS
@@ -25,24 +26,24 @@ set(dex_SRCS
 )
 
 set(dex_HEADERS
-    ${REPO_PATH}/include/dex/CmdUtils.h
-    ${REPO_PATH}/include/dex/DexCatch.h
-    ${REPO_PATH}/include/dex/DexClass.h
-    ${REPO_PATH}/include/dex/DexDataMap.h
-    ${REPO_PATH}/include/dex/DexDebugInfo.h
-    ${REPO_PATH}/include/dex/DexFile.h
-    ${REPO_PATH}/include/dex/DexOpcodes.h
-    ${REPO_PATH}/include/dex/DexOptData.h
-    ${REPO_PATH}/include/dex/DexProto.h
-    ${REPO_PATH}/include/dex/DexUtf.h
-    ${REPO_PATH}/include/dex/InstrUtils.h
-    ${REPO_PATH}/include/dex/Leb128.h
-    ${REPO_PATH}/include/dex/OptInvocation.h
-    ${REPO_PATH}/include/dex/SysUtil.h
+    ${REPO_PATH}/libdex/CmdUtils.h
+    ${REPO_PATH}/libdex/DexCatch.h
+    ${REPO_PATH}/libdex/DexClass.h
+    ${REPO_PATH}/libdex/DexDataMap.h
+    ${REPO_PATH}/libdex/DexDebugInfo.h
+    ${REPO_PATH}/libdex/DexFile.h
+    ${REPO_PATH}/libdex/DexOpcodes.h
+    ${REPO_PATH}/libdex/DexOptData.h
+    ${REPO_PATH}/libdex/DexProto.h
+    ${REPO_PATH}/libdex/DexUtf.h
+    ${REPO_PATH}/libdex/InstrUtils.h
+    ${REPO_PATH}/libdex/Leb128.h
+    ${REPO_PATH}/libdex/OptInvocation.h
+    ${REPO_PATH}/libdex/SysUtil.h
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH})
-include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
+include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/safe-iop)
 add_library(dex SHARED ${dex_SRCS})
 install(TARGETS dex DESTINATION lib)
 install(FILES
