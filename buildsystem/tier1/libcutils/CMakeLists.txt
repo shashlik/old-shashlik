@@ -1,7 +1,7 @@
 project(cutils)
 
 #add_definitions(-DHAVE_POSIX_FILEMAP -DHAVE_OFF64_T -DHAVE_SYS_UIO_H -DHAVE_PTHREADS -DOS_PATH_SEPARATOR='/' -DANDROID_SMP=1)
-add_definitions(-D_GNU_SOURCE -DHAVE_LINUX_LOCAL_SOCKET_NAMESPACE -DHAVE_SYS_UIO_H -DHAVE_SYS_SOCKET_H -DHAVE_PTHREADS -DANDROID_SMP=1)
+add_definitions(-D_GNU_SOURCE -DHAVE_LINUX_LOCAL_SOCKET_NAMESPACE -DHAVE_SYS_UIO_H -DHAVE_SYS_SOCKET_H -DHAVE_PTHREADS -DANDROID_SMP=1 -DHAVE_SYSTEM_PROPERTY_SERVER)
 set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../android-core)
 
 set(cutils_SRCS
@@ -26,7 +26,7 @@ set(cutils_SRCS
     ${REPO_PATH}/libcutils/open_memstream.c
     #    ${REPO_PATH}/libcutils/partition_utils.c
     ${REPO_PATH}/libcutils/process_name.c
-    #    ${REPO_PATH}/libcutils/properties.c
+    ${REPO_PATH}/libcutils/properties.c
     ${REPO_PATH}/libcutils/qtaguid.c
     ${REPO_PATH}/libcutils/record_stream.c
     ${REPO_PATH}/libcutils/sched_policy.c
@@ -42,7 +42,7 @@ set(cutils_SRCS
     ${REPO_PATH}/libcutils/strdup8to16.c
     ${REPO_PATH}/libcutils/str_parms.c
     ${REPO_PATH}/libcutils/threads.c
-    #    ${REPO_PATH}/libcutils/trace.c
+    ${REPO_PATH}/libcutils/trace.c
     ${REPO_PATH}/libcutils/uevent.c
 )
 
@@ -75,14 +75,14 @@ set(cutils_HEADERS
     ${REPO_PATH}/include/cutils/open_memstream.h
     #    ${REPO_PATH}/include/cutils/partition_utils.h
     ${REPO_PATH}/include/cutils/process_name.h
-    #    ${REPO_PATH}/include/cutils/properties.h
+    ${REPO_PATH}/include/cutils/properties.h
     ${REPO_PATH}/include/cutils/qtaguid.h
     ${REPO_PATH}/include/cutils/record_stream.h
     ${REPO_PATH}/include/cutils/sched_policy.h
     ${REPO_PATH}/include/cutils/sockets.h
     ${REPO_PATH}/include/cutils/str_parms.h
     ${REPO_PATH}/include/cutils/threads.h
-    #    ${REPO_PATH}/include/cutils/trace.h
+    ${REPO_PATH}/include/cutils/trace.h
     ${REPO_PATH}/include/cutils/tztime.h
     ${REPO_PATH}/include/cutils/uevent.h
 )
@@ -93,4 +93,4 @@ install(TARGETS cutils DESTINATION lib)
 install(FILES
         ${cutils_HEADERS}
         DESTINATION include/cutils)
-
+install(FILES ${REPO_PATH}/include/sys/system_properties.h DESTINATION include/sys)
