@@ -12,6 +12,8 @@ The shashlik repository must be in a directory alongside the following repositor
     branch: shashlik-kitkat
 * safe-iop (http://code.google.com/p/safe-iop/)
     tag: http://safe-iop.googlecode.com/svn/tags/r0.3.1
+* libnativehelper (https://android.googlesource.com/platform/libnativehelper)
+    branch: kitkat-release
 
 The paths in the CMakeLists.txt files all assume this relative positioning of
 repositories.
