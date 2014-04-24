@@ -6,8 +6,8 @@ set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../android-core)
 
 set(cutils_SRCS
     ${REPO_PATH}/libcutils/android_reboot.c
-    #    ${REPO_PATH}/libcutils/ashmem-dev.c
-    #    ${REPO_PATH}/libcutils/ashmem-host.c
+    #${REPO_PATH}/libcutils/ashmem-dev.c
+    ${REPO_PATH}/libcutils/ashmem-host.c
     ${REPO_PATH}/libcutils/atomic.c
     ${REPO_PATH}/libcutils/config_utils.c
     ${REPO_PATH}/libcutils/cpu_info.c
@@ -49,7 +49,7 @@ set(cutils_SRCS
 set(cutils_HEADERS
     ${REPO_PATH}/include/cutils/android_reboot.h
     ${REPO_PATH}/include/cutils/aref.h
-    #    ${REPO_PATH}/include/cutils/ashmem.h
+    ${REPO_PATH}/include/cutils/ashmem.h
     ${REPO_PATH}/include/cutils/atomic-arm.h
     ${REPO_PATH}/include/cutils/atomic.h
     ${REPO_PATH}/include/cutils/atomic-inline.h
