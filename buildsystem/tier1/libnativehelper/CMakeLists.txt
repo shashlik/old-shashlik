@@ -1,17 +1,17 @@
-project(nativhelper)
+project(nativehelper)
 
 #add_definitions(-DHAVE_SYS_UIO_H)
 set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libnativehelper)
 set(INCS_PATH ${REPO_PATH}/include/nativehelper)
 
-set(nativhelper_SRCS
+set(nativehelper_SRCS
    ${REPO_PATH}/JniConstants.cpp
    ${REPO_PATH}/JNIHelp.cpp
    ${REPO_PATH}/JniInvocation.cpp
    ${REPO_PATH}/toStringArray.cpp
 )
 
-set(nativhelper_HEADERS
+set(nativehelper_HEADERS
    ${INCS_PATH}/JniConstants.h
    ${INCS_PATH}/jni.h
    ${INCS_PATH}/JNIHelp.h
@@ -29,9 +29,9 @@ set(nativhelper_HEADERS
 
 include_directories(${REPO_PATH} ${INCS_PATH})
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
-add_library(nativhelper SHARED ${nativhelper_SRCS})
-install(TARGETS nativhelper DESTINATION lib)
+add_library(nativehelper SHARED ${nativehelper_SRCS})
+install(TARGETS nativehelper DESTINATION lib)
 install(FILES
-        ${nativhelper_HEADERS}
-        DESTINATION include/nativhelper)
+        ${nativehelper_HEADERS}
+        DESTINATION include/nativehelper)
 
