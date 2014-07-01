@@ -1,0 +1,29 @@
+= dalvik
+
+Build order:
+
+0. libdalvik
+1. vm
+2. dexgen
+3. dexlist
+4. dexopt
+5. dexdump
+6. dx
+7. tools
+8. unit-tests
+
+== libdalvik
+
+=== Required
+* zlib (system)
+* vm (in dalvik source tree)
+* safe-iop
+    http://code.google.com/p/safe-iop/
+* ziparchive
+    core/libziparchive
+
+=== Removable
+* libnativehelper (JNIHelp.h)
+    needed for TEMP_FAILURE_RETRY not being in unistd; we are free to assume it isa
+
+=== Provides
