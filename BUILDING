@@ -155,8 +155,8 @@ will have build/tier1/ and build/tier2/.
 The sources must be built in the order indicated by the name and is done by
 cmake. So from the topdirectory of shashlik, do
 
-  (cd build/tier1; cmake ../../buildsystem/tier1)
-  (cd build/tier2; cmake ../../buildsystem/tier2)
+  (cd build/tier1; cmake ../../buildsystem/tier1 && make)
+  (cd build/tier2; cmake ../../buildsystem/tier2 && make)
   ...and so on
 
 This will create a series of subdirectories, one for each shared library and
