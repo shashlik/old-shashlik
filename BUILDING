@@ -1,0 +1,168 @@
+This file describes how to build the Shashlik android simulated environment.
+
+
+
+Getting the Sources
+===================
+
+Shashlik uses Dalvik, the Android runtime interpreter, to run the
+applications.  In addition to Dalvik itself we need to have some dependencies
+to be able to build it. Dalvik is normally built inside the full Android
+source tree and we want to minimize the dependency tree when building on a
+normal Linux system.
+
+Here is the list of sources that are necessary to build Shashlik. For each
+component below you should be able to just cut and paste the command lines
+into a shell.
+
+The source trees should be placed next to each other in a common subdirectory,
+e.g. $HOME/shashlik or something similar.  In the rest of this file we will
+assume that you are using this location.  If not, you will have to adjust the
+instructions below accordingly.,
+
+  cd
+  mkdir shashlik
+  cd shashlik
+
+Then proceed to download the git and svn repositories as follows.
+
+
+1. The 4 repositories from the Shashlik project on github.
+
+Shashlik has 3 repos from the Google Android source copied into Github. These
+3 repos are Dalvik, Android Core and Android Libcore. The changes in these
+repositories will be kept as small as possible so that it will be easier to
+upgrade to a later version later. The main code written for Shashlik is
+created in the 4th repository of the project named (surprise!) shaslik.
+
+The main page of the project is https://github.com/shashlik. Here you will
+find links to all 4 repositories. Since the shashlik repos are private you
+will need to give your username and password to clone them.
+
+  git clone https://github.com/shashlik/shashlik.git
+  git clone https://github.com/shashlik/dalvik.git
+  git clone https://github.com/shashlik/android-core.git
+  git clone https://github.com/shashlik/android-libcore.git
+
+
+2. safe-iop
+
+Safe IOP is also a Google library which is described like this on the project
+home page at https://code.google.com/p/safe-iop/
+
+    This library provides a collection of (macro-based) functions for
+    performing safe integer operations across platform and architecture with a
+    straightforward API.
+
+It is kept in subversion. To check it out, do the following:
+
+  svn checkout http://safe-iop.googlecode.com/svn/trunk/ safe-iop
+  cd safe-iop
+  svn switch http://safe-iop.googlecode.com/svn/tags/r0.3.1
+
+We will use a specific release, in this case 0.3.1, to get a stable platform.
+This is the reason for the svn switch.
+
+
+3. libnativehelper
+
+Libnativehalper is another library from Google which is necessary to build
+Dalvik. It contains support functions for Android's class libraries. This one
+is kept in git.
+
+  git clone https://android.googlesource.com/platform/libnativehelper
+
+FIXME: Which branch/tag do we use?
+
+
+4. bionic
+
+Bionic is a derivation of the BSD's standard C library code that was
+originally developed by Google for their Android[2] operating system
+(Wikipedia). It is a stripped-down version of libc that contains exactly what
+is needed on Android. It is necessary to build Dalvik, although there is a
+project to port Dalvik to GNU libc.
+
+There is a project called dvk (https://code.google.com/p/dvk/) whose goal is
+to port dalvik to other CPU architectures and away from needing bionic but we
+have not gone down that route.
+
+  git clone https://android.googlesource.com/platform/bionic
+
+
+Building the sources
+====================
+
+The goal of Shashlik is to create a stand-alone Android runtime
+environment. This basically means Dalvik with a number of support features
+such as emulated sensors and a screen.
+
+Dalvik itself needs a number of support classes and libraries from the Android
+sources. Unfortunately the dependencies themselves drag in more dependencies
+and so on until most of Android is present. It turns out that Dalvik itself
+does not use that many classes and functions in the dependency libraries so by
+selecting to build only those classes that are actually needed.
+
+
+NOTE: At the point of writing this, Dalvik is not yet building correctly so
+      the instructions below will be updated when we get more of it building
+      and working.
+
+
+In this description we assume that you have downloaded the sources above and
+that they are all in $HOME/shashlik. See also the comment about this topic
+above.
+
+At this time the instructions assume that you are building on a standard Linux
+desktop system with an installed software development kit. Refer to your
+distribution on how to install this. As far as we know there are no
+distribution specific problems or peculiarities.
+
+
+Branches
+--------
+
+We are trying to minimize the changes in each component as much as
+possible. However some changes are necessary and cannot be avoided. So for
+each dependency that does need to be changed, we have created a branch called
+shashlik-kitkat. 
+
+Some of the components have release tags that we are using so that we can have
+a stable build.  Here is a list of the branches and tags that we are using:
+
+* dalvik: 	      branch shashlik-kitkat
+* android-core:       branch shashlik-kitkat
+* android-libcore:    branch shashlik-kitkat
+
+* safe-iop: 	      tag http://safe-iop.googlecode.com/svn/tags/r0.3.1
+* libnativehelper:    branch kitkat-release
+
+The repo shashlik itself is the one where we try to put all of our changes so
+that should be on master branch unless you are working on some feature that is
+using its own branch.
+
+
+Building
+--------
+
+To build Shashlik you should create a separate build directory. This could for
+instance be shashlik/build/. 
+
+In this directory, create one subdirectory for each subdirectory of
+shashlik/buildsystem/. At the point of writing this is tier1 and tier2. So you
+will have build/tier1/ and build/tier2/. 
+
+The sources must be built in the order indicated by the name and is done by
+cmake. So from the topdirectory of shashlik, do
+
+  (cd build/tier1; cmake ../../buildsystem/tier1)
+  (cd build/tier2; cmake ../../buildsystem/tier2)
+  ...and so on
+
+This will create a series of subdirectories, one for each shared library and
+binary artifact required. They will be built in the order of dependencies,
+building up a working system one piece at a time.
+
+All components in tier1 rely on only 'normal' Linux system libraries (libc,
+etc).  Components in tier2 are libraries that rely on components in tier1, and
+tier3 contains the various executables built on top of tier2/tier1 libraries.
