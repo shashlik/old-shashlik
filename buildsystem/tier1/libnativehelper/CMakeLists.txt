@@ -1,6 +1,7 @@
 project(nativehelper)
 
 #add_definitions(-DHAVE_SYS_UIO_H)
+add_definitions(-fpermissive) # To allow cast from char* to int
 set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../libnativehelper)
 set(INCS_PATH ${REPO_PATH}/include/nativehelper)
 
@@ -28,6 +29,7 @@ set(nativehelper_HEADERS
 )
 
 include_directories(${REPO_PATH} ${INCS_PATH})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../../android-core/include) # for android/log.h
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
 add_library(nativehelper SHARED ${nativehelper_SRCS})
 install(TARGETS nativehelper DESTINATION lib)
