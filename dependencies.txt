@@ -2,7 +2,7 @@
 
 Build order:
 
-0. libdalvik
+0. libdex
 1. vm
 2. dexgen
 3. dexlist
