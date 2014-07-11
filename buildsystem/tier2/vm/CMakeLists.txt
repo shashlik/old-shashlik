@@ -165,7 +165,7 @@ set(vm_HEADERS
 include_directories(${REPO_PATH} ${MOD_PATH} ${LIBENC_PATH} ${CMAKE_INSTALL_PREFIX}/include/android-libcore ${CMAKE_INSTALL_PREFIX}/include/nativehelper)
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
 add_library(dvm SHARED ${vm_SRCS} ${assembler_SRCS})
-#install(TARGETS vm DESTINATION lib)
+install(TARGETS dvm DESTINATION lib)
 install(FILES
         ${vm_HEADERS}
         DESTINATION include/dex)
