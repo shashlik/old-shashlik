@@ -1,11 +1,11 @@
 project(libapk)
 
-# Copied from buildsystems/tier1/liblog/CMakeLists.txt.  Remove when this builds correctly
+# FIXME: Should these KF5 find_package() calls all be in the top CMakeFile.txt? 
+find_package(KF5Archive NO_MODULE)
+
+
 #add_definitions(-DHAVE_SYS_UIO_H)
-#set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../android-core)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    # Add more here, e.g. from the KArchive framework
-                    )
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(libapk_SRCS
     ApkFile.cpp
@@ -16,7 +16,10 @@ set(libapk_HEADERS
 )
 
 add_library(libapk SHARED ${libapk_SRCS})
+
+target_link_libraries(libapk KF5::Archive Qt5::Core)
+
 install(TARGETS libapk DESTINATION lib)
 install(FILES
-        ${log_HEADERS}
+        ${libapk_HEADERS}
         DESTINATION include/libapk)
