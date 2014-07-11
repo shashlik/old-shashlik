@@ -29,15 +29,21 @@ set(vm_SRCS
     ${MOD_PATH}/arch/x86/Hints386ABI.cpp
     ${MOD_PATH}/mterp/out/InterpC-x86.cpp
     ${MOD_PATH}/mterp/out/InterpAsm-x86.S
+    ${MOD_PATH}/mterp/out/InterpC-portable.cpp
+    ${MOD_PATH}/mterp/Mterp.cpp
+    ${MOD_PATH}/InlineNative.cpp
 
     ${MOD_PATH}/AllocTracker.cpp
+    ${MOD_PATH}/Atomic.cpp
     ${MOD_PATH}/AtomicCache.cpp
+    ${MOD_PATH}/BitVector.cpp
     ${MOD_PATH}/CheckJni.cpp
     ${MOD_PATH}/Ddm.cpp
     ${MOD_PATH}/Debugger.cpp
     ${MOD_PATH}/DvmDex.cpp
     ${MOD_PATH}/Exception.cpp
     ${MOD_PATH}/Hash.cpp
+    ${MOD_PATH}/IndirectRefTable.cpp
     ${MOD_PATH}/Init.cpp
     ${MOD_PATH}/InitRefs.cpp
     ${MOD_PATH}/Inlines.cpp
@@ -59,11 +65,14 @@ set(vm_SRCS
     ${MOD_PATH}/alloc/Alloc.cpp
     ${MOD_PATH}/alloc/CardTable.cpp
     ${MOD_PATH}/alloc/DlMalloc.cpp
+    ${MOD_PATH}/alloc/Heap.cpp
+    ${MOD_PATH}/alloc/HeapBitmap.cpp
     ${MOD_PATH}/alloc/HeapSource.cpp
     ${MOD_PATH}/alloc/HeapDebug.cpp
     ${MOD_PATH}/alloc/DdmHeap.cpp
     ${MOD_PATH}/alloc/Verify.cpp
     ${MOD_PATH}/alloc/Visit.cpp
+    ${MOD_PATH}/alloc/MarkSweep.cpp
     ${MOD_PATH}/analysis/CodeVerify.cpp
     ${MOD_PATH}/analysis/DexPrepare.cpp
     ${MOD_PATH}/analysis/DexVerify.cpp
@@ -101,6 +110,7 @@ set(vm_SRCS
     ${MOD_PATH}/hprof/HprofHeap.cpp
     ${MOD_PATH}/hprof/HprofOutput.cpp
     ${MOD_PATH}/hprof/HprofString.cpp
+    ${MOD_PATH}/interp/Interp.cpp
     ${MOD_PATH}/interp/Jit.cpp
     ${MOD_PATH}/interp/Stack.cpp
     ${MOD_PATH}/jdwp/ExpandBuf.cpp
