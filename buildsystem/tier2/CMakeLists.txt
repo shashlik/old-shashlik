@@ -11,6 +11,7 @@ add_subdirectory(vm)
 
 # c++ tools
 add_subdirectory(dexdump)
+add_subdirectory(dexlist)
 
 #java tools
 #add_subdirectory(dexgen)
