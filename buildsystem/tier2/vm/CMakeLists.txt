@@ -1,20 +1,9 @@
 project(vm)
 
-add_definitions(-DHAVE_SYS_UIO_H -DANDROID_SMP -DDVM_SHOW_EXCEPTION=1 -DWITH_JIT -DWITH_JIT_TUNING -DARCH_IA32 -DDVM_JMP_TABLE_MTERP=1 -DMTERP_STUB -DHAVE_BIG_ENDIAN -fpermissive -w -DARCH_VARIANT="x86")
+add_definitions(-DDVM_JMP_TABLE_MTERP -DDVM_NO_ASM_INTERP -DHAVE_SYS_UIO_H -DANDROID_SMP -DDVM_SHOW_EXCEPTION=1 -DWITH_JIT -DWITH_JIT_TUNING -DARCH_IA32 -DDVM_JMP_TABLE_MTERP=1 -DMTERP_STUB -DHAVE_BIG_ENDIAN -fpermissive -w -DARCH_VARIANT="x86")
 set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../dalvik)
 set(MOD_PATH ${REPO_PATH}/vm)
 set(LIBENC_PATH ${MOD_PATH}/compiler/codegen/x86/libenc)
-#     ${MOD_PATH}/Atomic.cpp.arm
-#     ${MOD_PATH}/BitVector.cpp.arm
-#     ${MOD_PATH}/IndirectRefTable.cpp.arm
-#     ${MOD_PATH}/InlineNative.cpp.arm
-#     ${MOD_PATH}/mterp/out/InterpC-portable.cpp.arm
-#     ${MOD_PATH}/alloc/MarkSweep.cpp.arm
-#     ${MOD_PATH}/alloc/HeapBitmap.cpp.arm
-#     ${MOD_PATH}/interp/Interp.cpp.arm
-#     ${MOD_PATH}/alloc/Heap.cpp.arm
-#     ${MOD_PATH}/mterp/Mterp.cpp.arm
-#     ${MOD_PATH}/test/AtomicTest.cpp.arm
 
 set(libenc_SRCS
     ${LIBENC_PATH}/dec_base.cpp
@@ -23,12 +12,17 @@ set(libenc_SRCS
     ${LIBENC_PATH}/enc_tabl.cpp
 )
 
+enable_language(ASM)
+set(assembler_SRCS
+   ${MOD_PATH}/mterp/out/InterpAsm-x86.S
+   ${MOD_PATH}/arch/x86/Call386ABI.S
+)
+set_property(SOURCE ${assembler_SRCS} PROPERTY LANGUAGE ASM)
+
 set(vm_SRCS
-    ${libenc_SRCS}
-    ${MOD_PATH}/arch/x86/Call386ABI.S
+   ${libenc_SRCS}
     ${MOD_PATH}/arch/x86/Hints386ABI.cpp
     ${MOD_PATH}/mterp/out/InterpC-x86.cpp
-    ${MOD_PATH}/mterp/out/InterpAsm-x86.S
     ${MOD_PATH}/mterp/out/InterpC-portable.cpp
     ${MOD_PATH}/mterp/Mterp.cpp
     ${MOD_PATH}/InlineNative.cpp
@@ -170,7 +164,7 @@ set(vm_HEADERS
 
 include_directories(${REPO_PATH} ${MOD_PATH} ${LIBENC_PATH} ${CMAKE_INSTALL_PREFIX}/include/android-libcore ${CMAKE_INSTALL_PREFIX}/include/nativehelper)
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
-add_library(dvm SHARED ${vm_SRCS})
+add_library(dvm SHARED ${vm_SRCS} ${assembler_SRCS})
 #install(TARGETS vm DESTINATION lib)
 install(FILES
         ${vm_HEADERS}
