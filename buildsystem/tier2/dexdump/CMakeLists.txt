@@ -12,4 +12,5 @@ include_directories(${REPO_PATH} ${MOD_PATH} ${CMAKE_INSTALL_PREFIX}/include/and
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
 add_executable(dexdump ${dexdump_SRCS})
 target_link_libraries(dexdump ${STANDARD_SYS_LIBS} libcorkscrew.so libdex.so libcutils.so liblog.so libnativehelper.so libnativhelper.so libsafe-iop.so  libutils.so)
+install(TARGETS dexdump DESTINATION bin)
 
