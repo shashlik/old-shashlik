@@ -1,8 +1,6 @@
 project(libapk)
 
-# FIXME: Should these KF5 find_package() calls all be in the top CMakeFile.txt? 
 find_package(KF5Archive NO_MODULE)
-
 
 #add_definitions(-DHAVE_SYS_UIO_H)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
