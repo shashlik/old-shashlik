@@ -54,6 +54,8 @@ bool ApkFile::writeApk(const QString &fileName,
     Q_UNUSED(fileName);
     Q_UNUSED(appIdentification);
     Q_UNUSED(metadata);
+
+    return false;
 }
 
 
