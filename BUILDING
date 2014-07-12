@@ -72,7 +72,7 @@ is kept in git.
 
   git clone https://android.googlesource.com/platform/libnativehelper
 
-FIXME: Which branch/tag do we use?
+This repository is used without modification, and the master branch is tracked.
 
 
 4. bionic
