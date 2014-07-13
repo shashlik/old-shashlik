@@ -11,6 +11,6 @@ set(gdbjithelper_SRCS
 include_directories(${REPO_PATH} ${MOD_PATH} ${CMAKE_INSTALL_PREFIX}/include/android-libcore ${CMAKE_INSTALL_PREFIX}/include/nativehelper)
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
 add_executable(gdbjithelper ${gdbjithelper_SRCS})
-target_link_libraries(gdbjithelper ${STANDARD_SYS_LIBS} libcorkscrew.so libdex.so libcutils.so liblog.so libnativehelper.so libnativhelper.so libsafe-iop.so  libutils.so)
+target_link_libraries(gdbjithelper ${STANDARD_SYS_LIBS} libcorkscrew.so libdex.so libcutils.so liblog.so libnativehelper.so libnativehelper.so libsafe-iop.so  libutils.so)
 install(TARGETS gdbjithelper DESTINATION bin)
 

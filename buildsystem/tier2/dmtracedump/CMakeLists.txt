@@ -11,13 +11,13 @@ set(dmtracedump_SRCS
    ${MOD_PATH}/TraceDump.c
 )
 add_executable(dmtracedump ${dmtracedump_SRCS})
-target_link_libraries(dmtracedump ${STANDARD_SYS_LIBS} libcorkscrew.so libdex.so libcutils.so liblog.so libnativehelper.so libnativhelper.so libsafe-iop.so libutils.so dvm)
+target_link_libraries(dmtracedump ${STANDARD_SYS_LIBS} libcorkscrew.so libdex.so libcutils.so liblog.so libnativehelper.so libnativehelper.so libsafe-iop.so libutils.so dvm)
 install(TARGETS dmtracedump DESTINATION bin)
 
 set(create_test_dmtrace_SRCS
    ${MOD_PATH}/CreateTestTrace.c
 )
 add_executable(create_test_dmtrace ${create_test_dmtrace_SRCS})
-target_link_libraries(create_test_dmtrace ${STANDARD_SYS_LIBS} libcorkscrew.so libdex.so libcutils.so liblog.so libnativehelper.so libnativhelper.so libsafe-iop.so libutils.so dvm)
+target_link_libraries(create_test_dmtrace ${STANDARD_SYS_LIBS} libcorkscrew.so libdex.so libcutils.so liblog.so libnativehelper.so libnativehelper.so libsafe-iop.so libutils.so dvm)
 install(TARGETS create_test_dmtrace DESTINATION bin)
 
