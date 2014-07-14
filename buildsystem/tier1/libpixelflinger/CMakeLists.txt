@@ -1,6 +1,9 @@
 project(pixelflinger)
 
-add_definitions(-D_GNU_SOURCE -DCORKSCREW_HAVE_ARCH -DHAVE_SYS_UIO_H -std=c99)
+#add_definitions(-D_GNU_SOURCE -DCORKSCREW_HAVE_ARCH -DHAVE_SYS_UIO_H -std=c99)
+add_definitions(-D_GNU_SOURCE -DCORKSCREW_HAVE_ARCH -DHAVE_SYS_UIO_H
+                -fpermissive  #for pointer to int conversion in printf on x86_64
+		)
 set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../android-core)
 set(MOD_PATH ${REPO_PATH}/libpixelflinger)
 set(INC_PATH ${REPO_PATH}/include/pixelflinger)
