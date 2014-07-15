@@ -95,4 +95,4 @@ Our workflow can be summarized in a few simple points:
    This way, the branch will be merged as one commit and we will not have
    unbuildable nodes along the master branch.
 
-Release workflow TBD.
+Workflow specific to releases is still TBD.
