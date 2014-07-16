@@ -6,26 +6,32 @@ Getting the Sources
 ===================
 
 Shashlik uses Dalvik, the Android runtime interpreter, to run the
-applications.  In addition to Dalvik itself we need to have some dependencies
-to be able to build it. Dalvik is normally built inside the full Android
-source tree and we want to minimize the dependency tree when building on a
-normal Linux system.
+applications.  In addition to Dalvik itself we need to have a number of
+dependencies from the Google Android source tree to be able to build
+it. 
 
-Here is the list of sources that are necessary to build Shashlik. For each
-component below you should be able to just cut and paste the command lines
-into a shell.
+Dalvik is normally built inside the full Android source tree and we want to
+minimize the dependency tree when building on a normal Linux system. Here is
+the list of sources that are necessary to build Shashlik. For each component
+below you should be able to just cut and paste the command lines into a shell.
 
 The source trees should be placed next to each other in a common subdirectory,
-e.g. $HOME/shashlik or something similar.  In the rest of this file we will
+e.g. $HOME/SHASHLIK or something similar.  In the rest of this file we will
 assume that you are using this location.  If not, you will have to adjust the
 instructions below accordingly.,
 
   cd
-  mkdir shashlik
-  cd shashlik
+  mkdir SHASHLIK
+  cd SHASHLIK
 
-Then proceed to download the git and svn repositories as follows.
+Create the main directory for the sources. We recommend using a separate
+source tree because you will also have the install directory at this level
+(see below under Building the sources).
 
+  mkdir src
+  cd src
+
+Then proceed to download the git and svn repositories as follows.  
 
 1. The 4 repositories from the Shashlik project on github.
 
@@ -90,6 +96,15 @@ have not gone down that route.
   git clone https://android.googlesource.com/platform/bionic
 
 
+5. skia
+
+Skia is a 2D graphics library used in Chromium.  The project page can be found
+at http://code.google.com/p/skia/ .
+
+  git clone https://skia.googlesource.com/skia.git
+
+
+
 Building the sources
 ====================
 
@@ -145,19 +160,45 @@ using its own branch.
 Building
 --------
 
-To build Shashlik you should create a separate build directory. This could for
-instance be shashlik/build/. 
+Building Shashlik is slightly more complicated than building a normal source
+tree. This is because we are taking sources from the Android source tree and
+build them in a way that they are not designed for.
 
-In this directory, create one subdirectory for each subdirectory of
+What you need to do is to first build _and_ _install_ the libraries that can
+be built by themselves.  We call these tier1 libraries. Then you will use
+these installed tier1 libraries to build the ones that depend on them, which
+we call tier2 libraries.  After these tier1 and 2 libraries are built, you can
+build the actual tools and applications that make up the Shashlik project.
+
+Because of the above, you need to create a separate install directory.  We
+recommend SHASHLIK/install.  Note that the install directory should be
+_outside_ the shashlik repo source tree but under the SHASHLIK top directory.
+
+  mkdir install
+
+We recommend that you create 2 directories: one for the dependencies from the
+Android sources as described above and one for the code that actually resides
+in the shashlik repo. Here we call them builddeps and build respectively.  So
+in the top directory of the SHASHLIK project tree, do:
+
+  cd shashlik
+  mkdir builddeps
+  mkdir build
+
+In the builddeps directory, create one subdirectory for each subdirectory of
 shashlik/buildsystem/. At the point of writing this is tier1 and tier2. So you
-will have build/tier1/ and build/tier2/. 
+will have builddeps/tier1/ and builddeps/tier2/. 
 
-The sources must be built in the order indicated by the name and is done by
-cmake. So from the topdirectory of shashlik, do
+  mkdir -p builddeps/tier1
+  mkdir -p builddeps/tier2
 
-  (cd build/tier1; cmake ../../buildsystem/tier1 && make)
-  (cd build/tier2; cmake ../../buildsystem/tier2 && make)
-  ...and so on
+The sources must be built and installed in the order indicated by the name and
+is done by cmake. So from the topdirectory of shashlik, do
+
+  (cd builddeps/tier1; cmake ../../buildsystem/tier1 -DCMAKE_INSTALL_PREFIX=$HOME/SHASHLIK/install && make)
+  (cd builddeps/tier2; cmake ../../buildsystem/tier2 -DCMAKE_INSTALL_PREFIX=$HOME/SHASHLIK/install && make)
+
+...and so on if there are more than 2 subdirectories of ../../buildsystem.
 
 This will create a series of subdirectories, one for each shared library and
 binary artifact required. They will be built in the order of dependencies,
