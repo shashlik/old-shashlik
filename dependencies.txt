@@ -72,3 +72,15 @@ PROPOSAL:
     * start adding in the implementations one by one, leaving out those with deps
     * document all the deps the non-buildable implementations have and decide from
       there on a case-by-case basis: reimplement or port
+
+Method for adding the stubs: list all of the android_*.cpp stub files and sort them
+one-by-one into four categories:
+
+1. not used
+2. builds with no work
+3. builds with dependencies
+4. needs reimplementation
+
+Files in (1) can be dropped. Files in (2) can be addded immeidately. Files in (3)
+need deps handled first. Files in (4) need devel work to be scheduled.
+
