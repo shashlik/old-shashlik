@@ -2,7 +2,7 @@
 
 Build order:
 
-0. libdalvik
+0. libdex
 1. vm
 2. dexgen
 3. dexlist
@@ -27,3 +27,60 @@ Build order:
     needed for TEMP_FAILURE_RETRY not being in unistd; we are free to assume it isa
 
 === Provides
+
+
+== JNI
+
+For launcher, we want to base it off of:
+
+    frameworks-base/cmds/app_process
+    frameworks-base/core/jni
+
+In JNI, we also have all the native OS hooks.  The hooks are implemented in 
+core/jni/android_*cpp files, one per hook (e.g. database, camera, opengl buffers, ..)
+
+Many of these hooks have no deps or deps we already build (e.g. android_util_FloatMath.cpp
+android_os_Trace.cpp, ..). Some, however, use the Android native libraries. For instance,
+android_view_GLES20Canvas.cpp uses libgui and android_view_GraphicBuffer.cpp uses libui.
+
+Others use platform-independent libraries, such as skia in android_view_GLES20Canvas.cpp.
+skia itself is a small monster to build, but is portable.
+
+RESEARCH: which of the core/jni/android_* files can be used as-is with no porting
+RESEARCh: of the remaining, which would need replacing and which can be ported with their
+          android dependencies
+
+An example is the use of libui from frameworks-native in android_view_Surface.cpp.
+Can this be ported?
+
+frameworks-native/lib/ui:
+    * libcutils (done)
+    * libhardware
+        * uses system/window.h and system/gralloc.h which are just the API definition
+          RESEARCH: where the implementations actually are
+          POSSIBILITY: frameworks-native/opengl
+    * libsync
+        * Android kernel (!!) -> can't easily be implemented
+    * libutils (done)
+    * liblog (done)
+
+libgui is another commonly used library in the graphical JNI hooks.
+
+PROPOSAL:
+    * build the launcher based on app_process and jni/AndroidRuntime.cpp with no
+      stubs implemented
+    * start adding in the implementations one by one, leaving out those with deps
+    * document all the deps the non-buildable implementations have and decide from
+      there on a case-by-case basis: reimplement or port
+
+Method for adding the stubs: list all of the android_*.cpp stub files and sort them
+one-by-one into four categories:
+
+1. not used
+2. builds with no work
+3. builds with dependencies
+4. needs reimplementation
+
+Files in (1) can be dropped. Files in (2) can be addded immeidately. Files in (3)
+need deps handled first. Files in (4) need devel work to be scheduled.
+

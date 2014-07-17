@@ -1,0 +1,98 @@
+			  Shashlik project standards
+
+
+This file describes the coding and workflow standards of the Shashlik
+project. We want to keep formality at a minimum but we still need some common
+standards to keep things from coming into chaos
+
+
+General
+-------
+
+The project aims at creating a runtime environment for Android applications
+packaged into APK packages.  Our first target environment is going to be
+standard desktop Linux, both 32 and 64 bit systems. To do this, we are using
+the following resources:
+
+ 1. System libraries. These should be used as much as possible.
+
+ 2. Imported sources from the Android source tree. These will comprise tools
+    such as the Dalvik java runtime and libraries such as libdex to handle dex
+    files.
+
+ 3. Code that we write ourselves. This should only be done if absolutely
+    necessary. 
+
+The organization of the project is that we use as few Android repos as
+possible and use as few libraries from the ones that we do choose as
+possible. We also try to use them as much as is and only make minimal changes
+to them.
+
+There are a number of repos from Android that we use totally as is. Then there
+are a few repos that we import into this project and actually have to make
+changes to. At the time of writing, these repos are:
+ - dalvik
+ - android-libcore
+ - android-core
+
+These repos have been imported into github and should be checked out from
+github together with the shashlik repo. 
+
+For all unchanged repos we use specific tags. For all repos with changes (the
+3 above) we create a branch with the name pattern shashlik-<androidrelease>
+where <androidrelease> is the name of a specific Android release that we base
+our runtime environment on. At the time of the writing, this is
+shashlik-kitkat.
+
+For building the sources, we use CMake and it's all done inside shashlik
+itself. For details about how to build the sources, see the instructions in
+the file BUILDING.
+
+
+Coding standards
+----------------
+
+For code that we write ourselves we are generally following two well
+established standards:
+
+ * The kdelibs coding standards for C++:
+   https://techbase.kde.org/Policies/Kdelibs_Coding_Style 
+
+ * The plasma coding standards for QML:
+   https://community.kde.org/Plasma/QMLStyle
+
+When it comes to filenames and classes, the filenames should be the same as
+the class name.  So the class FooBar should be in FooBar.h and FooBar.cpp (and
+possibly also FooBar_p.h for the private class if there is one and it's used
+by other classes too).  Only have one class per file.
+
+Dialogs should be constructed using Qt Designer.
+
+Spacing is good. Keep the sources light and not too condensed
+(From the Krita coding standards).
+
+
+Workflow
+--------
+
+Our workflow can be summarized in a few simple points:
+
+ * New features and other significant changes should be developed in a git
+   branch. The name of the branch should follow the naming scheme
+   part-feature-developer (taken from the Calligra standards). Example:
+   tools-launcher-ingwa for a branch that implements or enhances the launcher
+   in the tools part of the sources (at the time of the writing there is no
+   such area, but it illustrates the point).
+
+ * Before merging into master all branches should be reviewed. The same goes
+   for smaller changes if they are deep in the libraries.
+
+ * Branches should be merged with the following command line:
+
+     git checkout master
+     git merge --squash <branchname>
+
+   This way, the branch will be merged as one commit and we will not have
+   unbuildable nodes along the master branch.
+
+Workflow specific to releases is still TBD.

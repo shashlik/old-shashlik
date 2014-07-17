@@ -1,20 +1,18 @@
 project(vm)
 
-add_definitions(-DHAVE_SYS_UIO_H -DANDROID_SMP -DDVM_SHOW_EXCEPTION=1 -DWITH_JIT -DWITH_JIT_TUNING -DARCH_IA32 -DDVM_JMP_TABLE_MTERP=1 -DMTERP_STUB -DHAVE_BIG_ENDIAN -fpermissive -w -DARCH_VARIANT="x86")
+add_definitions(-DDVM_JMP_TABLE_MTERP -DDVM_NO_ASM_INTERP -DHAVE_SYS_UIO_H -DANDROID_SMP
+                -DDVM_SHOW_EXCEPTION=1 -DDVM_JMP_TABLE_MTERP=1 -DMTERP_STUB -DHAVE_BIG_ENDIAN
+                -fpermissive -w)
+if (JIT_VM)
+   add_definitions(-DWITH_JIT -DJIT_VM_TUNING -DARCH_IA32 -DARCH_VARIANT="x86")
+else (JIT_VM)
+    add_definitions(-DdvmAsmInstructionStart=0 -DdvmAsmInstructionEnd=0
+                    -DdvmAsmSisterStart=0 -DdvmAsmSisterEnd=0 -DDVM_NO_ASM_INTERP=1)
+endif (JIT_VM)
+
 set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../dalvik)
 set(MOD_PATH ${REPO_PATH}/vm)
 set(LIBENC_PATH ${MOD_PATH}/compiler/codegen/x86/libenc)
-#     ${MOD_PATH}/Atomic.cpp.arm
-#     ${MOD_PATH}/BitVector.cpp.arm
-#     ${MOD_PATH}/IndirectRefTable.cpp.arm
-#     ${MOD_PATH}/InlineNative.cpp.arm
-#     ${MOD_PATH}/mterp/out/InterpC-portable.cpp.arm
-#     ${MOD_PATH}/alloc/MarkSweep.cpp.arm
-#     ${MOD_PATH}/alloc/HeapBitmap.cpp.arm
-#     ${MOD_PATH}/interp/Interp.cpp.arm
-#     ${MOD_PATH}/alloc/Heap.cpp.arm
-#     ${MOD_PATH}/mterp/Mterp.cpp.arm
-#     ${MOD_PATH}/test/AtomicTest.cpp.arm
 
 set(libenc_SRCS
     ${LIBENC_PATH}/dec_base.cpp
@@ -23,21 +21,67 @@ set(libenc_SRCS
     ${LIBENC_PATH}/enc_tabl.cpp
 )
 
-set(vm_SRCS
-    ${libenc_SRCS}
-    ${MOD_PATH}/arch/x86/Call386ABI.S
-    ${MOD_PATH}/arch/x86/Hints386ABI.cpp
-    ${MOD_PATH}/mterp/out/InterpC-x86.cpp
-    ${MOD_PATH}/mterp/out/InterpAsm-x86.S
+if (JIT_VM)
+    enable_language(ASM)
+    set(assembler_SRCS
+        ${MOD_PATH}/mterp/out/InterpAsm-x86.S
+        ${MOD_PATH}/arch/x86/Call386ABI.S
+    )
+    set_property(SOURCE ${assembler_SRCS} PROPERTY LANGUAGE ASM)
 
+    set(vm_compiler_SRCS
+        ${MOD_PATH}/arch/x86/Hints386ABI.cpp
+        ${MOD_PATH}/mterp/out/InterpC-x86.cpp
+        ${MOD_PATH}/compiler/codegen/x86/LowerAlu.cpp
+        ${MOD_PATH}/compiler/codegen/x86/LowerConst.cpp
+        ${MOD_PATH}/compiler/codegen/x86/LowerMove.cpp
+        ${MOD_PATH}/compiler/codegen/x86/Lower.cpp
+        ${MOD_PATH}/compiler/codegen/x86/LowerHelper.cpp
+        ${MOD_PATH}/compiler/codegen/x86/LowerJump.cpp
+        ${MOD_PATH}/compiler/codegen/x86/LowerObject.cpp
+        ${MOD_PATH}/compiler/codegen/x86/AnalysisO1.cpp
+        ${MOD_PATH}/compiler/codegen/x86/BytecodeVisitor.cpp
+        ${MOD_PATH}/compiler/codegen/x86/NcgAot.cpp
+        ${MOD_PATH}/compiler/codegen/x86/CodegenInterface.cpp
+        ${MOD_PATH}/compiler/codegen/x86/LowerInvoke.cpp
+        ${MOD_PATH}/compiler/codegen/x86/LowerReturn.cpp
+        ${MOD_PATH}/compiler/codegen/x86/NcgHelper.cpp
+        ${MOD_PATH}/compiler/codegen/x86/LowerGetPut.cpp
+        ${MOD_PATH}/compiler/Compiler.cpp
+        ${MOD_PATH}/compiler/Frontend.cpp
+        ${MOD_PATH}/compiler/Utility.cpp
+        ${MOD_PATH}/compiler/InlineTransformation.cpp
+        ${MOD_PATH}/compiler/IntermediateRep.cpp
+        ${MOD_PATH}/compiler/Dataflow.cpp
+        ${MOD_PATH}/compiler/SSATransformation.cpp
+        ${MOD_PATH}/compiler/Loop.cpp
+        ${MOD_PATH}/compiler/Ralloc.cpp
+        ${MOD_PATH}/interp/Jit.cpp
+     )
+else (JIT_VM)
+    set(vm_compiler_SRCS
+        ${MOD_PATH}/arch/generic/Call.cpp
+        ${MOD_PATH}/arch/generic/Hints.cpp
+        ${MOD_PATH}/mterp/out/InterpC-allstubs.cpp)
+endif (JIT_VM)
+
+set(vm_SRCS
+   ${libenc_SRCS}
+   ${vm_compiler_SRCS}
+    ${MOD_PATH}/mterp/out/InterpC-portable.cpp
+    ${MOD_PATH}/mterp/Mterp.cpp
+    ${MOD_PATH}/InlineNative.cpp
     ${MOD_PATH}/AllocTracker.cpp
+    ${MOD_PATH}/Atomic.cpp
     ${MOD_PATH}/AtomicCache.cpp
+    ${MOD_PATH}/BitVector.cpp
     ${MOD_PATH}/CheckJni.cpp
     ${MOD_PATH}/Ddm.cpp
     ${MOD_PATH}/Debugger.cpp
     ${MOD_PATH}/DvmDex.cpp
     ${MOD_PATH}/Exception.cpp
     ${MOD_PATH}/Hash.cpp
+    ${MOD_PATH}/IndirectRefTable.cpp
     ${MOD_PATH}/Init.cpp
     ${MOD_PATH}/InitRefs.cpp
     ${MOD_PATH}/Inlines.cpp
@@ -59,11 +103,14 @@ set(vm_SRCS
     ${MOD_PATH}/alloc/Alloc.cpp
     ${MOD_PATH}/alloc/CardTable.cpp
     ${MOD_PATH}/alloc/DlMalloc.cpp
+    ${MOD_PATH}/alloc/Heap.cpp
+    ${MOD_PATH}/alloc/HeapBitmap.cpp
     ${MOD_PATH}/alloc/HeapSource.cpp
     ${MOD_PATH}/alloc/HeapDebug.cpp
     ${MOD_PATH}/alloc/DdmHeap.cpp
     ${MOD_PATH}/alloc/Verify.cpp
     ${MOD_PATH}/alloc/Visit.cpp
+    ${MOD_PATH}/alloc/MarkSweep.cpp
     ${MOD_PATH}/analysis/CodeVerify.cpp
     ${MOD_PATH}/analysis/DexPrepare.cpp
     ${MOD_PATH}/analysis/DexVerify.cpp
@@ -72,36 +119,12 @@ set(vm_SRCS
     ${MOD_PATH}/analysis/RegisterMap.cpp
     ${MOD_PATH}/analysis/VerifySubs.cpp
     ${MOD_PATH}/analysis/VfyBasicBlock.cpp
-    ${MOD_PATH}/compiler/codegen/x86/LowerAlu.cpp
-    ${MOD_PATH}/compiler/codegen/x86/LowerConst.cpp
-    ${MOD_PATH}/compiler/codegen/x86/LowerMove.cpp
-    ${MOD_PATH}/compiler/codegen/x86/Lower.cpp
-    ${MOD_PATH}/compiler/codegen/x86/LowerHelper.cpp
-    ${MOD_PATH}/compiler/codegen/x86/LowerJump.cpp
-    ${MOD_PATH}/compiler/codegen/x86/LowerObject.cpp
-    ${MOD_PATH}/compiler/codegen/x86/AnalysisO1.cpp
-    ${MOD_PATH}/compiler/codegen/x86/BytecodeVisitor.cpp
-    ${MOD_PATH}/compiler/codegen/x86/NcgAot.cpp
-    ${MOD_PATH}/compiler/codegen/x86/CodegenInterface.cpp
-    ${MOD_PATH}/compiler/codegen/x86/LowerInvoke.cpp
-    ${MOD_PATH}/compiler/codegen/x86/LowerReturn.cpp
-    ${MOD_PATH}/compiler/codegen/x86/NcgHelper.cpp
-    ${MOD_PATH}/compiler/codegen/x86/LowerGetPut.cpp
-    ${MOD_PATH}/compiler/Compiler.cpp
-    ${MOD_PATH}/compiler/Frontend.cpp
-    ${MOD_PATH}/compiler/Utility.cpp
-    ${MOD_PATH}/compiler/InlineTransformation.cpp
-    ${MOD_PATH}/compiler/IntermediateRep.cpp
-    ${MOD_PATH}/compiler/Dataflow.cpp
-    ${MOD_PATH}/compiler/SSATransformation.cpp
-    ${MOD_PATH}/compiler/Loop.cpp
-    ${MOD_PATH}/compiler/Ralloc.cpp
     ${MOD_PATH}/hprof/Hprof.cpp
     ${MOD_PATH}/hprof/HprofClass.cpp
     ${MOD_PATH}/hprof/HprofHeap.cpp
     ${MOD_PATH}/hprof/HprofOutput.cpp
     ${MOD_PATH}/hprof/HprofString.cpp
-    ${MOD_PATH}/interp/Jit.cpp
+    ${MOD_PATH}/interp/Interp.cpp
     ${MOD_PATH}/interp/Stack.cpp
     ${MOD_PATH}/jdwp/ExpandBuf.cpp
     ${MOD_PATH}/jdwp/JdwpAdb.cpp
@@ -160,8 +183,8 @@ set(vm_HEADERS
 
 include_directories(${REPO_PATH} ${MOD_PATH} ${LIBENC_PATH} ${CMAKE_INSTALL_PREFIX}/include/android-libcore ${CMAKE_INSTALL_PREFIX}/include/nativehelper)
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
-add_library(dvm SHARED ${vm_SRCS})
-#install(TARGETS vm DESTINATION lib)
+add_library(dvm SHARED ${vm_SRCS} ${assembler_SRCS})
+install(TARGETS dvm DESTINATION lib)
 install(FILES
         ${vm_HEADERS}
         DESTINATION include/dex)
