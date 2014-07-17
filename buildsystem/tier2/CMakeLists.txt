@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 
-link_directories(${CMAKE_INSTALL_PREFIX}/lib/)
+link_directories(${CMAKE_CURRENT_BINARY_DIR}/libdex/
+                 ${CMAKE_INSTALL_PREFIX}/lib/
+ 		 )
 set(STANDARD_SYS_LIBS dl pthread z resolv ffi)
+
+
 set(JIT_VM false)
 
 # vm support libs
