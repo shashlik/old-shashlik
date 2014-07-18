@@ -195,8 +195,8 @@ will have builddeps/tier1/ and builddeps/tier2/.
 The sources must be built and installed in the order indicated by the name and
 is done by cmake. So from the topdirectory of shashlik, do
 
-  (cd builddeps/tier1; cmake ../../buildsystem/tier1 -DCMAKE_INSTALL_PREFIX=$HOME/SHASHLIK/install && make)
-  (cd builddeps/tier2; cmake ../../buildsystem/tier2 -DCMAKE_INSTALL_PREFIX=$HOME/SHASHLIK/install && make)
+  (cd builddeps/tier1; cmake ../../buildsystem/tier1 -DCMAKE_INSTALL_PREFIX=$HOME/SHASHLIK/install && make install)
+  (cd builddeps/tier2; cmake ../../buildsystem/tier2 -DCMAKE_INSTALL_PREFIX=$HOME/SHASHLIK/install && make install)
 
 ...and so on if there are more than 2 subdirectories of ../../buildsystem.
 
