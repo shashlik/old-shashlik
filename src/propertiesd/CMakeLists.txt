@@ -4,7 +4,7 @@ find_package(Qt5Network ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
 
 add_definitions(-DHAVE_SYSTEM_PROPERTY_SERVER)
 
-include_directories(${SHAHSKLIK_INSTALL_PREFIX}/include)
+include_directories(${SHASHLIK_INSTALL_PREFIX}/include)
 
 set(
    kded_shashlik_propertiesd_SRCS
