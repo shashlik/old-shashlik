@@ -25,13 +25,14 @@ instructions below accordingly.,
   cd SHASHLIK
 
 Create the main directory for the sources. We recommend using a separate
-source tree because you will also have the install directory at this level
-(see below under Building the sources).
+directory for the source tree because you will also have the install directory
+at this level (see below under Building the sources).
 
   mkdir src
   cd src
 
 Then proceed to download the git and svn repositories as follows.  
+
 
 1. The 4 repositories from the Shashlik project on github.
 
@@ -51,7 +52,15 @@ will need to give your username and password to clone them.
   git clone https://github.com/shashlik/android-libcore.git
 
 
-2. safe-iop
+2. framework-base
+
+We need some classes from the general Android source code. However these are
+not changed in any way so we have not imported them into github.
+
+  git clone https://android.googlesource.com/platform/platform/frameworks/base
+
+
+3. safe-iop
 
 Safe IOP is also a Google library which is described like this on the project
 home page at https://code.google.com/p/safe-iop/
@@ -70,7 +79,7 @@ We will use a specific release, in this case 0.3.1, to get a stable platform.
 This is the reason for the svn switch.
 
 
-3. libnativehelper
+4. libnativehelper
 
 Libnativehalper is another library from Google which is necessary to build
 Dalvik. It contains support functions for Android's class libraries. This one
@@ -81,7 +90,7 @@ is kept in git.
 FIXME: Which branch/tag do we use?
 
 
-4. bionic
+5. bionic
 
 Bionic is a derivation of the BSD's standard C library code that was
 originally developed by Google for their Android[2] operating system
