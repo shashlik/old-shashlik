@@ -14,13 +14,17 @@
 //#include <android_runtime/AndroidRuntime.h>
 //#include <sys/personality.h>
 
+#include "runtime/ShashlikRuntime.h"
+
 
 namespace shashlik {
 
 class JNIEnv;
 
 
-class AppRuntime // : public AndroidRuntime
+using namespace android;
+
+class AppRuntime : public ShashlikRuntime
 {
 public:
     AppRuntime();
