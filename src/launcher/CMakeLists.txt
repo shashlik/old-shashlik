@@ -37,7 +37,7 @@ set_target_properties(shashlik_launcher PROPERTIES
     OUTPUT_NAME shashlik-launcher
 )
 
-link_directories(--trace ${CMAKE_INSTALL_PREFIX}/lib/
+link_directories(${CMAKE_INSTALL_PREFIX}/lib
                  /local/SHASHLIK/install/lib
 )
 #set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH}   /local/SHASHLIK/install/lib)
