@@ -9,9 +9,7 @@ set(STANDARD_SYS_LIBS  dl pthread z resolv ffi)
 #find_package(Qt5Network ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
 
 add_definitions(-fpermissive    # For redeclaration of char32_t (among other things?)
-#                -v
                 )
-#set(LINK_FLAGS "--verbose=2")
 
 include_directories(${CMAKE_INSTALL_PREFIX}/include
                     ${CMAKE_INSTALL_PREFIX}/include/nativehelper
@@ -26,18 +24,16 @@ set(shashlik_launcher_SRCS
     runtime/ShashlikRuntime.cpp
     runtime/Stubs.cpp
 
+    # Old stuff that we may have to bring back in later.
     #${ANDROID_FRAMEWORKS_BASE}/core/jni/AndroidRuntime.cpp
 )
 
-link_directories(${CMAKE_INSTALL_PREFIX}/lib
-                 /local/SHASHLIK/install/lib
-)
+link_directories(${CMAKE_INSTALL_PREFIX}/lib)   # NOTE: This must be before add_executable :/
 add_executable(shashlik_launcher ${shashlik_launcher_SRCS})
 set_target_properties(shashlik_launcher PROPERTIES
     OUTPUT_NAME shashlik-launcher
 )
 
-#set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH}   /local/SHASHLIK/install/lib)
 target_link_libraries(shashlik_launcher
     libnativehelper.so
     libutils.so
@@ -51,5 +47,4 @@ target_link_libraries(shashlik_launcher
 )
 
 install(TARGETS shashlik_launcher DESTINATION bin )
-#install(FILES kded_shashlik_propertiesd.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kded )
 
