@@ -35,7 +35,7 @@
 #include <dirent.h>
 #include <assert.h>
 
-#include <android_runtime/AndroidRuntime.h>
+//#include <android_runtime/AndroidRuntime.h>
 //#include <binder/IBinder.h>
 //#include <binder/IPCThreadState.h>
 //#include <binder/IServiceManager.h>
@@ -56,6 +56,9 @@
 
 
 using namespace android;
+
+// For now these are also registered in in Stubs.h.
+// FIXME: Find a better way to handle them.
 
 extern int register_android_os_Binder(JNIEnv* env);
 extern int register_android_os_Process(JNIEnv* env);
