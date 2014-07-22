@@ -52,12 +52,9 @@ will need to give your username and password to clone them.
   git clone https://github.com/shashlik/android-libcore.git
 
 
-2. framework-base
+2. frameworks-base
 
-We need some classes from the general Android source code. However these are
-not changed in any way so we have not imported them into github.
-
-  git clone https://android.googlesource.com/platform/platform/frameworks/base
+  git clone https://android.googlesource.com/platform/frameworks/base frameworks-base
 
 
 3. safe-iop
@@ -158,6 +155,7 @@ a stable build.  Here is a list of the branches and tags that we are using:
 * android-core:       branch shashlik-kitkat
 * android-libcore:    branch shashlik-kitkat
 
+* frameworks-base     branch shashlik-kitkat
 * safe-iop: 	      tag http://safe-iop.googlecode.com/svn/tags/r0.3.1
 * libnativehelper:    branch kitkat-release
 
