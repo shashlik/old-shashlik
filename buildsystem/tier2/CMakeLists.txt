@@ -1,7 +1,16 @@
 cmake_minimum_required(VERSION 2.8)
 
-link_directories(${CMAKE_INSTALL_PREFIX}/lib/)
+link_directories(${CMAKE_CURRENT_BINARY_DIR}/libdex/  # For linking dexdump, dexlist and dexgen
+                 ${CMAKE_INSTALL_PREFIX}/lib/
+ 		 )
 set(STANDARD_SYS_LIBS dl pthread z resolv ffi)
+
+
+# Set JIT_VM to:
+#   false   if you want to run an interpreter (currently necessary on 64 bit systems)
+#   true    if you want just in time compilation to assembler
+#
+# false is the default
 set(JIT_VM false)
 
 # vm support libs
