@@ -26,7 +26,8 @@
 #include <QHash>
 
 // KDE Frameworks
-#include <KArchive>
+//#include <KArchive>
+#include <KZip>
 
 //
 //#include "FileCollector.h"
@@ -35,11 +36,20 @@
 class QString;
 class QByteArray;
 
-class ApkFile // : public FileCollector
+class ApkFile : public KZip
 {
 public:
-    ApkFile();
-    ~ApkFile();
+    ApkFile(const QString &filename);
+    ApkFile(QIODevice *dev);
+    virtual ~ApkFile();
+
+    /** Unpack the APK file into the directory dest
+     *
+     * Unpack the contents of the APK file into a directory. The directory is created 
+     *
+     * @param dest path to a directory which is created if needed and where the unpacked files are placed
+     */
+    bool unpack(const QString &dest) const;
 
     // When you have created all the content and added it using
     // addContentFile(), call this function once and it will write the

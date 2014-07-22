@@ -38,12 +38,27 @@
 //                         class ApkFile
 
 
-ApkFile::ApkFile()
+ApkFile::ApkFile(const QString &filename)
+    : KZip(filename)
+{
+}
+
+ApkFile::ApkFile(QIODevice *dev)
+    : KZip(dev)
 {
 }
 
 ApkFile::~ApkFile()
 {
+}
+
+
+bool ApkFile::unpack(const QString &dest) const
+{
+    const KArchiveDirectory *dir = directory();
+
+    // This was simpler than I thought...
+    return dir->copyTo(dest, true);
 }
 
 
