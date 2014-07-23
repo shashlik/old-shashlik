@@ -52,9 +52,13 @@ will need to give your username and password to clone them.
   git clone https://github.com/shashlik/android-libcore.git
 
 
-2. frameworks-base
+2. Other Android repositories
 
-  git clone https://android.googlesource.com/platform/frameworks/base frameworks-base
+Shashlik is also using some other Android repositories but without changing
+anything in them.  You need to check these out too.
+
+  git clone https://android.googlesource.com/platform/frameworks/base  frameworks-base
+  git clone https://android.googlesource.com/platform/frameworks/native frameworks-native
 
 
 3. safe-iop
@@ -156,7 +160,8 @@ a stable build.  Here is a list of the branches and tags that we are using:
 * android-libcore:    branch shashlik-kitkat
 
 * frameworks-base     branch shashlik-kitkat
-* safe-iop: 	      tag http://safe-iop.googlecode.com/svn/tags/r0.3.1
+* frameworks-native   branch shashlik-kitkat
+* safe-iop:           tag http://safe-iop.googlecode.com/svn/tags/r0.3.1
 * libnativehelper:    branch kitkat-release
 
 The repo shashlik itself is the one where we try to put all of our changes so
