@@ -1,0 +1,23 @@
+project(libapk)
+
+find_package(KF5Archive NO_MODULE)
+
+#add_definitions(-DHAVE_SYS_UIO_H)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+set(libapk_SRCS
+    ApkFile.cpp
+)
+
+set(libapk_HEADERS
+    ApkFile.h
+)
+
+add_library(libapk SHARED ${libapk_SRCS})
+
+target_link_libraries(libapk KF5::Archive Qt5::Core)
+
+install(TARGETS libapk DESTINATION lib)
+install(FILES
+        ${libapk_HEADERS}
+        DESTINATION include/libapk)

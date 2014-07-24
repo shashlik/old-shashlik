@@ -4,6 +4,9 @@ project(dex)
 add_definitions(-DHAVE_SYS_UIO_H -DHAVE_OFF64_T)
 set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../dalvik)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH})
+include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/safe-iop)
+
 set(dex_SRCS
     ${REPO_PATH}/libdex/CmdUtils.cpp
     ${REPO_PATH}/libdex/DexCatch.cpp
@@ -42,9 +45,9 @@ set(dex_HEADERS
     ${REPO_PATH}/libdex/SysUtil.h
 )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH})
-include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/safe-iop)
 add_library(dex SHARED ${dex_SRCS})
+target_link_libraries(dex ${STANDARD_SYS_LIBS})
+
 install(TARGETS dex DESTINATION lib)
 install(FILES
         ${dex_HEADERS}

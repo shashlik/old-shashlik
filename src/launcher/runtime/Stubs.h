@@ -1,0 +1,133 @@
+extern int register_android_os_Binder(JNIEnv* env);
+extern int register_android_os_Process(JNIEnv* env);
+extern int register_android_graphics_Bitmap(JNIEnv*);
+extern int register_android_graphics_BitmapFactory(JNIEnv*);
+extern int register_android_graphics_BitmapRegionDecoder(JNIEnv*);
+extern int register_android_graphics_Camera(JNIEnv* env);
+extern int register_android_graphics_CreateJavaOutputStreamAdaptor(JNIEnv* env);
+extern int register_android_graphics_Graphics(JNIEnv* env);
+extern int register_android_graphics_Interpolator(JNIEnv* env);
+extern int register_android_graphics_LayerRasterizer(JNIEnv*);
+extern int register_android_graphics_MaskFilter(JNIEnv* env);
+extern int register_android_graphics_Movie(JNIEnv* env);
+extern int register_android_graphics_NinePatch(JNIEnv*);
+extern int register_android_graphics_PathEffect(JNIEnv* env);
+extern int register_android_graphics_Shader(JNIEnv* env);
+extern int register_android_graphics_Typeface(JNIEnv* env);
+extern int register_android_graphics_YuvImage(JNIEnv* env);
+
+extern int register_com_google_android_gles_jni_EGLImpl(JNIEnv* env);
+extern int register_com_google_android_gles_jni_GLImpl(JNIEnv* env);
+extern int register_android_opengl_jni_EGL14(JNIEnv* env);
+extern int register_android_opengl_jni_EGLExt(JNIEnv* env);
+extern int register_android_opengl_jni_GLES10(JNIEnv* env);
+extern int register_android_opengl_jni_GLES10Ext(JNIEnv* env);
+extern int register_android_opengl_jni_GLES11(JNIEnv* env);
+extern int register_android_opengl_jni_GLES11Ext(JNIEnv* env);
+extern int register_android_opengl_jni_GLES20(JNIEnv* env);
+extern int register_android_opengl_jni_GLES30(JNIEnv* env);
+
+extern int register_android_hardware_Camera(JNIEnv *env);
+extern int register_android_hardware_camera2_CameraMetadata(JNIEnv *env);
+extern int register_android_hardware_SensorManager(JNIEnv *env);
+extern int register_android_hardware_SerialPort(JNIEnv *env);
+extern int register_android_hardware_UsbDevice(JNIEnv *env);
+extern int register_android_hardware_UsbDeviceConnection(JNIEnv *env);
+extern int register_android_hardware_UsbRequest(JNIEnv *env);
+
+extern int register_android_media_AudioRecord(JNIEnv *env);
+extern int register_android_media_AudioSystem(JNIEnv *env);
+extern int register_android_media_AudioTrack(JNIEnv *env);
+extern int register_android_media_JetPlayer(JNIEnv *env);
+extern int register_android_media_ToneGenerator(JNIEnv *env);
+
+extern int register_android_util_FloatMath(JNIEnv* env);
+
+
+namespace shashlik
+{
+
+
+int register_android_debug_JNITest(_JNIEnv*);
+int register_android_os_SystemClock(_JNIEnv*);
+int register_android_util_EventLog(_JNIEnv*);
+int register_android_util_Log(_JNIEnv*);
+int register_android_text_format_Time(_JNIEnv*);
+int register_android_content_AssetManager(_JNIEnv*);
+int register_android_content_StringBlock(_JNIEnv*);
+int register_android_content_XmlBlock(_JNIEnv*);
+int register_android_emoji_EmojiFactory(_JNIEnv*);
+int register_android_text_AndroidCharacter(_JNIEnv*);
+int register_android_text_AndroidBidi(_JNIEnv*);
+int register_android_view_InputDevice(_JNIEnv*);
+int register_android_view_KeyCharacterMap(_JNIEnv*);
+int register_android_os_SystemProperties(_JNIEnv*);
+int register_android_os_Parcel(_JNIEnv*);
+int register_android_view_DisplayEventReceiver(_JNIEnv*);
+int register_android_nio_utils(_JNIEnv*);
+int register_android_view_GraphicBuffer(_JNIEnv*);
+int register_android_view_GLES20DisplayList(_JNIEnv*);
+int register_android_view_GLES20Canvas(_JNIEnv*);
+int register_android_view_HardwareRenderer(_JNIEnv*);
+int register_android_view_Surface(_JNIEnv*);
+int register_android_view_SurfaceControl(_JNIEnv*);
+int register_android_view_SurfaceSession(_JNIEnv*);
+int register_android_view_TextureView(_JNIEnv*);
+int register_android_graphics_Canvas(_JNIEnv*);
+int register_android_graphics_ColorFilter(_JNIEnv*);
+int register_android_graphics_DrawFilter(_JNIEnv*);
+int register_android_graphics_Matrix(_JNIEnv*);
+int register_android_graphics_Paint(_JNIEnv*);
+int register_android_graphics_Path(_JNIEnv*);
+int register_android_graphics_PathMeasure(_JNIEnv*);
+int register_android_graphics_Picture(_JNIEnv*);
+int register_android_graphics_PorterDuff(_JNIEnv*);
+int register_android_graphics_Rasterizer(_JNIEnv*);
+int register_android_graphics_Region(_JNIEnv*);
+int register_android_graphics_SurfaceTexture(_JNIEnv*);
+int register_android_graphics_Xfermode(_JNIEnv*);
+int register_android_graphics_pdf_PdfDocument(_JNIEnv*);
+int register_android_database_CursorWindow(_JNIEnv*);
+int register_android_database_SQLiteConnection(_JNIEnv*);
+int register_android_database_SQLiteGlobal(_JNIEnv*);
+int register_android_database_SQLiteDebug(_JNIEnv*);
+int register_android_os_Debug(_JNIEnv*);
+int register_android_os_FileObserver(_JNIEnv*);
+int register_android_os_FileUtils(_JNIEnv*);
+int register_android_os_MessageQueue(_JNIEnv*);
+int register_android_os_SELinux(_JNIEnv*);
+int register_android_os_Trace(_JNIEnv*);
+int register_android_os_UEventObserver(_JNIEnv*);
+int register_android_net_LocalSocketImpl(_JNIEnv*);
+int register_android_net_NetworkUtils(_JNIEnv*);
+int register_android_net_TrafficStats(_JNIEnv*);
+int register_android_net_wifi_WifiNative(_JNIEnv*);
+int register_android_os_MemoryFile(_JNIEnv*);
+int register_com_android_internal_os_ZygoteInit(_JNIEnv*);
+int register_android_media_RemoteDisplay(_JNIEnv*);
+int register_android_opengl_classes(_JNIEnv*);
+int register_android_server_NetworkManagementSocketTagger(_JNIEnv*);
+int register_android_server_Watchdog(_JNIEnv*);
+int register_android_ddm_DdmHandleNativeHeap(_JNIEnv*);
+int register_android_backup_BackupDataInput(_JNIEnv*);
+int register_android_backup_BackupDataOutput(_JNIEnv*);
+int register_android_backup_FileBackupHelperBase(_JNIEnv*);
+int register_android_backup_BackupHelperDispatcher(_JNIEnv*);
+int register_android_app_backup_FullBackup(_JNIEnv*);
+int register_android_app_ActivityThread(_JNIEnv*);
+int register_android_app_NativeActivity(_JNIEnv*);
+int register_android_view_InputChannel(_JNIEnv*);
+int register_android_view_InputEventReceiver(_JNIEnv*);
+int register_android_view_InputEventSender(_JNIEnv*);
+int register_android_view_InputQueue(_JNIEnv*);
+int register_android_view_KeyEvent(_JNIEnv*);
+int register_android_view_MotionEvent(_JNIEnv*);
+int register_android_view_PointerIcon(_JNIEnv*);
+int register_android_view_VelocityTracker(_JNIEnv*);
+int register_android_content_res_ObbScanner(_JNIEnv*);
+int register_android_content_res_Configuration(_JNIEnv*);
+int register_android_animation_PropertyValuesHolder(_JNIEnv*);
+int register_com_android_internal_content_NativeLibraryHelper(_JNIEnv*);
+int register_com_android_internal_net_NetworkStatsFactory(_JNIEnv*);
+}
+
