@@ -30,12 +30,16 @@ public:
     AppRuntime();
     ~AppRuntime();
 
+    void setParentDir(const char* parentDir);
 #if 0
     // this appears to be unused
     const char* getParentDir() const;
 #endif
 
+    void setClassName(const char *className);
     const char* getClassName() const;
+
+    void setArgcArgv(int argc, const char *const *argv);
 
     // Reimplemented virtual functions
     virtual void onVmCreated(JNIEnv* env);
@@ -47,7 +51,7 @@ private:
 
     const char*        m_parentDir;
     const char*        m_className;
-    //jclass             m_class;
+    //jclass             m_class;  #temporarily disabled to make it build
     int                m_argC;
     const char* const* m_argV;
 };

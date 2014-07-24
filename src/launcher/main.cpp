@@ -16,9 +16,13 @@
 
 //#include <cutils/properties.h>
 //#include <binder/IPCThreadState.h>
+#if 0 // See note in ProcessGlobals.cpp
 //#include <binder/ProcessState.h>
+#else
+#include "ProcessGlobals.h"
+#endif
 //#include <utils/Log.h>
-//#include <cutils/process_name.h>
+#include <cutils/process_name.h>
 //#include <cutils/memory.h>
 //#include <cutils/trace.h>
 //#include <android_runtime/AndroidRuntime.h>
@@ -79,7 +83,6 @@ int main(int argc, char* const argv[])
     unsetenv("NO_ADDR_COMPAT_LAYOUT_FIXUP");
 #endif
 
-#if 0 // temp. disabled to make it build
     // These are global variables in ProcessState.cpp
     mArgC = argc;
     mArgV = argv;
@@ -133,16 +136,15 @@ int main(int argc, char* const argv[])
         set_process_name(niceName);
     }
 
-    runtime.mParentDir = parentDir;
+    runtime.setParentDir(parentDir);
 
     if (zygote) {
         runtime.start("com.android.internal.os.ZygoteInit",
                 startSystemServer ? "start-system-server" : "");
     } else if (className) {
         // Remainder of args get passed to startup class main()
-        runtime.mClassName = className;
-        runtime.mArgC = argc - i;
-        runtime.mArgV = argv + i;
+	runtime.setClassName(className);
+        runtime.setArgcArgv(argc - i, argv + i);
         runtime.start("com.android.internal.os.RuntimeInit",
                 application ? "application" : "tool");
     } else {
@@ -151,5 +153,4 @@ int main(int argc, char* const argv[])
         LOG_ALWAYS_FATAL("app_process: no class name or --zygote supplied.");
         return 10;
     }
-#endif
 }

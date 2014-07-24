@@ -41,6 +41,11 @@ AppRuntime::~AppRuntime()
 }
 
 
+void AppRuntime::setParentDir(const char* parentDir)
+{
+    return m_parentDir = parentDir;
+}
+
 #if 0
 const char* AppRuntime::getParentDir() const
 {
@@ -48,10 +53,22 @@ const char* AppRuntime::getParentDir() const
 }
 #endif
 
+void AppRuntime::setClassName(const char *className)
+{
+    m_className = className;
+}
+
 const char* AppRuntime::getClassName() const
 {
     return m_className;
 }
+
+void AppRuntime::setArgcArgv(int argc, const char *const *argv)
+{
+    m_argC = argc;
+    m_argV = argv;
+}
+
 
 
 // ----------------------------------------------------------------

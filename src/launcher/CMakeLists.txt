@@ -20,6 +20,7 @@ include_directories(${CMAKE_INSTALL_PREFIX}/include
 set(shashlik_launcher_SRCS
     main.cpp
     AppRuntime.cpp
+    ProcessGlobals.cpp
 
     runtime/ShashlikRuntime.cpp
     runtime/Stubs.cpp
