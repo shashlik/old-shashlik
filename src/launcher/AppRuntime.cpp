@@ -43,7 +43,7 @@ AppRuntime::~AppRuntime()
 
 void AppRuntime::setParentDir(const char* parentDir)
 {
-    return m_parentDir = parentDir;
+    m_parentDir = parentDir;
 }
 
 #if 0

@@ -15,11 +15,11 @@
 //#include <sys/personality.h>
 
 #include "runtime/ShashlikRuntime.h"
+#include <nativehelper/jni.h>
 
+//class JNIEnv;
 
 namespace shashlik {
-
-class JNIEnv;
 
 
 using namespace android;
