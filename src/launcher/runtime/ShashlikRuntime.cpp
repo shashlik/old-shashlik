@@ -399,6 +399,9 @@ static int hasDir(const char* dir)
  */
 static void readLocale(char* language, char* region)
 {
+    //FIXME: this should come from the Qt locale settings
+    //       we don't need to hit the property server for this as Qt
+    //       gives us access to it - aseigo
     char propLang[PROPERTY_VALUE_MAX], propRegn[PROPERTY_VALUE_MAX];
 
     property_get("persist.sys.language", propLang, "");
