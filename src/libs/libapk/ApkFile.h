@@ -55,8 +55,8 @@ public:
     // addContentFile(), call this function once and it will write the
     // apk to the disk.
     bool writeApk(const QString &fileName,
-		  const QByteArray &appIdentification,
-		  QHash<QString, QString> metadata);
+                  const QByteArray &appIdentification,
+                  QHash<QString, QString> metadata);
 
 private:
 // Private functions here

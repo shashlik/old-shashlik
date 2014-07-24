@@ -63,8 +63,8 @@ bool ApkFile::unpack(const QString &dest) const
 
 
 bool ApkFile::writeApk(const QString &fileName,
-		       const QByteArray &appIdentification,
-		       QHash<QString, QString> metadata)
+                       const QByteArray &appIdentification,
+                       QHash<QString, QString> metadata)
 {
     Q_UNUSED(fileName);
     Q_UNUSED(appIdentification);
