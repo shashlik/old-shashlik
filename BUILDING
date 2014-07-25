@@ -47,30 +47,31 @@ find links to all 4 repositories. Since the shashlik repos are private you
 will need to give your username and password to clone them.
 
   git clone https://github.com/shashlik/shashlik.git
-  git clone https://github.com/shashlik/dalvik.git
-  git clone https://github.com/shashlik/android-core.git
-  git clone https://github.com/shashlik/android-libcore.git
+  git clone --branch shashlik-kitkat https://github.com/shashlik/dalvik.git
+  git clone --branch shashlik-kitkat https://github.com/shashlik/android-core.git
+  git clone --branch shashlik-kitkat https://github.com/shashlik/android-libcore.git
 
 
 2. Other Android repositories
 
 Shashlik is also using some other Android repositories but without changing
-anything in them.  You need to check these out too.
+anything in them.  You need to check these out too. Since we want a stable
+point to work from, we use the kitkat-release branch.
 
-  git clone https://android.googlesource.com/platform/frameworks/base  frameworks-base
-  git clone https://android.googlesource.com/platform/frameworks/native frameworks-native
+  git clone --branch kitkat-release https://android.googlesource.com/platform/frameworks/base  frameworks-base
+  git clone --branch kitkat-release https://android.googlesource.com/platform/frameworks/native frameworks-native
 
 
 3. safe-iop
 
 Safe IOP is also a Google library which is described like this on the project
-home page at https://code.google.com/p/safe-iop/
+home page at https://code.google.com/p/safe-iop/:
 
-    This library provides a collection of (macro-based) functions for
+    "This library provides a collection of (macro-based) functions for
     performing safe integer operations across platform and architecture with a
-    straightforward API.
+    straightforward API."
 
-It is kept in subversion. To check it out, do the following:
+This library is kept in subversion. To check it out, do the following:
 
   svn checkout http://safe-iop.googlecode.com/svn/trunk/ safe-iop
   cd safe-iop
@@ -86,9 +87,7 @@ Libnativehalper is another library from Google which is necessary to build
 Dalvik. It contains support functions for Android's class libraries. This one
 is kept in git.
 
-  git clone https://android.googlesource.com/platform/libnativehelper
-
-This repository is used without modification, and the master branch is tracked.
+  git clone --branch kitkat-release https://android.googlesource.com/platform/libnativehelper
 
 
 5. bionic
@@ -105,14 +104,7 @@ have not gone down that route.
 
   git clone https://android.googlesource.com/platform/bionic
 
-
-5. skia
-
-Skia is a 2D graphics library used in Chromium.  The project page can be found
-at http://code.google.com/p/skia/ .
-
-  git clone https://skia.googlesource.com/skia.git
-
+This repository is used without modification, and the master branch is tracked.
 
 
 Building the sources
@@ -122,26 +114,40 @@ The goal of Shashlik is to create a stand-alone Android runtime
 environment. This basically means Dalvik with a number of support features
 such as emulated sensors and a screen.
 
-Dalvik itself needs a number of support classes and libraries from the Android
-sources. Unfortunately the dependencies themselves drag in more dependencies
-and so on until most of Android is present. It turns out that Dalvik itself
-does not use that many classes and functions in the dependency libraries so by
-selecting to build only those classes that are actually needed.
-
-
-NOTE: At the point of writing this, Dalvik is not yet building correctly so
-      the instructions below will be updated when we get more of it building
-      and working.
-
+Dalvik itself needs a number of support classes and libraries from other parts
+of the Android sources. Unfortunately the dependencies themselves drag in more
+dependencies and so on until most of Android is present. It turns out that
+Dalvik itself does not use that many classes and functions in the dependency
+libraries so by selecting to build only those classes that are actually needed
+we can keep down the number of repositories that we need to check out.
 
 In this description we assume that you have downloaded the sources above and
-that they are all in $HOME/shashlik. See also the comment about this topic
-above.
+that they are all in $HOME/shashlik. 
 
 At this time the instructions assume that you are building on a standard Linux
 desktop system with an installed software development kit. Refer to your
 distribution on how to install this. As far as we know there are no
 distribution specific problems or peculiarities.
+
+
+Prerequisites
+-------------
+
+Aside from using a normal Linux development system (make, gcc, etc) you need
+three components that might not be on everybodys computers:
+ - CMake, version 2.8 minimum
+ - Qt 5.3
+ - KDE Frameworks 5 (KF5)
+
+This instruction will from here on assume that you have these installed
+correctly.  If not, you will have to install them (probably build yourself)
+using their respective installation instructions.
+
+NOTE: Even after installing Qt5.3 and KF5 correctly for normal usage you will
+      still have to add a specific environment variable to be able to use them
+      for development using CMake:
+
+        export CMAKE_PREFIX_PATH=$KF5:$CMAKE_PREFIX_PATH
 
 
 Branches
@@ -153,8 +159,11 @@ each dependency that does need to be changed, we have created a branch called
 shashlik-kitkat. 
 
 Some of the components have release tags that we are using so that we can have
-a stable build.  Here is a list of the branches and tags that we are using:
+a stable build.  Here is a list of the branches and tags that we are using. If
+you have checked out the repositories using the commands given above they
+should be on the correct branch already.
 
+* shashlik:	      branch master
 * dalvik: 	      branch shashlik-kitkat
 * android-core:       branch shashlik-kitkat
 * android-libcore:    branch shashlik-kitkat
@@ -164,9 +173,9 @@ a stable build.  Here is a list of the branches and tags that we are using:
 * safe-iop:           tag http://safe-iop.googlecode.com/svn/tags/r0.3.1
 * libnativehelper:    branch kitkat-release
 
-The repo shashlik itself is the one where we try to put all of our changes so
-that should be on master branch unless you are working on some feature that is
-using its own branch.
+As you can see above, the repo shashlik itself is the one where we try to put
+all of our changes so that should be on master branch unless you are working
+on some new feature in a feature branch.
 
 
 Building
@@ -186,16 +195,21 @@ Because of the above, you need to create a separate install directory.  We
 recommend SHASHLIK/install.  Note that the install directory should be
 _outside_ the shashlik repo source tree but under the SHASHLIK top directory.
 
+  cd $HOME/SHASHLIK
   mkdir install
 
-We recommend that you create 2 directories: one for the dependencies from the
-Android sources as described above and one for the code that actually resides
-in the shashlik repo. Here we call them builddeps and build respectively.  So
-in the top directory of the SHASHLIK project tree, do:
+For building, we recommend that you create 2 directories: one for the
+dependencies from the Android sources as described above and one for the code
+that actually resides in the shashlik repo. Here we call them builddeps and
+build respectively.  So in the top directory of the SHASHLIK project tree, do:
 
   cd shashlik
   mkdir builddeps
   mkdir build
+
+
+Building the dependencies
+- - - - - - - - - - - - -
 
 In the builddeps directory, create one subdirectory for each subdirectory of
 shashlik/buildsystem/. At the point of writing this is tier1 and tier2. So you
@@ -219,3 +233,20 @@ building up a working system one piece at a time.
 All components in tier1 rely on only 'normal' Linux system libraries (libc,
 etc).  Components in tier2 are libraries that rely on components in tier1, and
 tier3 contains the various executables built on top of tier2/tier1 libraries.
+
+
+Building the shashlik sources
+- - - - - - - - - - - - - - -
+
+Lastly you will have to build the shashlik sources that depend on the selected
+Android libraries that were created in the builddeps directory. This is done
+in the build/ directory and it is really easy.
+
+  cd build
+  cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/SHASHLIK/install
+  make install
+
+You can now run all the shashlik binaries by adding the install path to your
+PATH environment variable:
+
+  export PATH=$HOME/SHASHLIK/install/bin:$PATH
