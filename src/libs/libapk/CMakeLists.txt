@@ -13,11 +13,11 @@ set(libapk_HEADERS
     ApkFile.h
 )
 
-add_library(libapk SHARED ${libapk_SRCS})
+add_library(apk SHARED ${libapk_SRCS})
 
-target_link_libraries(libapk KF5::Archive Qt5::Core)
+target_link_libraries(apk KF5::Archive Qt5::Core)
 
-install(TARGETS libapk DESTINATION lib)
+install(TARGETS apk DESTINATION lib)
 install(FILES
         ${libapk_HEADERS}
         DESTINATION include/libapk)

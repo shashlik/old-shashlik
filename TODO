@@ -2,18 +2,19 @@
 Immediate stuff
  * Create a version string					----
  * Add a list of installables to the repo (lib + bin)		----
- * Rename liblibapk to libapk 	     	       	 		----
-
+ * Rename liblibapk to libapk 	     	       	 		DONE
+ * Fix the build instructions					DONE
 
 
 Build the components of Dalvik
- * vm 								Done
- * dexgen							Done
- * dexlist							Done
- * dexopt							Done
- * dexdump							Done
+ * vm library							DONE
+ * Binaries
+    * dexgen							----
+    * dexlist							Done
+    * dexopt							----
+    * dexdump							Done
  * dx								----
- * tools							----
+ * tools							DONE
  * unit-tests							----
 
 New tools
