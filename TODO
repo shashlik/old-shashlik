@@ -1,14 +1,20 @@
-= BUILD
-1. vm
-2. dexgen
-3. dexlist
-4. dexopt
-5. dexdump
-6. dx
-7. tools
-8. unit-tests
 
-= IMPLEMENT
-* properties server (see android-core/libcutils/properties.c)
+Immediate stuff
+ * Create a version string					----
+ * Add a list of installables to the repo (lib + bin)		----
+ * Rename liblibapk to libapk 	     	       	 		----
 
-= TEST
+
+
+Build the components of Dalvik
+ * vm 								Done
+ * dexgen							Done
+ * dexlist							Done
+ * dexopt							Done
+ * dexdump							Done
+ * dx								----
+ * tools							----
+ * unit-tests							----
+
+New tools
+ * properties server (see android-core/libcutils/properties.c)	DONE
