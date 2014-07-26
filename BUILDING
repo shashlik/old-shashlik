@@ -1,4 +1,4 @@
-This file describes how to build the Shashlik android simulated environment.
+This file describes how to build Shashlik, the simulated Android environment.
 
 
 
@@ -18,7 +18,7 @@ below you should be able to just cut and paste the command lines into a shell.
 The source trees should be placed next to each other in a common subdirectory,
 e.g. $HOME/SHASHLIK or something similar.  In the rest of this file we will
 assume that you are using this location.  If not, you will have to adjust the
-instructions below accordingly.,
+instructions below accordingly.
 
   cd
   mkdir SHASHLIK
@@ -36,7 +36,7 @@ Then proceed to download the git and svn repositories as follows.
 
 1. The 4 repositories from the Shashlik project on github.
 
-Shashlik has 3 repos from the Google Android source copied into Github. These
+Shashlik has 3 repos from the Google Android sources copied into Github. These
 3 repos are Dalvik, Android Core and Android Libcore. The changes in these
 repositories will be kept as small as possible so that it will be easier to
 upgrade to a later version later. The main code written for Shashlik is
@@ -107,7 +107,7 @@ have not gone down that route.
 This repository is used without modification, and the master branch is tracked.
 
 
-Building the sources
+Building the Sources
 ====================
 
 The goal of Shashlik is to create a stand-alone Android runtime
@@ -172,6 +172,7 @@ should be on the correct branch already.
 * frameworks-native   branch shashlik-kitkat
 * safe-iop:           tag http://safe-iop.googlecode.com/svn/tags/r0.3.1
 * libnativehelper:    branch kitkat-release
+* bionic:	      branch master
 
 As you can see above, the repo shashlik itself is the one where we try to put
 all of our changes so that should be on master branch unless you are working
@@ -186,10 +187,10 @@ tree. This is because we are taking sources from the Android source tree and
 build them in a way that they are not designed for.
 
 What you need to do is to first build _and_ _install_ the libraries that can
-be built by themselves.  We call these tier1 libraries. Then you will use
-these installed tier1 libraries to build the ones that depend on them, which
-we call tier2 libraries.  After these tier1 and 2 libraries are built, you can
-build the actual tools and applications that make up the Shashlik project.
+be built by themselves.  We call these tier 1 libraries. Then you will use
+these installed tier 1 libraries to build the ones that depend on them, which
+we call tier 2 libraries.  After these tier 1 and 2 libraries are built, you
+can build the actual tools and applications that make up the Shashlik project.
 
 Because of the above, you need to create a separate install directory.  We
 recommend SHASHLIK/install.  Note that the install directory should be
@@ -200,15 +201,15 @@ _outside_ the shashlik repo source tree but under the SHASHLIK top directory.
 
 For building, we recommend that you create 2 directories: one for the
 dependencies from the Android sources as described above and one for the code
-that actually resides in the shashlik repo. Here we call them builddeps and
-build respectively.  So in the top directory of the SHASHLIK project tree, do:
+that actually resides in the shashlik repository. Here we call them builddeps
+and build respectively:
 
-  cd shashlik
+  cd $HOME/SHASHLIKshashlik
   mkdir builddeps
   mkdir build
 
 
-Building the dependencies
+Building the Dependencies
 - - - - - - - - - - - - -
 
 In the builddeps directory, create one subdirectory for each subdirectory of
@@ -219,7 +220,7 @@ will have builddeps/tier1/ and builddeps/tier2/.
   mkdir -p builddeps/tier2
 
 The sources must be built and installed in the order indicated by the name and
-is done by cmake. So from the topdirectory of shashlik, do
+is done by cmake. So from the topdirectory of the shashlik repository, do:
 
   (cd builddeps/tier1; cmake ../../buildsystem/tier1 -DCMAKE_INSTALL_PREFIX=$HOME/SHASHLIK/install && make install)
   (cd builddeps/tier2; cmake ../../buildsystem/tier2 -DCMAKE_INSTALL_PREFIX=$HOME/SHASHLIK/install && make install)
@@ -235,12 +236,12 @@ etc).  Components in tier2 are libraries that rely on components in tier1, and
 tier3 contains the various executables built on top of tier2/tier1 libraries.
 
 
-Building the shashlik sources
+Building the Shashlik Sources
 - - - - - - - - - - - - - - -
 
 Lastly you will have to build the shashlik sources that depend on the selected
 Android libraries that were created in the builddeps directory. This is done
-in the build/ directory and it is really easy.
+in the build/ directory and it is really easy:
 
   cd build
   cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/SHASHLIK/install
