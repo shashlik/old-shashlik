@@ -12,7 +12,7 @@ Next milestone: M2: Run a dex file inside the VM
 Immediate stuff
  * Create the detailed TODO					DONE
  * Create a version string					----
- * Add a list of installables to the repo (lib + bin)		----
+ * Add a list of installables to the repo (lib + bin)		DONE
  * Rename liblibapk to libapk 	     	       	 		DONE
  * Fix the build instructions					DONE
 
