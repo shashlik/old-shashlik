@@ -50,6 +50,7 @@ will need to give your username and password to clone them.
   git clone --branch shashlik-kitkat https://github.com/shashlik/dalvik.git
   git clone --branch shashlik-kitkat https://github.com/shashlik/android-core.git
   git clone --branch shashlik-kitkat https://github.com/shashlik/android-libcore.git
+  git clone --branch shashlik-kitkat https://github.com/shashlik/android-frameworks-native.git
 
 
 2. Other Android repositories
@@ -163,16 +164,17 @@ a stable build.  Here is a list of the branches and tags that we are using. If
 you have checked out the repositories using the commands given above they
 should be on the correct branch already.
 
-* shashlik:	      branch master
-* dalvik: 	      branch shashlik-kitkat
-* android-core:       branch shashlik-kitkat
-* android-libcore:    branch shashlik-kitkat
+* shashlik:                   branch master
+* dalvik:                     branch shashlik-kitkat
+* android-core:               branch shashlik-kitkat
+* android-libcore:            branch shashlik-kitkat
+* android-frameworks-native:  branch shashlik-kitkat
 
-* frameworks-base     branch shashlik-kitkat
-* frameworks-native   branch shashlik-kitkat
+* frameworks-base             branch kitkat-release
+* frameworks-native           branch kitkat-release
 * safe-iop:           tag http://safe-iop.googlecode.com/svn/tags/r0.3.1
-* libnativehelper:    branch kitkat-release
-* bionic:	      branch master
+* libnativehelper:            branch kitkat-release
+* bionic:                     branch master
 
 As you can see above, the repo shashlik itself is the one where we try to put
 all of our changes so that should be on master branch unless you are working
