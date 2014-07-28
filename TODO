@@ -17,7 +17,17 @@ Immediate stuff
  * Fix the build instructions					DONE
 
 Tasks to reach next milestone
+ * Preparations
+    + Use the AndroidRuntime class from frameworks-native	----
+      instead of copying it
+    + Create a binder library but without connections to	----
+      the kernel
+
  * Check if the provided file is a correct APK			----
+    + Check for the manifest
+    + Check the META-INF/MANIFEST.MF file
+    + Check for assets/
+    + Check for classes.dex
  * Unpack the APK into a temp directory	   			----
  * Get the VM started  	      					----
  * Load system java classes                			----
