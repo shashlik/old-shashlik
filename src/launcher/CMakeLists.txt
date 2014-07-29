@@ -11,9 +11,11 @@ set(STANDARD_SYS_LIBS  dl pthread z resolv ffi)
 add_definitions(-fpermissive    # For redeclaration of char32_t (among other things?)
                 )
 
+# FIXME: Introduce ${<library>_INCLUDES} variables for all our libraries.
 include_directories(${CMAKE_INSTALL_PREFIX}/include
                     ${CMAKE_INSTALL_PREFIX}/include/nativehelper
-                    #${CMAKE_CURRENT_SOURCE_DIR}/runtime
+		    ${CMAKE_SOURCE_DIR}/src/libs/libshashlikutils
+                    ${CMAKE_BINARY_DIR}     # for shashlikversion.h
                     ${ANDROID_FRAMEWORKS_BASE}/include
 	            )
 
