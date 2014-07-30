@@ -1,1 +1,2 @@
 add_subdirectory(libapk)
+add_subdirectory(libshashlikutils)

@@ -1,9 +1,17 @@
 cmake_minimum_required(VERSION 2.8)
 
-link_directories(${CMAKE_CURRENT_BINARY_DIR}/libdex/  # For linking dexdump, dexlist and dexgen
-                 ${CMAKE_INSTALL_PREFIX}/lib/
+link_directories(${CMAKE_INSTALL_PREFIX}/lib/
+                 ${CMAKE_CURRENT_BINARY_DIR}/libdex/  # For linking dexdump, dexlist and dexgen
  		 )
 set(STANDARD_SYS_LIBS dl pthread z resolv ffi)
+
+
+
+add_subdirectory(libbinder)
+
+
+# ----------------------------------------------------------------
+#                             Dalvik
 
 
 # Set JIT_VM to:

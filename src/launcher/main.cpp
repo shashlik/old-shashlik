@@ -28,13 +28,18 @@
 //#include <android_runtime/AndroidRuntime.h>
 //#include <sys/personality.h>
 
+#include "shashlikversion.h"
 #include "AppRuntime.h"
 
 
+#define PROGRAM_NAME "shashlik-launcher"
+
 void app_usage()
 {
+    fprintf(stderr, "%s %s\n", PROGRAM_NAME, SHASHLIK_VERSION_STRING);
     fprintf(stderr,
-        "Usage: app_process [java-options] cmd-dir start-class-name [options]\n");
+	    "Usage: %s [java-options] cmd-dir start-class-name [options]\n",
+	    PROGRAM_NAME);
 }
 
 
@@ -148,7 +153,8 @@ int main(int argc, char* const argv[])
         runtime.start("com.android.internal.os.RuntimeInit",
                 application ? "application" : "tool");
     } else {
-        fprintf(stderr, "Error: no class name or --zygote supplied.\n");
+	fprintf(stderr, "%s %s error: no class name or --zygote supplied.\n",
+		PROGRAM_NAME, SHASHLIK_VERSION_STRING);
         app_usage();
         LOG_ALWAYS_FATAL("app_process: no class name or --zygote supplied.");
         return 10;
