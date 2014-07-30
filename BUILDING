@@ -152,6 +152,13 @@ NOTE: Even after installing Qt5.3 and KF5 correctly for normal usage you will
 
         export CMAKE_PREFIX_PATH=$KF5:$CMAKE_PREFIX_PATH
 
+We also suggest to create an environment variable with the path of the
+Shashlik top directory.
+
+  export SHASHLIK=$HOME/SHASHLIK
+
+In the rest of this document we shall use this variable in our examples.
+
 
 Branches
 --------
@@ -200,7 +207,7 @@ Because of the above, you need to create a separate install directory.  We
 recommend SHASHLIK/install.  Note that the install directory should be
 _outside_ the shashlik repo source tree but under the SHASHLIK top directory.
 
-  cd $HOME/SHASHLIK
+  cd $SHASHLIK
   mkdir install
 
 For building, we recommend that you create 2 directories: one for the
@@ -208,7 +215,7 @@ dependencies from the Android sources as described above and one for the code
 that actually resides in the shashlik repository. Here we call them builddeps
 and build respectively:
 
-  cd $HOME/SHASHLIKshashlik
+  cd $SHASHLIK/shashlik
   mkdir builddeps
   mkdir build
 
@@ -226,8 +233,8 @@ will have builddeps/tier1/ and builddeps/tier2/.
 The sources must be built and installed in the order indicated by the name and
 is done by cmake. So from the topdirectory of the shashlik repository, do:
 
-  (cd builddeps/tier1; cmake ../../buildsystem/tier1 -DCMAKE_INSTALL_PREFIX=$HOME/SHASHLIK/install && make install)
-  (cd builddeps/tier2; cmake ../../buildsystem/tier2 -DCMAKE_INSTALL_PREFIX=$HOME/SHASHLIK/install && make install)
+  (cd builddeps/tier1; cmake ../../buildsystem/tier1 -DCMAKE_INSTALL_PREFIX=$SHASHLIK/install && make install)
+  (cd builddeps/tier2; cmake ../../buildsystem/tier2 -DCMAKE_INSTALL_PREFIX=$SHASHLIK/install && make install)
 
 ...and so on if there are more than 2 subdirectories of ../../buildsystem.
 
@@ -248,10 +255,10 @@ Android libraries that were created in the builddeps directory. This is done
 in the build/ directory and it is really easy:
 
   cd build
-  cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/SHASHLIK/install
+  cmake .. -DCMAKE_INSTALL_PREFIX=$SHASHLIK/install
   make install
 
 You can now run all the shashlik binaries by adding the install path to your
 PATH environment variable:
 
-  export PATH=$HOME/SHASHLIK/install/bin:$PATH
+  export PATH=$SHASHLIK/install/bin:$PATH
