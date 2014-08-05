@@ -1,6 +1,6 @@
 project(binder)
 
-add_definitions(-DHAVE_SYS_UIO_H)
+add_definitions(-DHAVE_SYS_UIO_H -fpermissive)
 set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../android-frameworks-native)
 #include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
