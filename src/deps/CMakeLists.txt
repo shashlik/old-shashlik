@@ -20,7 +20,7 @@ set(JIT_VM false)
 ##add_subdirectory(libdex)
 
 # dalvik vm
-##add_subdirectory(vm)
+add_subdirectory(vm)
 
 # c++ tools
 add_subdirectory(dexdump)
@@ -28,6 +28,9 @@ add_subdirectory(dexlist)
 add_subdirectory(hprof-conv)
 
 if (JIT_VM)
+# FIXME: These can only be built on a 32 bit system.  Somebody with such a
+#        system will have to move them from buildsystem/tier2.
+
 ##    add_subdirectory(gdbjithelper)
 ##    add_subdirectory(dexopt)
 ##    add_subdirectory(dmtracedump)

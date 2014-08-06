@@ -1,5 +1,9 @@
 project(vm)
 
+set(REPO_PATH ${DALVIK_PATH})
+set(MOD_PATH ${REPO_PATH}/vm)
+set(LIBENC_PATH ${MOD_PATH}/compiler/codegen/x86/libenc)
+
 add_definitions(-DDVM_JMP_TABLE_MTERP -DDVM_NO_ASM_INTERP -DHAVE_SYS_UIO_H -DANDROID_SMP
                 -DDVM_SHOW_EXCEPTION=1 -DDVM_JMP_TABLE_MTERP=1 -DMTERP_STUB -DHAVE_BIG_ENDIAN
                 -fpermissive -w)
@@ -9,10 +13,6 @@ else (JIT_VM)
     add_definitions(-DdvmAsmInstructionStart=0 -DdvmAsmInstructionEnd=0
                     -DdvmAsmSisterStart=0 -DdvmAsmSisterEnd=0 -DDVM_NO_ASM_INTERP=1)
 endif (JIT_VM)
-
-set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../dalvik)
-set(MOD_PATH ${REPO_PATH}/vm)
-set(LIBENC_PATH ${MOD_PATH}/compiler/codegen/x86/libenc)
 
 set(libenc_SRCS
     ${LIBENC_PATH}/dec_base.cpp

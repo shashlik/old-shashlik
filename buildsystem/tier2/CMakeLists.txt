@@ -7,7 +7,7 @@ set(STANDARD_SYS_LIBS dl pthread z resolv ffi)
 
 
 
-#add_subdirectory(libbinder)
+##add_subdirectory(libbinder)
 
 
 # ----------------------------------------------------------------
@@ -25,7 +25,7 @@ set(JIT_VM false)
 add_subdirectory(libdex)
 
 # dalvik vm
-add_subdirectory(vm)
+##add_subdirectory(vm)
 
 # c++ tools
 ##add_subdirectory(dexdump)
