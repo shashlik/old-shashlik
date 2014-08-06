@@ -43,8 +43,13 @@ set(GENERAL_SOURCE_PATH ${CMAKE_SOURCE_DIR}/..)
 set(ANDROID_CORE_PATH              ${GENERAL_SOURCE_PATH}/android-core)
 set(ANDROID_LIBCORE_PATH           ${GENERAL_SOURCE_PATH}/android-libcore)
 set(ANDROID_FRAMEWORKS_NATIVE_PATH ${GENERAL_SOURCE_PATH}/android-frameworks-native)
+set(DALVIK_PATH                    ${GENERAL_SOURCE_PATH}/dalvik)
 
 
+# Dalvik
+set(LIBDEX_INCLUDES ${DALVIK_PATH})  # FIXME: Move this when all the tools are done
+
+# frameworks/native
 set(LIBBINDER_INCLUDES ${CMAKE_SOURCE_DIR}/src/libs/libbinder
                        ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
                        ${CMAKE_INSTALL_PREFIX}/include    # FIXME: Remove when the build works without tier1/2

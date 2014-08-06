@@ -28,7 +28,7 @@ add_subdirectory(libdex)
 add_subdirectory(vm)
 
 # c++ tools
-add_subdirectory(dexdump)
+##add_subdirectory(dexdump)
 add_subdirectory(dexlist)
 add_subdirectory(hprof-conv)
 
