@@ -4,7 +4,7 @@ add_definitions(-DDVM_JMP_TABLE_MTERP -DDVM_NO_ASM_INTERP -DHAVE_SYS_UIO_H -DAND
                 -DDVM_SHOW_EXCEPTION=1 -DDVM_JMP_TABLE_MTERP=1 -DMTERP_STUB -DHAVE_BIG_ENDIAN
                 -fpermissive -w)
 if (JIT_VM)
-   add_definitions(-DWITH_JIT -DJIT_VM_TUNING -DARCH_IA32 -DARCH_VARIANT="x86")
+   add_definitions(${JIT_DEFS})
 else (JIT_VM)
     add_definitions(-DdvmAsmInstructionStart=0 -DdvmAsmInstructionEnd=0
                     -DdvmAsmSisterStart=0 -DdvmAsmSisterEnd=0 -DDVM_NO_ASM_INTERP=1)
