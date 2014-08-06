@@ -24,7 +24,7 @@ set(JIT_VM false)
 
 # c++ tools
 add_subdirectory(dexdump)
-##add_subdirectory(dexlist)
+add_subdirectory(dexlist)
 ##add_subdirectory(hprof-conv)
 
 if (JIT_VM)
