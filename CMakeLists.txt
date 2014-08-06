@@ -29,10 +29,8 @@ include(GenerateExportHeader)
 include(ECMGenerateHeaders)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
-include(KDECompilerSettings)
 include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
-include(KDEFrameworkCompilerSettings)
 
 
 # ----------------------------------------------------------------
