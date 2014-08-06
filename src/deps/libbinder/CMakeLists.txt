@@ -1,7 +1,10 @@
 project(binder)
 
 set(REPO_PATH ${ANDROID_FRAMEWORKS_NATIVE_PATH})
+set(MODULE_PATH ${REPO_PATH}/libs/binder)
+set(INCLUDE_PATH ${REPO_PATH}/include/binder)
 include_directories(${LIBBINDER_INCLUDES})
+message("INC DIRS ARE ${LIBBINDER_INCLUDES}")
 
 add_definitions(-DHAVE_SYS_UIO_H
                 -DHAVE_PTHREADS -pthread    # for IPCThreadState.cpp
@@ -9,50 +12,50 @@ add_definitions(-DHAVE_SYS_UIO_H
 )
 
 set(binder_LIB_SRCS
-    #    ${REPO_PATH}/libs/binder/AppOpsManager.cpp
-    ${REPO_PATH}/libs/binder/Binder.cpp
-    ${REPO_PATH}/libs/binder/BpBinder.cpp
-    ${REPO_PATH}/libs/binder/BufferedTextOutput.cpp
-    ${REPO_PATH}/libs/binder/Debug.cpp
-    #    ${REPO_PATH}/libs/binder/IAppOpsCallback.cpp
-    #    ${REPO_PATH}/libs/binder/IAppOpsService.cpp
-    #    ${REPO_PATH}/libs/binder/IInterface.cpp
-    #    ${REPO_PATH}/libs/binder/IMemory.cpp
-    ${REPO_PATH}/libs/binder/IPCThreadState.cpp
-    #    ${REPO_PATH}/libs/binder/IPermissionController.cpp
-    #    ${REPO_PATH}/libs/binder/IServiceManager.cpp
-    #    ${REPO_PATH}/libs/binder/MemoryBase.cpp
-    #    ${REPO_PATH}/libs/binder/MemoryDealer.cpp
-    #    ${REPO_PATH}/libs/binder/MemoryHeapBase.cpp
-    ${REPO_PATH}/libs/binder/Parcel.cpp
-    #    ${REPO_PATH}/libs/binder/PermissionCache.cpp
-    ${REPO_PATH}/libs/binder/ProcessState.cpp
-    ${REPO_PATH}/libs/binder/Static.cpp
-    ${REPO_PATH}/libs/binder/TextOutput.cpp
+    #    ${MODULE_PATH}/AppOpsManager.cpp
+    ${MODULE_PATH}/Binder.cpp
+    ${MODULE_PATH}/BpBinder.cpp
+    ${MODULE_PATH}/BufferedTextOutput.cpp
+    ${MODULE_PATH}/Debug.cpp
+    #    ${MODULE_PATH}/IAppOpsCallback.cpp
+    #    ${MODULE_PATH}/IAppOpsService.cpp
+    #    ${MODULE_PATH}/IInterface.cpp
+    #    ${MODULE_PATH}/IMemory.cpp
+    ${MODULE_PATH}/IPCThreadState.cpp
+    #    ${MODULE_PATH}/IPermissionController.cpp
+    #    ${MODULE_PATH}/IServiceManager.cpp
+    #    ${MODULE_PATH}/MemoryBase.cpp
+    #    ${MODULE_PATH}/MemoryDealer.cpp
+    #    ${MODULE_PATH}/MemoryHeapBase.cpp
+    ${MODULE_PATH}/Parcel.cpp
+    #    ${MODULE_PATH}/PermissionCache.cpp
+    ${MODULE_PATH}/ProcessState.cpp
+    ${MODULE_PATH}/Static.cpp
+    ${MODULE_PATH}/TextOutput.cpp
 )
 
 set(binder_LIB_HEADERS
-    #    ${REPO_PATH}/include/binder/AppOpsManager.h
-    ${REPO_PATH}/include/binder/Binder.h
-    #    ${REPO_PATH}/include/binder/BinderService.h
-    ${REPO_PATH}/include/binder/BpBinder.h
-    ${REPO_PATH}/include/binder/BufferedTextOutput.h
-    ${REPO_PATH}/include/binder/Debug.h
-    #    ${REPO_PATH}/include/binder/IAppOpsCallback.h
-    #    ${REPO_PATH}/include/binder/IAppOpsService.h
-    ${REPO_PATH}/include/binder/IBinder.h
-    ${REPO_PATH}/include/binder/IInterface.h
-    #    ${REPO_PATH}/include/binder/IMemory.h
-    ${REPO_PATH}/include/binder/IPCThreadState.h
-    #    ${REPO_PATH}/include/binder/IPermissionController.h
-    #    ${REPO_PATH}/include/binder/IServiceManager.h
-    #    ${REPO_PATH}/include/binder/MemoryBase.h
-    #    ${REPO_PATH}/include/binder/MemoryDealer.h
-    #    ${REPO_PATH}/include/binder/MemoryHeapBase.h
-    ${REPO_PATH}/include/binder/Parcel.h
-    #    ${REPO_PATH}/include/binder/PermissionCache.h
-    ${REPO_PATH}/include/binder/ProcessState.h
-    ${REPO_PATH}/include/binder/TextOutput.h
+    #    ${INCLUDE_PATH}/AppOpsManager.h
+    ${INCLUDE_PATH}/Binder.h
+    #    ${INCLUDE_PATH}/BinderService.h
+    ${INCLUDE_PATH}/BpBinder.h
+    ${INCLUDE_PATH}/BufferedTextOutput.h
+    ${INCLUDE_PATH}/Debug.h
+    #    ${INCLUDE_PATH}/IAppOpsCallback.h
+    #    ${INCLUDE_PATH}/IAppOpsService.h
+    ${INCLUDE_PATH}/IBinder.h
+    ${INCLUDE_PATH}/IInterface.h
+    #    ${INCLUDE_PATH}/IMemory.h
+    ${INCLUDE_PATH}/IPCThreadState.h
+    #    ${INCLUDE_PATH}/IPermissionController.h
+    #    ${INCLUDE_PATH}/IServiceManager.h
+    #    ${INCLUDE_PATH}/MemoryBase.h
+    #    ${INCLUDE_PATH}/MemoryDealer.h
+    #    ${INCLUDE_PATH}/MemoryHeapBase.h
+    ${INCLUDE_PATH}/Parcel.h
+    #    ${INCLUDE_PATH}/PermissionCache.h
+    ${INCLUDE_PATH}/ProcessState.h
+    ${INCLUDE_PATH}/TextOutput.h
 
     #    ${REPO_PATH}/include/private/binder/binder_module.h
     ${REPO_PATH}/include/private/binder/Static.h
