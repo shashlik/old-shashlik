@@ -1,0 +1,77 @@
+project(binder)
+
+set(REPO_PATH ${ANDROID_FRAMEWORKS_NATIVE_PATH})
+set(MODULE_PATH ${REPO_PATH}/libs/binder)
+set(INCLUDE_PATH ${REPO_PATH}/include/binder)
+include_directories(${LIBBINDER_INCLUDES})
+message("INC DIRS ARE ${LIBBINDER_INCLUDES}")
+
+add_definitions(-DHAVE_SYS_UIO_H
+                -DHAVE_PTHREADS -pthread    # for IPCThreadState.cpp
+                -fpermissive                # for redeclaration of  char32_t
+)
+
+set(binder_LIB_SRCS
+    #    ${MODULE_PATH}/AppOpsManager.cpp
+    ${MODULE_PATH}/Binder.cpp
+    ${MODULE_PATH}/BpBinder.cpp
+    ${MODULE_PATH}/BufferedTextOutput.cpp
+    ${MODULE_PATH}/Debug.cpp
+    #    ${MODULE_PATH}/IAppOpsCallback.cpp
+    #    ${MODULE_PATH}/IAppOpsService.cpp
+    #    ${MODULE_PATH}/IInterface.cpp
+    #    ${MODULE_PATH}/IMemory.cpp
+    ${MODULE_PATH}/IPCThreadState.cpp
+    #    ${MODULE_PATH}/IPermissionController.cpp
+    #    ${MODULE_PATH}/IServiceManager.cpp
+    #    ${MODULE_PATH}/MemoryBase.cpp
+    #    ${MODULE_PATH}/MemoryDealer.cpp
+    #    ${MODULE_PATH}/MemoryHeapBase.cpp
+    ${MODULE_PATH}/Parcel.cpp
+    #    ${MODULE_PATH}/PermissionCache.cpp
+    ${MODULE_PATH}/ProcessState.cpp
+    ${MODULE_PATH}/Static.cpp
+    ${MODULE_PATH}/TextOutput.cpp
+)
+
+set(binder_LIB_HEADERS
+    #    ${INCLUDE_PATH}/AppOpsManager.h
+    ${INCLUDE_PATH}/Binder.h
+    #    ${INCLUDE_PATH}/BinderService.h
+    ${INCLUDE_PATH}/BpBinder.h
+    ${INCLUDE_PATH}/BufferedTextOutput.h
+    ${INCLUDE_PATH}/Debug.h
+    #    ${INCLUDE_PATH}/IAppOpsCallback.h
+    #    ${INCLUDE_PATH}/IAppOpsService.h
+    ${INCLUDE_PATH}/IBinder.h
+    ${INCLUDE_PATH}/IInterface.h
+    #    ${INCLUDE_PATH}/IMemory.h
+    ${INCLUDE_PATH}/IPCThreadState.h
+    #    ${INCLUDE_PATH}/IPermissionController.h
+    #    ${INCLUDE_PATH}/IServiceManager.h
+    #    ${INCLUDE_PATH}/MemoryBase.h
+    #    ${INCLUDE_PATH}/MemoryDealer.h
+    #    ${INCLUDE_PATH}/MemoryHeapBase.h
+    ${INCLUDE_PATH}/Parcel.h
+    #    ${INCLUDE_PATH}/PermissionCache.h
+    ${INCLUDE_PATH}/ProcessState.h
+    ${INCLUDE_PATH}/TextOutput.h
+
+    #    ${REPO_PATH}/include/private/binder/binder_module.h
+    ${REPO_PATH}/include/private/binder/Static.h
+)
+
+link_directories(${CMAKE_INSTALL_PREFIX}/lib/
+                 #${CMAKE_CURRENT_BINARY_DIR}/libdex/  # For linking dexdump, dexlist and dexgen
+                 )
+
+add_library(binder SHARED ${binder_LIB_SRCS})
+target_link_libraries(binder log utils cutils
+			     ${STANDARD_SYS_LIBS}
+                      )
+
+install(TARGETS binder DESTINATION lib)
+install(FILES
+        ${binder_LIB_HEADERS}
+        DESTINATION include/binder)
+

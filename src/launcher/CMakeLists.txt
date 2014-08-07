@@ -8,16 +8,17 @@ set(STANDARD_SYS_LIBS  dl pthread z resolv ffi)
 #find_package(KF5DBusAddons NO_MODULE)
 #find_package(Qt5Network ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
 
-add_definitions(-fpermissive    # For redeclaration of char32_t (among other things?)
+add_definitions(-fPIC
+                -fpermissive    # For redeclaration of char32_t (among other things?)
                 )
 
 # FIXME: Introduce ${<library>_INCLUDES} variables for all our libraries.
 include_directories(${CMAKE_INSTALL_PREFIX}/include
                     ${CMAKE_INSTALL_PREFIX}/include/nativehelper
-		    ${CMAKE_SOURCE_DIR}/src/libs/libshashlikutils
+                    ${CMAKE_SOURCE_DIR}/src/libs/libshashlikutils
                     ${CMAKE_BINARY_DIR}     # for shashlikversion.h
                     ${ANDROID_FRAMEWORKS_BASE}/include
-	            )
+                    )
 
 set(shashlik_launcher_SRCS
     main.cpp

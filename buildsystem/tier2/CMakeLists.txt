@@ -7,7 +7,7 @@ set(STANDARD_SYS_LIBS dl pthread z resolv ffi)
 
 
 
-add_subdirectory(libbinder)
+##add_subdirectory(libbinder)
 
 
 # ----------------------------------------------------------------
@@ -25,14 +25,15 @@ set(JIT_VM false)
 add_subdirectory(libdex)
 
 # dalvik vm
-add_subdirectory(vm)
+##add_subdirectory(vm)
 
 # c++ tools
-add_subdirectory(dexdump)
-add_subdirectory(dexlist)
-add_subdirectory(hprof-conv)
+##add_subdirectory(dexdump)
+##add_subdirectory(dexlist)
+##add_subdirectory(hprof-conv)
 
 if (JIT_VM)
+    set(JIT_DEFS -DWITH_JIT -DWITH_JIT_TUNING -DDVM_JMP_TABLE_MTERP=1 -DMTERP_STUB -DARCH_IA32 -DARCH_VARIANT="x86")
     add_subdirectory(gdbjithelper)
     add_subdirectory(dexopt)
     add_subdirectory(dmtracedump)
