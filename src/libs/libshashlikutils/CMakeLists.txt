@@ -3,6 +3,7 @@ project(libshashlikutils)
 # generate shashlikversion.h
 configure_file(shashlikversion.h.cmake ${CMAKE_BINARY_DIR}/shashlikversion.h)
 
+find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Core)
 #find_package(KF5Archive NO_MODULE)
 
 #add_definitions(-DHAVE_SYS_UIO_H)
@@ -23,7 +24,8 @@ set(libshashlikutils_HEADERS
 add_library(shashlikutils SHARED ${libshashlikutils_SRCS})
 
 target_link_libraries(shashlikutils
-		     # KF5::Archive Qt5::Core
+		      #KF5::Archive
+                      Qt5::Core
 )
 
 install(TARGETS shashlikutils DESTINATION lib)
