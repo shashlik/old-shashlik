@@ -37,7 +37,7 @@
 
 //#include <android_runtime/AndroidRuntime.h>
 //#include <binder/IBinder.h>
-//#include <binder/IPCThreadState.h>
+#include <binder/IPCThreadState.h>
 //#include <binder/IServiceManager.h>
 #include <utils/Log.h>
 #include <utils/misc.h>
@@ -350,12 +350,8 @@ static void runtime_vfprintf(FILE* fp, const char* format, va_list ap)
  * into us)
  */
 static bool runtime_isSensitiveThread() {
-#if 0 // disabled temporarily /IW
     IPCThreadState* state = IPCThreadState::selfOrNull();
     return state && state->getStrictModePolicy() != 0;
-#else
-    return false;
-#endif
 }
 
 
