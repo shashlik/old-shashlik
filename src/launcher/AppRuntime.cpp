@@ -14,12 +14,12 @@
 //#include <unistd.h>
 
 //#include <cutils/properties.h>
-//#include <binder/IPCThreadState.h>
-//#include <binder/ProcessState.h>
+#include <binder/IPCThreadState.h>
+#include <binder/ProcessState.h>
 //#include <utils/Log.h>
 //#include <cutils/process_name.h>
 //#include <cutils/memory.h>
-//#include <cutils/trace.h>
+#include <cutils/trace.h>
 //#include <android_runtime/AndroidRuntime.h>
 //#include <sys/personality.h>
 
@@ -30,7 +30,7 @@ namespace shashlik {
 AppRuntime::AppRuntime()
     : m_parentDir(0)
     , m_className(0)
-      //    , m_Class(0)
+    , m_class(0)
     , m_argC(0)
     , m_argV(0)
 {
@@ -77,7 +77,6 @@ void AppRuntime::setArgcArgv(int argc, const char *const *argv)
 
 void AppRuntime::onVmCreated(JNIEnv* env)
 {
-#if 0 // temp. disabled to make it build
     if (m_className == NULL) {
 	return; // Zygote. Nothing to do here.
     }
@@ -95,53 +94,46 @@ void AppRuntime::onVmCreated(JNIEnv* env)
      * executing boot class Java code and thereby deny ourselves access to
      * non-boot classes.
      */
-    char* slashClassName = toSlashClassName(mClassName);
-    mClass = env->FindClass(slashClassName);
-    if (mClass == NULL) {
-	ALOGE("ERROR: could not find class '%s'\n", mClassName);
+    char* slashClassName = toSlashClassName(m_className);
+    m_class = env->FindClass(slashClassName);
+    if (m_class == NULL) {
+	ALOGE("ERROR: could not find class '%s'\n", m_className);
     }
     free(slashClassName);
 
-    mClass = reinterpret_cast<jclass>(env->NewGlobalRef(mClass));
-#endif
+    m_class = reinterpret_cast<jclass>(env->NewGlobalRef(m_class));
 }
 
 void AppRuntime::onStarted()
 {
-#if 0 // temp. disabled to make it build
     sp<ProcessState> proc = ProcessState::self();
     ALOGV("App process: starting thread pool.\n");
     proc->startThreadPool();
 
-    AndroidRuntime* ar = AndroidRuntime::getRuntime();
+    ShashlikRuntime* ar = ShashlikRuntime::getRuntime();
     ar->callMain(m_className, m_class, m_argC, m_argV);
 
     IPCThreadState::self()->stopProcess();
-#endif
 }
 
 void AppRuntime::onZygoteInit()
 {
-#if 0 // temp. disabled to make it build
     // Re-enable tracing now that we're no longer in Zygote.
     atrace_set_tracing_enabled(true);
 
     sp<ProcessState> proc = ProcessState::self();
     ALOGV("App process: starting thread pool.\n");
     proc->startThreadPool();
-#endif
 }
 
 void AppRuntime::onExit(int code)
 {
-#if 0 // temp. disabled to make it build
     if (m_className == NULL) {
 	// if zygote
 	IPCThreadState::self()->stopProcess();
     }
 
-    AndroidRuntime::onExit(code);
-#endif
+    ShashlikRuntime::onExit(code);
 }
 
 
