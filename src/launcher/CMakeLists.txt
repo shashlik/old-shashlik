@@ -47,6 +47,7 @@ target_link_libraries(shashlik_launcher
     #KF5::CoreAddons
     #KF5::DBusAddons
     #Qt5::Network
+    shashlikutils
     ${STANDARD_SYS_LIBS}
 )
 
