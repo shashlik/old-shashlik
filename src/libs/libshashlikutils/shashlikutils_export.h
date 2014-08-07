@@ -23,7 +23,7 @@
 #define SHASHLIKUTILS_EXPORT_H
 
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
-#include <kdemacros.h>
+#include <qglobal.h>
 
 /* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
 #if defined _WIN32 || defined _WIN64
@@ -31,16 +31,16 @@
 #ifndef SHASHLIKUTILS_EXPORT
 # if defined(MAKE_SHASHLIKUTILS_LIB)
 /* We are building this library */
-#  define SHASHLIKUTILS_EXPORT KDE_EXPORT
+#  define SHASHLIKUTILS_EXPORT Q_DECL_EXPORT
 # else
 /* We are using this library */
-#  define SHASHLIKUTILS_EXPORT KDE_IMPORT
+#  define SHASHLIKUTILS_EXPORT Q_DECL_IMPORT
 # endif
 #endif
 
 #else /* UNIX */
 
-#define SHASHLIKUTILS_EXPORT KDE_EXPORT
+#define SHASHLIKUTILS_EXPORT Q_DECL_EXPORT
 
 #endif
 
@@ -49,12 +49,12 @@
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
 # if defined(MAKE_SHASHLIKUTILS_LIB)
-#       define SHASHLIKUTILS_TEST_EXPORT KDE_EXPORT
+#       define SHASHLIKUTILS_TEST_EXPORT Q_DECL_EXPORT
 #   else
-#       define SHASHLIKUTILS_TEST_EXPORT KDE_IMPORT
+#       define SHASHLIKUTILS_TEST_EXPORT Q_DECL_IMPORT
 #   endif
 # else /* not windows */
-#   define SHASHLIKUTILS_TEST_EXPORT KDE_EXPORT
+#   define SHASHLIKUTILS_TEST_EXPORT Q_DECL_EXPORT
 # endif
 #else /* not compiling tests */
 #   define SHASHLIKUTILS_TEST_EXPORT
