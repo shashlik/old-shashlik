@@ -14,7 +14,8 @@ add_definitions(-fPIC
                 )
 
 # FIXME: Introduce ${<library>_INCLUDES} variables for all our libraries.
-include_directories(${CMAKE_INSTALL_PREFIX}/include
+include_directories(${LIBBINDER_INCLUDES}
+                    ${CMAKE_INSTALL_PREFIX}/include
                     ${CMAKE_INSTALL_PREFIX}/include/nativehelper
                     ${CMAKE_SOURCE_DIR}/src/libs/libshashlikutils
                     ${CMAKE_BINARY_DIR}     # for shashlikversion.h
