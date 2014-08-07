@@ -10,6 +10,7 @@ set(STANDARD_SYS_LIBS  dl pthread z resolv ffi)
 
 add_definitions(-fPIC
                 -fpermissive    # For redeclaration of char32_t (among other things?)
+		-DHAVE_ANDROID_OS # For atrace_*. FIXME: This one needs some deeper considerations.
                 )
 
 # FIXME: Introduce ${<library>_INCLUDES} variables for all our libraries.
@@ -39,15 +40,16 @@ set_target_properties(shashlik_launcher PROPERTIES
 )
 
 target_link_libraries(shashlik_launcher
+    shashlikutils
+    libbinder.so
     libnativehelper.so
-    libutils.so
-    libcutils.so
     libcorkscrew.so
     liblog.so
+    libutils.so
+    libcutils.so
     #KF5::CoreAddons
     #KF5::DBusAddons
     #Qt5::Network
-    shashlikutils
     ${STANDARD_SYS_LIBS}
 )
 

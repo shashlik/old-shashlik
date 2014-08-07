@@ -51,7 +51,7 @@ private:
 
     const char*        m_parentDir;
     const char*        m_className;
-    //jclass             m_class;  #temporarily disabled to make it build
+    jclass             m_class;
     int                m_argC;
     const char* const* m_argV;
 };
