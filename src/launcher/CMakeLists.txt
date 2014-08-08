@@ -42,7 +42,8 @@ set_target_properties(shashlik_launcher PROPERTIES
 
 target_link_libraries(shashlik_launcher
     shashlikutils
-    libbinder.so
+    binder
+
     libnativehelper.so
     libcorkscrew.so
     liblog.so
