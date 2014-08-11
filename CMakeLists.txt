@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 
+
 # General definitions
 set(SHASHLIK_VERSION_STRING "0.5.0")
 set(SHASHLIK_VERSION_MAJOR 0)
 set(SHASHLIK_VERSION_MINOR 5)
 set(SHASHLIK_VERSION_RELEASE 0)
 set(SHASHLIK_VERSION_YEAR 2014)
+
 
 # ----------------------------------------------------------------
 # Requirements
@@ -14,10 +16,11 @@ set(SHASHLIK_VERSION_YEAR 2014)
 find_package(ECM 1.0.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
-# For KF5 stuff, you must set the CMake module path first. See BUILDING 
-# for how to do that.
 
-find_package(Qt5Core ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
+# For Qt5 and KF5 stuff, you must set the CMake module path first. See
+# BUILDING for how to do that.
+
+find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Core)
 #find_package(Qt COMPONENTS QtCore REQUIRED)
 
 set(KF5_VERSION "5.0.0") # handled by release scripts

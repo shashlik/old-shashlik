@@ -7,7 +7,9 @@ set(STANDARD_SYS_LIBS dl pthread z resolv ffi)
 
 
 
-##add_subdirectory(libbinder)
+# necessary to note that we have endian.h, which we do on all systems we target
+# otherwise the android code goes and redefines it all on us. not so great
+add_definitions(-DHAVE_ENDIAN_H)
 
 
 # ----------------------------------------------------------------
