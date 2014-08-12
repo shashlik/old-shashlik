@@ -1,8 +1,5 @@
 project(shashlik_launcher)
 
-# Definitions.  Some of these might move to the top CMakeLists.txt
-set(STANDARD_SYS_LIBS  dl pthread z resolv ffi)
-
 
 #find_package(KF5CoreAddons NO_MODULE)
 #find_package(KF5DBusAddons NO_MODULE)

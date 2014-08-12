@@ -50,6 +50,10 @@ add_definitions(-DHAVE_SYS_UIO_H
                 -DHAVE_PTHREADS
 )
 
+# Standard system libraries that everything links against
+set(STANDARD_SYS_LIBS  dl pthread z resolv ffi)
+
+
 
 # ----------------------------------------------------------------
 # Various project settings
