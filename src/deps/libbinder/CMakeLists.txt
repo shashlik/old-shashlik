@@ -66,7 +66,7 @@ link_directories(${CMAKE_INSTALL_PREFIX}/lib/
                  )
 
 add_library(binder SHARED ${binder_LIB_SRCS})
-target_link_libraries(binder log utils cutils
+target_link_libraries(binder LINK_INTERFACE_LIBRARIES log utils cutils
 			     ${STANDARD_SYS_LIBS}
                       )
 

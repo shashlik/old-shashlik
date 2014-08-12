@@ -41,6 +41,7 @@ include(ECMSetupVersion)
 
 
 # It is assumed that the various repos are checked out next to this one
+# This is described in the file BUILDING.
 set(GENERAL_SOURCE_PATH ${CMAKE_SOURCE_DIR}/..)
 
 set(ANDROID_CORE_PATH              ${GENERAL_SOURCE_PATH}/android-core)

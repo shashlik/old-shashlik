@@ -49,7 +49,7 @@ set(dex_HEADERS
 )
 
 add_library(dex SHARED ${dex_SRCS})
-target_link_libraries(dex ${STANDARD_SYS_LIBS})
+target_link_libraries(dex LINK_INTERFACE_LIBRARIES ${STANDARD_SYS_LIBS})
 
 install(TARGETS dex DESTINATION lib)
 install(FILES
