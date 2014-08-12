@@ -12,9 +12,17 @@ include_directories(${REPO_PATH}
 )
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
 
-add_definitions(-DDVM_JMP_TABLE_MTERP -DDVM_NO_ASM_INTERP -DHAVE_SYS_UIO_H -DANDROID_SMP
-                -DDVM_SHOW_EXCEPTION=1 -DDVM_JMP_TABLE_MTERP=1 -DMTERP_STUB -DHAVE_BIG_ENDIAN
-                -fpermissive -w)
+add_definitions(-DDVM_JMP_TABLE_MTERP
+                -DDVM_NO_ASM_INTERP
+                -DANDROID_SMP
+                -DDVM_SHOW_EXCEPTION=1
+                -DDVM_JMP_TABLE_MTERP=1
+                -DMTERP_STUB
+		-DHAVE_BIG_ENDIAN  # FIXME: This must be wrong but it currently doesn't build without it
+                -fpermissive
+                -w
+)
+
 if (JIT_VM)
    add_definitions(${JIT_DEFS})
 else (JIT_VM)

@@ -10,7 +10,7 @@ Next milestone: M2: Run a dex file inside the VM
 
 
 Immediate stuff
- * Add the HAVE_ definitions to the appropriate (top?) level.   ----
+ * Add the HAVE_ definitions to the appropriate (top?) level.   Done
 
 
 Tasks to reach next milestone

@@ -37,6 +37,21 @@ include(ECMSetupVersion)
 
 
 # ----------------------------------------------------------------
+# System settings
+
+
+# It is necessary to note that we have endian.h, which we do on all systems we
+# target otherwise the android code goes and redefines it all on us. Not so
+# great...
+add_definitions(-DHAVE_SYS_UIO_H
+                -DHAVE_ENDIAN_H
+                -DHAVE_OFF64_T   # FIXME: Need to investigate which gcc flags is needed to get this
+                -DHAVE_SYS_SOCKET_H
+                -DHAVE_PTHREADS
+)
+
+
+# ----------------------------------------------------------------
 # Various project settings
 
 

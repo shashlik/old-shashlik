@@ -7,16 +7,14 @@ include_directories(${REPO_PATH}
 )
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
 
-add_definitions(-DHAVE_SYS_UIO_H
-                -DANDROID_SMP
+add_definitions(-DANDROID_SMP
                 -DDVM_SHOW_EXCEPTION=1
-                -DWITH_JIT
+                -DWITH_JIT                 # FIXME: Really? Also when JIT_VM is false?
                 -DWITH_JIT_TUNING
                 -DARCH_IA32
                 -DARCH_VARIANT="x86"
                 -DDVM_JMP_TABLE_MTERP=1
                 -DMTERP_STUB
-                -DHAVE_BIG_ENDIAN
                 -fpermissive
                 -w
 )
