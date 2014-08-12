@@ -1,10 +1,13 @@
 project(dex)
 
+set(REPO_PATH ${DALVIK_PATH})
 #add_definitions(-D_GNU_SOURCE -DHAVE_LINUX_LOCAL_SOCKET_NAMESPACE -DHAVE_SYS_UIO_H -DHAVE_SYS_SOCKET_H -DHAVE_PTHREADS -DANDROID_SMP=1)
-add_definitions(-DHAVE_SYS_UIO_H -DHAVE_OFF64_T)
-set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../dalvik)
+add_definitions(-DHAVE_SYS_UIO_H
+                -DHAVE_OFF64_T
+)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH})
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH})
+include_directories(${LIBDEX_INCLUDES})
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/safe-iop)
 
 set(dex_SRCS

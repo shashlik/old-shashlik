@@ -30,7 +30,7 @@ set(hprof-conv_SRCS
 link_directories(${CMAKE_INSTALL_PREFIX}/lib/)
 
 add_executable(hprof-conv ${hprof-conv_SRCS})
-target_link_libraries(hprof-conv libdex.so
+target_link_libraries(hprof-conv dex
                                  libcorkscrew.so liblog.so libnativehelper.so
                                  libsafe-iop.so  libutils.so libcutils.so
                                  ${STANDARD_SYS_LIBS}

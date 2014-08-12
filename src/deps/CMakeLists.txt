@@ -17,7 +17,7 @@ set(STANDARD_SYS_LIBS dl pthread z resolv ffi)
 set(JIT_VM false)
 
 # vm support libs
-##add_subdirectory(libdex)
+add_subdirectory(libdex)
 
 # dalvik vm
 add_subdirectory(vm)

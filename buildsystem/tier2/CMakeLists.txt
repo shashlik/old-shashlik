@@ -24,7 +24,7 @@ add_definitions(-DHAVE_ENDIAN_H)
 set(JIT_VM false)
 
 # vm support libs
-add_subdirectory(libdex)
+##add_subdirectory(libdex)
 
 # dalvik vm
 ##add_subdirectory(vm)

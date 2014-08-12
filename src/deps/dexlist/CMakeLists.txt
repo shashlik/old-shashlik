@@ -29,7 +29,7 @@ set(dexlist_SRCS
 link_directories(${CMAKE_INSTALL_PREFIX}/lib/)
 
 add_executable(dexlist ${dexlist_SRCS})
-target_link_libraries(dexlist  libdex.so
+target_link_libraries(dexlist  dex
                                libcorkscrew.so liblog.so libnativehelper.so
                                libsafe-iop.so  libutils.so libcutils.so
                                ${STANDARD_SYS_LIBS}
