@@ -6,7 +6,6 @@ configure_file(shashlikversion.h.cmake ${CMAKE_BINARY_DIR}/shashlikversion.h)
 find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Core)
 #find_package(KF5Archive NO_MODULE)
 
-#add_definitions(-DHAVE_SYS_UIO_H)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_BINARY_DIR}
 )

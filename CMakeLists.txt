@@ -45,7 +45,7 @@ include(ECMSetupVersion)
 # great...
 add_definitions(-DHAVE_SYS_UIO_H
                 -DHAVE_ENDIAN_H
-                #-DHAVE_OFF64_T   # FIXME: Need to investigate which gcc flags is needed to get this
+                -DHAVE_OFF64_T   # FIXME: Need to investigate which gcc flags is needed to get this
                 -DHAVE_SYS_SOCKET_H
                 -DHAVE_PTHREADS
 )

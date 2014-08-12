@@ -6,9 +6,7 @@ set(INCLUDE_PATH ${REPO_PATH}/include/binder)
 include_directories(${LIBBINDER_INCLUDES})
 message("INC DIRS ARE ${LIBBINDER_INCLUDES}")
 
-add_definitions(-DHAVE_SYS_UIO_H
-                -DHAVE_PTHREADS -pthread    # for IPCThreadState.cpp
-                -fpermissive                # for redeclaration of  char32_t
+add_definitions(-fpermissive                # for redeclaration of  char32_t
 )
 
 set(binder_LIB_SRCS
