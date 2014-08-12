@@ -50,7 +50,7 @@ set(DALVIK_PATH                    ${GENERAL_SOURCE_PATH}/dalvik)
 
 
 # Dalvik
-set(LIBDEX_INCLUDES ${DALVIK_PATH})  # FIXME: Move this when all the tools are done
+set(LIBDEX_INCLUDES ${DALVIK_PATH})
 
 # frameworks/native
 set(LIBBINDER_INCLUDES ${CMAKE_SOURCE_DIR}/src/libs/libbinder
