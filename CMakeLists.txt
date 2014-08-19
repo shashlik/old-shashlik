@@ -48,7 +48,12 @@ add_definitions(-DHAVE_SYS_UIO_H
                 -DHAVE_OFF64_T   # FIXME: Need to investigate which gcc flags is needed to get this
                 -DHAVE_SYS_SOCKET_H
                 -DHAVE_PTHREADS
+                -DHAVE_POSIX_CLOCKS
 )
+
+# Standard system libraries that everything links against
+set(STANDARD_SYS_LIBS  dl pthread z resolv ffi)
+
 
 
 # ----------------------------------------------------------------
