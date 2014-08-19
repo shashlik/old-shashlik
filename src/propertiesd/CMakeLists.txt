@@ -4,12 +4,13 @@ find_package(Qt5Network ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
 
 add_definitions(-DHAVE_SYSTEM_PROPERTY_SERVER)
 
-include_directories(${CMAKE_INSTALL_PREFIX}/include)
+include_directories(${CMAKE_INSTALL_PREFIX}/include 
+                    ${LIBCUTILS_INCLUDES}
+)
 
-set(
-   kded_shashlik_propertiesd_SRCS
-   propertiesd.cpp
-   )
+set(kded_shashlik_propertiesd_SRCS
+    propertiesd.cpp
+)
 
 add_library(kded_shashlik_propertiesd MODULE ${kded_shashlik_propertiesd_SRCS} )
 set_target_properties(kded_shashlik_propertiesd PROPERTIES

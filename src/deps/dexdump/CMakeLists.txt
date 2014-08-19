@@ -2,7 +2,8 @@ project(dexdump)
 
 set(REPO_PATH ${DALVIK_PATH})
 include_directories(${REPO_PATH}
-                    ${CMAKE_INSTALL_PREFIX}/include/android-libcore  # FIXME
+                    ${LIBCUTILS_INCLUDES}
+                    #${CMAKE_INSTALL_PREFIX}/include/android-libcore  # FIXME
                     ${CMAKE_INSTALL_PREFIX}/include/nativehelper     # FIXME
 )
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
@@ -30,7 +31,7 @@ link_directories(${CMAKE_INSTALL_PREFIX}/lib/)
 add_executable(dexdump ${dexdump_SRCS})
 target_link_libraries(dexdump dex
                               libcorkscrew.so liblog.so libnativehelper.so # WIll be transformed later to target names
-			      libsafe-iop.so libutils.so libcutils.so 
+			      libsafe-iop.so libutils.so cutils 
                               ${STANDARD_SYS_LIBS}
                       )
 

@@ -1,7 +1,15 @@
 project(cutils)
 
-#add_definitions(-DHAVE_POSIX_FILEMAP -DHAVE_OFF64_T -DHAVE_SYS_UIO_H -DHAVE_PTHREADS -DOS_PATH_SEPARATOR='/' -DANDROID_SMP=1)
-add_definitions(-D_GNU_SOURCE -DHAVE_LINUX_LOCAL_SOCKET_NAMESPACE -DHAVE_SYS_UIO_H -DHAVE_SYS_SOCKET_H -DHAVE_PTHREADS -DANDROID_SMP=1 -DHAVE_SYSTEM_PROPERTY_SERVER)
+set(REPO_PATH ${ANDROID_CORE_PATH})
+
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${LIBCUTILS_INCLUDES})
+
+add_definitions(-D_GNU_SOURCE
+                -DHAVE_LINUX_LOCAL_SOCKET_NAMESPACE
+                -DANDROID_SMP=1
+                -DHAVE_SYSTEM_PROPERTY_SERVER
+)
 set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../android-core)
 
 set(cutils_SRCS
@@ -87,10 +95,9 @@ set(cutils_HEADERS
     ${REPO_PATH}/include/cutils/uevent.h
 )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH}/include)
 add_library(cutils SHARED ${cutils_SRCS})
 install(TARGETS cutils DESTINATION lib)
 install(FILES
         ${cutils_HEADERS}
         DESTINATION include/cutils)
-install(FILES ${REPO_PATH}/include/sys/system_properties.h DESTINATION include/sys)
+#install(FILES ${REPO_PATH}/include/sys/system_properties.h DESTINATION include/sys)

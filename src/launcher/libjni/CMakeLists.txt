@@ -10,6 +10,7 @@ add_definitions(-DHAVE_ANDROID_OS   # To make cutils/trace work.  FIXME: Check w
 #include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/..   # For runtime/ . Reorganize this better once it works
+                    ${LIBCUTILS_INCLUDES}
                     ${CMAKE_INSTALL_PREFIX}/include
                     ${CMAKE_INSTALL_PREFIX}/include/nativehelper
                     ${LIBBINDER_INCLUDES}

@@ -3,7 +3,9 @@ project(binder)
 set(REPO_PATH ${ANDROID_FRAMEWORKS_NATIVE_PATH})
 set(MODULE_PATH ${REPO_PATH}/libs/binder)
 set(INCLUDE_PATH ${REPO_PATH}/include/binder)
-include_directories(${LIBBINDER_INCLUDES})
+include_directories(${LIBBINDER_INCLUDES}
+                    ${LIBCUTILS_INCLUDES}
+)
 message("INC DIRS ARE ${LIBBINDER_INCLUDES}")
 
 add_definitions(-fpermissive                # for redeclaration of  char32_t
