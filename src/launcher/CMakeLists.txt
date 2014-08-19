@@ -1,6 +1,9 @@
 project(shashlik_launcher)
 
 
+add_subdirectory(libjni)
+
+
 #find_package(KF5CoreAddons NO_MODULE)
 #find_package(KF5DBusAddons NO_MODULE)
 #find_package(Qt5Network ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
