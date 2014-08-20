@@ -3,7 +3,7 @@ shashlik
 
 Android Simulated Environment
 
-The roadmap / gameplan is:
+The roadmap / plan is:
 
 * Enumerate components and dependencies
 
