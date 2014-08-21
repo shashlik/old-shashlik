@@ -2,7 +2,6 @@ project(cutils)
 
 set(REPO_PATH ${ANDROID_CORE_PATH})
 
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${LIBCUTILS_INCLUDES})
 
 add_definitions(-D_GNU_SOURCE

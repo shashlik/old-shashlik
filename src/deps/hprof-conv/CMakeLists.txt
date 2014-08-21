@@ -3,6 +3,8 @@ project(hprof-conv)
 set(REPO_PATH ${DALVIK_PATH})
 set(MODULE_PATH ${REPO_PATH}/tools/hprof-conv)
 include_directories(${REPO_PATH}
+                    ${LIBUTILS_INCLUDES}
+                    ${LIBCUTILS_INCLUDES}
                     ${CMAKE_INSTALL_PREFIX}/include/android-libcore #FIXME
                     ${CMAKE_INSTALL_PREFIX}/include/nativehelper    #FIXME
 )
@@ -30,7 +32,7 @@ link_directories(${CMAKE_INSTALL_PREFIX}/lib/)
 add_executable(hprof-conv ${hprof-conv_SRCS})
 target_link_libraries(hprof-conv dex
                                  libcorkscrew.so liblog.so libnativehelper.so
-                                 libsafe-iop.so  libutils.so cutils  # Targets in this tree
+                                 libsafe-iop.so  utils cutils  # Targets in this tree
                                  ${STANDARD_SYS_LIBS}
                       )
 

@@ -72,7 +72,7 @@ set(DALVIK_PATH                    ${GENERAL_SOURCE_PATH}/dalvik)
 # Tier 1 libraries
 
 # android-core (FIXME: Make one ANDROID_CORE_INCLUDES instead?)
-set(LIBUTILS_INCLUDES ${ANDROID_CORE_PATH}/include)
+set(LIBUTILS_INCLUDES  ${ANDROID_CORE_PATH}/include)
 set(LIBCUTILS_INCLUDES ${ANDROID_CORE_PATH}/include)
 
 

@@ -1,7 +1,15 @@
 project(utils)
 
-add_definitions(-DHAVE_POSIX_FILEMAP -DHAVE_OFF64_T -DHAVE_SYS_UIO_H -DHAVE_PTHREADS -DOS_PATH_SEPARATOR='/' -DANDROID_SMP=1)
-set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../android-core)
+set(REPO_PATH ${ANDROID_CORE_PATH})
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${LIBCUTILS_INCLUDES})
+
+add_definitions(-DHAVE_POSIX_FILEMAP
+                -DHAVE_OFF64_T
+                -DHAVE_SYS_UIO_H
+                -DHAVE_PTHREADS
+                -DOS_PATH_SEPARATOR='/'
+                -DANDROID_SMP=1)
 
 set(utils_SRCS
    ${REPO_PATH}/libutils/BasicHashtable.cpp
