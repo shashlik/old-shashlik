@@ -31,8 +31,9 @@ link_directories(${CMAKE_INSTALL_PREFIX}/lib/)
 
 add_executable(dexdump ${dexdump_SRCS})
 target_link_libraries(dexdump dex
-                              libcorkscrew.so liblog.so libnativehelper.so # WIll be transformed later to target names
-			      safe-iop utils cutils 
+                              libcorkscrew.so  libnativehelper.so # WIll be transformed later to target names
+			      safe-iop
+                              log utils cutils # android-core
                               ${STANDARD_SYS_LIBS}
                       )
 

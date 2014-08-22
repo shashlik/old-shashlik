@@ -1,7 +1,10 @@
 project(log)
 
-add_definitions(-DHAVE_SYS_UIO_H)
-set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../android-core)
+set(REPO_PATH ${ANDROID_CORE_PATH})
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${LIBLOG_INCLUDES}
+)
 
 set(log_SRCS
     ${REPO_PATH}/liblog/event_tag_map.c
@@ -20,10 +23,9 @@ set(log_HEADERS
     ${REPO_PATH}/include/log/uio.h
 )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH}/include)
 add_library(log SHARED ${log_SRCS})
 install(TARGETS log DESTINATION lib)
-install(FILES
-        ${log_HEADERS}
-        DESTINATION include/log)
+#install(FILES
+#        ${log_HEADERS}
+#        DESTINATION include/log)
 

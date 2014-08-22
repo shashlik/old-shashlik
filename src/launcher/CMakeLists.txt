@@ -43,18 +43,14 @@ set_target_properties(shashlik_launcher PROPERTIES
 )
 
 target_link_libraries(shashlik_launcher
-    shashlikutils
-    binder
+                      shashlikutils
+                      binder
 
-    libnativehelper.so
-    libcorkscrew.so
-    liblog.so
-    utils
-    cutils
-    #KF5::CoreAddons
-    #KF5::DBusAddons
-    #Qt5::Network
-    ${STANDARD_SYS_LIBS}
+                      libnativehelper.so
+                      libcorkscrew.so
+                      log utils cutils  # android-core
+
+                      ${STANDARD_SYS_LIBS}
 )
 
 install(TARGETS shashlik_launcher DESTINATION bin )
