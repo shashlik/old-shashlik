@@ -21,7 +21,6 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 # BUILDING for how to do that.
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Core)
-#find_package(Qt COMPONENTS QtCore REQUIRED)
 
 set(KF5_VERSION "5.0.0") # handled by release scripts
 set(KF5_DEP_VERSION "5.0.0") # handled by release scripts
@@ -61,13 +60,26 @@ set(STANDARD_SYS_LIBS  dl pthread z resolv ffi)
 
 
 # It is assumed that the various repos are checked out next to this one
+# This is described in the file BUILDING.
 set(GENERAL_SOURCE_PATH ${CMAKE_SOURCE_DIR}/..)
 
 set(ANDROID_CORE_PATH              ${GENERAL_SOURCE_PATH}/android-core)
 set(ANDROID_LIBCORE_PATH           ${GENERAL_SOURCE_PATH}/android-libcore)
 set(ANDROID_FRAMEWORKS_NATIVE_PATH ${GENERAL_SOURCE_PATH}/android-frameworks-native)
 set(DALVIK_PATH                    ${GENERAL_SOURCE_PATH}/dalvik)
+set(SAFE_IOP_PATH                  ${GENERAL_SOURCE_PATH}/safe-iop)
 
+
+# Tier 1 libraries
+
+# android-core (FIXME: Make one ANDROID_CORE_INCLUDES instead?)
+set(LIBUTILS_INCLUDES  ${ANDROID_CORE_PATH}/include)
+set(LIBCUTILS_INCLUDES ${ANDROID_CORE_PATH}/include)
+
+# safe-iop
+set(SAFE_IOP_INCLUDES ${SAFE_IOP_PATH}/include)
+
+# Tier2 libraries
 
 # Dalvik
 set(LIBDEX_INCLUDES ${DALVIK_PATH})

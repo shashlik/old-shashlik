@@ -3,8 +3,11 @@ project(dex)
 set(REPO_PATH ${DALVIK_PATH})
 #add_definitions(-D_GNU_SOURCE -DHAVE_LINUX_LOCAL_SOCKET_NAMESPACE -DHAVE_SYS_SOCKET_H -DHAVE_PTHREADS -DANDROID_SMP=1)
 
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH})
-include_directories(${LIBDEX_INCLUDES})
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH} ${LIBCUTILS_INCLUDES})
+include_directories(${LIBDEX_INCLUDES}
+                    ${LIBCUTILS_INCLUDES}
+                    ${SAFE_IOP_INCLUDES}
+)
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/safe-iop)
 
 set(dex_SRCS
@@ -46,7 +49,7 @@ set(dex_HEADERS
 )
 
 add_library(dex SHARED ${dex_SRCS})
-target_link_libraries(dex ${STANDARD_SYS_LIBS})
+target_link_libraries(dex LINK_INTERFACE_LIBRARIES ${STANDARD_SYS_LIBS})
 
 install(TARGETS dex DESTINATION lib)
 install(FILES

@@ -3,7 +3,10 @@ project(binder)
 set(REPO_PATH ${ANDROID_FRAMEWORKS_NATIVE_PATH})
 set(MODULE_PATH ${REPO_PATH}/libs/binder)
 set(INCLUDE_PATH ${REPO_PATH}/include/binder)
-include_directories(${LIBBINDER_INCLUDES})
+include_directories(${LIBBINDER_INCLUDES}
+                    ${LIBUTILS_INCLUDES}
+                    ${LIBCUTILS_INCLUDES}
+)
 message("INC DIRS ARE ${LIBBINDER_INCLUDES}")
 
 add_definitions(-fpermissive                # for redeclaration of  char32_t
@@ -64,7 +67,8 @@ link_directories(${CMAKE_INSTALL_PREFIX}/lib/
                  )
 
 add_library(binder SHARED ${binder_LIB_SRCS})
-target_link_libraries(binder log utils cutils
+target_link_libraries(binder LINK_INTERFACE_LIBRARIES
+                             log utils cutils
 			     ${STANDARD_SYS_LIBS}
                       )
 

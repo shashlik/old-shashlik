@@ -15,6 +15,8 @@ add_definitions(-fPIC
 
 # FIXME: Introduce ${<library>_INCLUDES} variables for all our libraries.
 include_directories(${LIBBINDER_INCLUDES}
+                    ${LIBUTILS_INCLUDES}
+                    ${LIBCUTILS_INCLUDES}
                     ${CMAKE_INSTALL_PREFIX}/include
                     ${CMAKE_INSTALL_PREFIX}/include/nativehelper
                     ${CMAKE_SOURCE_DIR}/src/libs/libshashlikutils
@@ -47,8 +49,8 @@ target_link_libraries(shashlik_launcher
     libnativehelper.so
     libcorkscrew.so
     liblog.so
-    libutils.so
-    libcutils.so
+    utils
+    cutils
     #KF5::CoreAddons
     #KF5::DBusAddons
     #Qt5::Network

@@ -1,6 +1,11 @@
 set(STANDARD_SYS_LIBS dl pthread z resolv ffi)
 
 
+# tier1 libraries
+add_subdirectory(libutils)	# android-core
+add_subdirectory(libcutils)	# android-core
+
+add_subdirectory(safe-iop)	# safe-iop
 
 # ----------------------------------------------------------------
 #                             Dalvik
