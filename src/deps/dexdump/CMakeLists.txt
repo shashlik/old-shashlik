@@ -32,7 +32,7 @@ link_directories(${CMAKE_INSTALL_PREFIX}/lib/)
 add_executable(dexdump ${dexdump_SRCS})
 target_link_libraries(dexdump dex
                               libcorkscrew.so liblog.so libnativehelper.so # WIll be transformed later to target names
-			      libsafe-iop.so utils cutils 
+			      safe-iop utils cutils 
                               ${STANDARD_SYS_LIBS}
                       )
 

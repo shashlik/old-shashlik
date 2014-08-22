@@ -31,7 +31,7 @@ link_directories(${CMAKE_INSTALL_PREFIX}/lib/)
 add_executable(dexlist ${dexlist_SRCS})
 target_link_libraries(dexlist  dex
                                libcorkscrew.so liblog.so libnativehelper.so
-                               libsafe-iop.so  utils cutils # Targets in this tree
+                               safe-iop  utils cutils  # Targets in this tree
                                ${STANDARD_SYS_LIBS}
                       )
 

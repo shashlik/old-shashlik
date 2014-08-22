@@ -67,6 +67,7 @@ set(ANDROID_CORE_PATH              ${GENERAL_SOURCE_PATH}/android-core)
 set(ANDROID_LIBCORE_PATH           ${GENERAL_SOURCE_PATH}/android-libcore)
 set(ANDROID_FRAMEWORKS_NATIVE_PATH ${GENERAL_SOURCE_PATH}/android-frameworks-native)
 set(DALVIK_PATH                    ${GENERAL_SOURCE_PATH}/dalvik)
+set(SAFE_IOP_PATH                  ${GENERAL_SOURCE_PATH}/safe-iop)
 
 
 # Tier 1 libraries
@@ -75,6 +76,8 @@ set(DALVIK_PATH                    ${GENERAL_SOURCE_PATH}/dalvik)
 set(LIBUTILS_INCLUDES  ${ANDROID_CORE_PATH}/include)
 set(LIBCUTILS_INCLUDES ${ANDROID_CORE_PATH}/include)
 
+# safe-iop
+set(SAFE_IOP_INCLUDES ${SAFE_IOP_PATH}/include)
 
 # Tier2 libraries
 
