@@ -1,9 +1,17 @@
 project(corkscrew)
 
-add_definitions(-D_GNU_SOURCE -DCORKSCREW_HAVE_ARCH -DHAVE_SYS_UIO_H -std=c99)
-set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../android-core)
+set(REPO_PATH ${ANDROID_CORE_PATH})
 set(MOD_PATH ${REPO_PATH}/libcorkscrew)
 set(INC_PATH ${REPO_PATH}/include/corkscrew)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${LIBCORKSCREW_INCLUDES}
+)
+
+add_definitions(-D_GNU_SOURCE
+                -DCORKSCREW_HAVE_ARCH
+                -std=c99
+)
 
 set(corkscrew_SRCS
    ${MOD_PATH}/backtrace.c
@@ -24,9 +32,8 @@ set(corkscrew_HEADERS
    ${INC_PATH}/symbol_table.h
 )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH}/include)
 add_library(corkscrew SHARED ${corkscrew_SRCS})
 install(TARGETS corkscrew DESTINATION lib)
-install(FILES
-        ${corkscrew_HEADERS}
-        DESTINATION include/corkscrew)
+#install(FILES
+#        ${corkscrew_HEADERS}
+#        DESTINATION include/corkscrew)

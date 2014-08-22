@@ -31,9 +31,9 @@ link_directories(${CMAKE_INSTALL_PREFIX}/lib/)
 
 add_executable(hprof-conv ${hprof-conv_SRCS})
 target_link_libraries(hprof-conv dex
-                                 libcorkscrew.so libnativehelper.so
+                                 libnativehelper.so
                                  safe-iop
-                                 log utils cutils  # android-core
+                                 corkscrew log utils cutils  # android-core
                                  ${STANDARD_SYS_LIBS}
                       )
 

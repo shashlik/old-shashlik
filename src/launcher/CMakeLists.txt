@@ -47,8 +47,7 @@ target_link_libraries(shashlik_launcher
                       binder
 
                       libnativehelper.so
-                      libcorkscrew.so
-                      log utils cutils  # android-core
+                      corkscrew log utils cutils  # android-core
 
                       ${STANDARD_SYS_LIBS}
 )

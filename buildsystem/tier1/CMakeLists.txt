@@ -7,7 +7,7 @@ add_definitions(-DHAVE_ENDIAN_H)
 add_subdirectory(android-core-headers)
 add_subdirectory(android-libcore-headers)
 
-add_subdirectory(libcorkscrew)
+#add_subdirectory(libcorkscrew)
 #add_subdirectory(liblog)
 #add_subdirectory(safe-iop)
 add_subdirectory(libnativehelper)

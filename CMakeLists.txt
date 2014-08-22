@@ -73,9 +73,10 @@ set(SAFE_IOP_PATH                  ${GENERAL_SOURCE_PATH}/safe-iop)
 # Tier 1 libraries
 
 # android-core (FIXME: Make one ANDROID_CORE_INCLUDES instead?)
-set(LIBLOG_INCLUDES    ${ANDROID_CORE_PATH}/include)
-set(LIBUTILS_INCLUDES  ${ANDROID_CORE_PATH}/include)
-set(LIBCUTILS_INCLUDES ${ANDROID_CORE_PATH}/include)
+set(LIBCORKSCREW_INCLUDES  ${ANDROID_CORE_PATH}/include)
+set(LIBLOG_INCLUDES        ${ANDROID_CORE_PATH}/include)
+set(LIBUTILS_INCLUDES      ${ANDROID_CORE_PATH}/include)
+set(LIBCUTILS_INCLUDES     ${ANDROID_CORE_PATH}/include)
 
 # safe-iop
 set(SAFE_IOP_INCLUDES ${SAFE_IOP_PATH}/include)
