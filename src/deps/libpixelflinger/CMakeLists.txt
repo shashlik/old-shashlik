@@ -1,12 +1,18 @@
 project(pixelflinger)
 
-#add_definitions(-D_GNU_SOURCE -DCORKSCREW_HAVE_ARCH -DHAVE_SYS_UIO_H -std=c99)
-add_definitions(-D_GNU_SOURCE -DCORKSCREW_HAVE_ARCH -DHAVE_SYS_UIO_H
-                -fpermissive  #for pointer to int conversion in printf on x86_64
-		)
-set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../android-core)
+
+set(REPO_PATH ${ANDROID_CORE_PATH})
 set(MOD_PATH ${REPO_PATH}/libpixelflinger)
 set(INC_PATH ${REPO_PATH}/include/pixelflinger)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${REPO_PATH}/include   # FIXME: LIBPIXELFLINGER_INCLUDES
+)
+
+add_definitions(-D_GNU_SOURCE
+                -DCORKSCREW_HAVE_ARCH
+                -fpermissive  # FIXME: for pointer to int conversion in printf on x86_64
+)
 
 set(pixelflinger_SRCS
    ${MOD_PATH}/codeflinger/ARMAssemblerInterface.cpp
@@ -36,7 +42,6 @@ set(pixelflinger_HEADERS
    ${INC_PATH}/pixelflinger.h
 )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH}/include)
 add_library(pixelflinger SHARED ${pixelflinger_SRCS})
 install(TARGETS pixelflinger DESTINATION lib)
 install(FILES

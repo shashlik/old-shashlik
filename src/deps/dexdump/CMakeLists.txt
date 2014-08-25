@@ -33,7 +33,7 @@ add_executable(dexdump ${dexdump_SRCS})
 target_link_libraries(dexdump dex
                               libnativehelper.so # Will be transformed later to target names
 			      safe-iop
-                              corkscrew.so log utils cutils # android-core
+                              corkscrew log utils cutils # android-core
                               ${STANDARD_SYS_LIBS}
                       )
 

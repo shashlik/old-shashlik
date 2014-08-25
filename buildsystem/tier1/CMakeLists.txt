@@ -11,7 +11,7 @@ add_subdirectory(android-libcore-headers)
 #add_subdirectory(liblog)
 #add_subdirectory(safe-iop)
 add_subdirectory(libnativehelper)
-add_subdirectory(libpixelflinger)
+#add_subdirectory(libpixelflinger)
 
 #add_subdirectory(libutils)
 #add_subdirectory(libcutils)
