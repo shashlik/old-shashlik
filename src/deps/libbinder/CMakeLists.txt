@@ -67,6 +67,10 @@ link_directories(${CMAKE_INSTALL_PREFIX}/lib/
                  )
 
 add_library(binder SHARED ${binder_LIB_SRCS})
+if(FORCE_32BIT_BUILD)
+    set_target_properties(binder PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
+
 target_link_libraries(binder LINK_INTERFACE_LIBRARIES
                              log utils cutils
 			     ${STANDARD_SYS_LIBS}

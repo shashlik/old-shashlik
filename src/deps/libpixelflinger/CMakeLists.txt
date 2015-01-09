@@ -43,6 +43,10 @@ set(pixelflinger_HEADERS
 )
 
 add_library(pixelflinger SHARED ${pixelflinger_SRCS})
+if(FORCE_32BIT_BUILD)
+    set_target_properties(pixelflinger PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
+
 install(TARGETS pixelflinger DESTINATION lib)
 install(FILES
         ${pixelflinger_HEADERS}

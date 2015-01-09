@@ -94,7 +94,9 @@ set(utils_HEADERS
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${REPO_PATH}/include)
 add_library(utils SHARED ${utils_SRCS})
-set_target_properties(utils PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+if(FORCE_32BIT_BUILD)
+    set_target_properties(utils PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
 
 install(TARGETS utils DESTINATION lib)
 install(FILES
