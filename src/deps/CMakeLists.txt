@@ -1,12 +1,21 @@
 set(STANDARD_SYS_LIBS dl pthread z resolv ffi)
 
 
+# necessary to note that we have endian.h, which we do on all systems we target
+# otherwise the android code goes and redefines it all on us. not so great
+add_definitions(-DHAVE_ENDIAN_H)
+
+add_subdirectory(android-core-headers)
+add_subdirectory(android-libcore-headers)
+
 # tier1 libraries
 add_subdirectory(libcorkscrew)    # android-core
 add_subdirectory(liblog)          # android-core
 add_subdirectory(libutils)        # android-core
 add_subdirectory(libcutils)       # android-core
 add_subdirectory(libpixelflinger) # android-core
+
+add_subdirectory(libnativehelper) # native-helper
 
 add_subdirectory(safe-iop)        # safe-iop
 
