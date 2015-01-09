@@ -4,8 +4,8 @@ set(REPO_PATH ${ANDROID_CORE_PATH})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${LIBCUTILS_INCLUDES})
 
-add_definitions(-DHAVE_ANDROID_OS   # To make android threads work.  FIXME: Check what other consequences this has.
-)
+# add_definitions(-DHAVE_ANDROID_OS   # To make android threads work.  FIXME: Check what other consequences this has.
+# )
 
 add_definitions(-DHAVE_POSIX_FILEMAP
                 -DHAVE_OFF64_T
