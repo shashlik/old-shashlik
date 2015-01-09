@@ -29,8 +29,12 @@ set(dexlist_SRCS
 link_directories(${CMAKE_INSTALL_PREFIX}/lib/)
 
 add_executable(dexlist ${dexlist_SRCS})
+if(FORCE_32BIT_BUILD)
+    set_target_properties(dexlist PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
+
 target_link_libraries(dexlist  dex
-                               libnativehelper.so
+                               nativehelper
                                safe-iop
                                corkscrew log utils cutils  # Targets in this tree
                                ${STANDARD_SYS_LIBS}
