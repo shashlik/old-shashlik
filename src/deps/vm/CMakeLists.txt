@@ -9,7 +9,9 @@ include_directories(${REPO_PATH}
                     ${LIBENC_PATH}
                     ${LIBCUTILS_INCLUDES}
                     ${CMAKE_INSTALL_PREFIX}/include/android-libcore #FIXME
-                    ${CMAKE_INSTALL_PREFIX}/include/nativehelper    #FIXME
+                    ${LIBNATIVEHELPER_INCLUDEDIRS}
+                    ${LIBANDROIDCORE_INCLUDEDIRS}
+                    ${LIBANDROIDLIBCORE_INCLUDEDIRS}
 )
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
 
@@ -199,8 +201,10 @@ set(vm_HEADERS
 )
 
 add_library(dvm SHARED ${vm_SRCS} ${assembler_SRCS})
-
-target_link_libraries(dvm dex jni)
+if(FORCE_32BIT_BUILD)
+    set_target_properties(dvm PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
+target_link_libraries(dvm nativehelper dex jni)
 
 install(TARGETS dvm DESTINATION lib)
 install(FILES

@@ -4,6 +4,7 @@ project(libjni)
 #find_package(KF5Archive NO_MODULE)
 
 add_definitions(-DHAVE_ANDROID_OS   # To make cutils/trace work.  FIXME: Check what other consequences this has.
+                -fpermissive  # FIXME: for pointer to int conversion in printf on x86_64
 )
 
 
@@ -11,8 +12,8 @@ add_definitions(-DHAVE_ANDROID_OS   # To make cutils/trace work.  FIXME: Check w
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/..   # For runtime/ . Reorganize this better once it works
                     ${LIBCUTILS_INCLUDES}
+                    ${LIBNATIVEHELPER_INCLUDEDIRS}
                     ${CMAKE_INSTALL_PREFIX}/include
-                    ${CMAKE_INSTALL_PREFIX}/include/nativehelper
                     ${LIBBINDER_INCLUDES}
                     #${CMAKE_BINARY_DIR}     # for shashlikversion.h
                     #${ANDROID_FRAMEWORKS_BASE}/include
@@ -163,9 +164,11 @@ set(libjni_HEADERS
 )
 
 add_library(jni SHARED ${libjni_SRCS})
-set_target_properties(jni PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+if(FORCE_32BIT_BUILD)
+    set_target_properties(jni PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
 
-target_link_libraries(jni utils #KF5::Archive
+target_link_libraries(jni utils nativehelper #KF5::Archive
 			  #Qt5::Core
 )
 
