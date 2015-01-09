@@ -6,6 +6,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${LIBLOG_INCLUDES}
 )
 
+add_definitions(-DFAKE_LOG_DEVICE)
+
 set(log_SRCS
     ${REPO_PATH}/liblog/event_tag_map.c
     ${REPO_PATH}/liblog/fake_log_device.c
