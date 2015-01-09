@@ -200,6 +200,8 @@ set(vm_HEADERS
 
 add_library(dvm SHARED ${vm_SRCS} ${assembler_SRCS})
 
+target_link_libraries(dvm dex jni)
+
 install(TARGETS dvm DESTINATION lib)
 install(FILES
         ${vm_HEADERS}
