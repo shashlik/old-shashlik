@@ -8,6 +8,7 @@ set(SHASHLIK_VERSION_MINOR 5)
 set(SHASHLIK_VERSION_RELEASE 0)
 set(SHASHLIK_VERSION_YEAR 2014)
 
+set(FORCE_32BIT_BUILD false)
 
 # ----------------------------------------------------------------
 # Requirements
@@ -67,6 +68,7 @@ set(ANDROID_CORE_PATH              ${GENERAL_SOURCE_PATH}/android-core)
 set(ANDROID_LIBCORE_PATH           ${GENERAL_SOURCE_PATH}/android-libcore)
 set(ANDROID_FRAMEWORKS_NATIVE_PATH ${GENERAL_SOURCE_PATH}/android-frameworks-native)
 set(DALVIK_PATH                    ${GENERAL_SOURCE_PATH}/dalvik)
+set(NATIVEHELPER_PATH              ${GENERAL_SOURCE_PATH}/libnativehelper)
 set(SAFE_IOP_PATH                  ${GENERAL_SOURCE_PATH}/safe-iop)
 
 
@@ -77,6 +79,13 @@ set(LIBCORKSCREW_INCLUDES  ${ANDROID_CORE_PATH}/include)
 set(LIBLOG_INCLUDES        ${ANDROID_CORE_PATH}/include)
 set(LIBUTILS_INCLUDES      ${ANDROID_CORE_PATH}/include)
 set(LIBCUTILS_INCLUDES     ${ANDROID_CORE_PATH}/include)
+
+set(LIBANDROIDCORE_INCLUDEDIRS ${ANDROID_CORE_PATH}/include)
+set(LIBANDROIDLIBCORE_INCLUDEDIRS ${ANDROID_LIBCORE_PATH}/include)
+
+# nativehelper
+set(LIBNATIVEHELPER_INCLUDES ${NATIVEHELPER_PATH}/include/nativehelper)
+set(LIBNATIVEHELPER_INCLUDEDIRS ${NATIVEHELPER_PATH}/include/nativehelper ${NATIVEHELPER_PATH}/include)
 
 # safe-iop
 set(SAFE_IOP_INCLUDES ${SAFE_IOP_PATH}/include)
