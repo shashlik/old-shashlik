@@ -49,6 +49,10 @@ set(dex_HEADERS
 )
 
 add_library(dex SHARED ${dex_SRCS})
+if(FORCE_32BIT_BUILD)
+    set_target_properties(dex PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
+
 target_link_libraries(dex LINK_INTERFACE_LIBRARIES ${STANDARD_SYS_LIBS})
 
 install(TARGETS dex DESTINATION lib)

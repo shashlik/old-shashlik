@@ -30,9 +30,14 @@ set(dexdump_SRCS
 link_directories(${CMAKE_INSTALL_PREFIX}/lib/)
 
 add_executable(dexdump ${dexdump_SRCS})
+if(FORCE_32BIT_BUILD)
+    set_target_properties(dexdump PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
+
 target_link_libraries(dexdump dex
-                              libcorkscrew.so liblog.so libnativehelper.so # WIll be transformed later to target names
-			      safe-iop utils cutils 
+                              nativehelper
+                              safe-iop
+                              corkscrew log utils cutils # android-core
                               ${STANDARD_SYS_LIBS}
                       )
 

@@ -1,13 +1,11 @@
 project(android-core-headers)
 
-set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../android-core)
-
 set(android_HEADERS
-    ${REPO_PATH}/include/android/log.h
+    ${ANDROID_CORE_PATH}/include/android/log.h
 )
 set(system_HEADERS
-    ${REPO_PATH}/include/system/graphics.h
-    ${REPO_PATH}/include/system/thread_defs.h
+    ${ANDROID_CORE_PATH}/include/system/graphics.h
+    ${ANDROID_CORE_PATH}/include/system/thread_defs.h
 )
 
 install(FILES
@@ -16,4 +14,3 @@ install(FILES
 install(FILES
         ${system_HEADERS}
         DESTINATION include/system)
-

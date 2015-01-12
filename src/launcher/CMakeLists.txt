@@ -17,8 +17,8 @@ add_definitions(-fPIC
 include_directories(${LIBBINDER_INCLUDES}
                     ${LIBUTILS_INCLUDES}
                     ${LIBCUTILS_INCLUDES}
+                    ${LIBNATIVEHELPER_INCLUDEDIRS}
                     ${CMAKE_INSTALL_PREFIX}/include
-                    ${CMAKE_INSTALL_PREFIX}/include/nativehelper
                     ${CMAKE_SOURCE_DIR}/src/libs/libshashlikutils
                     ${CMAKE_BINARY_DIR}     # for shashlikversion.h
                     ${ANDROID_FRAMEWORKS_BASE}/include
@@ -38,23 +38,21 @@ set(shashlik_launcher_SRCS
 
 link_directories(${CMAKE_INSTALL_PREFIX}/lib)   # NOTE: This must be before add_executable :/
 add_executable(shashlik_launcher ${shashlik_launcher_SRCS})
+if(FORCE_32BIT_BUILD)
+    set_target_properties(shashlik_launcher PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
+
 set_target_properties(shashlik_launcher PROPERTIES
     OUTPUT_NAME shashlik-launcher
 )
 
 target_link_libraries(shashlik_launcher
-    shashlikutils
-    binder
+                      shashlikutils
+                      binder
+                      nativehelper
+                      corkscrew log utils cutils  # android-core
 
-    libnativehelper.so
-    libcorkscrew.so
-    liblog.so
-    utils
-    cutils
-    #KF5::CoreAddons
-    #KF5::DBusAddons
-    #Qt5::Network
-    ${STANDARD_SYS_LIBS}
+                      ${STANDARD_SYS_LIBS}
 )
 
 install(TARGETS shashlik_launcher DESTINATION bin )

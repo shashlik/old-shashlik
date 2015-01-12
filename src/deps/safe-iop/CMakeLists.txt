@@ -14,6 +14,9 @@ set(safe-iop_HEADERS
 )
 
 add_library(safe-iop SHARED ${safe-iop_SRCS})
+if(FORCE_32BIT_BUILD)
+    set_target_properties(safe-iop PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
 install(TARGETS safe-iop DESTINATION lib)
 #install(FILES
 #        ${safe-iop_HEADERS}

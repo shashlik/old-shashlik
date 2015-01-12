@@ -30,9 +30,14 @@ set(hprof-conv_SRCS
 link_directories(${CMAKE_INSTALL_PREFIX}/lib/)
 
 add_executable(hprof-conv ${hprof-conv_SRCS})
+if(FORCE_32BIT_BUILD)
+    set_target_properties(hprof-conv PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
+
 target_link_libraries(hprof-conv dex
-                                 libcorkscrew.so liblog.so libnativehelper.so
-                                 safe-iop  utils cutils  # Targets in this tree
+                                 nativehelper
+                                 safe-iop
+                                 corkscrew log utils cutils  # android-core
                                  ${STANDARD_SYS_LIBS}
                       )
 

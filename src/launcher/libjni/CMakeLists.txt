@@ -4,6 +4,7 @@ project(libjni)
 #find_package(KF5Archive NO_MODULE)
 
 add_definitions(-DHAVE_ANDROID_OS   # To make cutils/trace work.  FIXME: Check what other consequences this has.
+                -fpermissive  # FIXME: for pointer to int conversion in printf on x86_64
 )
 
 
@@ -11,8 +12,8 @@ add_definitions(-DHAVE_ANDROID_OS   # To make cutils/trace work.  FIXME: Check w
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/..   # For runtime/ . Reorganize this better once it works
                     ${LIBCUTILS_INCLUDES}
+                    ${LIBNATIVEHELPER_INCLUDEDIRS}
                     ${CMAKE_INSTALL_PREFIX}/include
-                    ${CMAKE_INSTALL_PREFIX}/include/nativehelper
                     ${LIBBINDER_INCLUDES}
                     #${CMAKE_BINARY_DIR}     # for shashlikversion.h
                     #${ANDROID_FRAMEWORKS_BASE}/include
@@ -67,7 +68,7 @@ set(libjni_SRCS
     android_os_FileUtils.cpp          # Builds
 #    android_os_MemoryFile.cpp         # Problems: cast 64 bit / jint
 #    android_os_MessageQueue.cpp       # Problems: include utils/Looper.h
-#    android_os_Parcel.cpp             # Problems: cast 64 bit / jint
+    android_os_Parcel.cpp             # Problems: cast 64 bit / jint
     #android_os_SELinux.cpp
 #    android_os_SystemClock.cpp       # Problems: ioctl(...ANDROID_ALARM_SET_RTC ...)
     android_os_SystemProperties.cpp   # Builds
@@ -80,7 +81,7 @@ set(libjni_SRCS
     android_text_AndroidCharacter.cpp # Builds
 #    android_text_format_Time.cpp     # Problems: includes bionic_time.h
 #    android_util_AssetManager.cpp     # Problems: includes android_runtime/android_util_AssetManager.h>
-#    android_util_Binder.cpp           # Problems: cast 64 bit / int32_t
+    android_util_Binder.cpp           # Problems: cast 64 bit / int32_t
     android_util_EventLog.cpp	      # Builds
     android_util_FileObserver.cpp     # Builds
 #    android_util_FloatMath.cpp	      # Problems: Uses SK_ARRAY_COUNT from SkTypes.h (Skia)
@@ -163,8 +164,11 @@ set(libjni_HEADERS
 )
 
 add_library(jni SHARED ${libjni_SRCS})
+if(FORCE_32BIT_BUILD)
+    set_target_properties(jni PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
 
-target_link_libraries(jni #KF5::Archive
+target_link_libraries(jni utils nativehelper #KF5::Archive
 			  #Qt5::Core
 )
 
