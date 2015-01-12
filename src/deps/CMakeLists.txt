@@ -1,10 +1,3 @@
-set(STANDARD_SYS_LIBS dl pthread z resolv ffi)
-
-
-# necessary to note that we have endian.h, which we do on all systems we target
-# otherwise the android code goes and redefines it all on us. not so great
-add_definitions(-DHAVE_ENDIAN_H)
-
 add_subdirectory(android-core-headers)
 add_subdirectory(android-libcore-headers)
 
@@ -21,17 +14,6 @@ add_subdirectory(safe-iop)        # safe-iop
 
 # ----------------------------------------------------------------
 #                             Dalvik
-
-
-# Set JIT_VM to:
-#   false   if you want to run an interpreter (currently necessary on 64 bit systems)
-#   true    if you want just in time compilation to assembler
-#
-# false is the default
-#
-# FIXME: Should this move to the top CMakeList.txt?
-#        Or should we perhaps have a test for 32/64 bit systems?
-set(JIT_VM false)
 
 # vm support libs
 add_subdirectory(libdex)
