@@ -1,25 +1,25 @@
 This is a list of what is built and installed from the Shashlik source code
 
 bin/
-  shashlik-launcher		This is the runner of Android APK files.
-  dexdump*			Dumps the contents of dex files
-  dexlist*			?
-  hprof-conv*			?
+  shashlik-launcher     This is the runner of Android APK files.
+  dexdump*              Dumps the contents of dex files
+  dexlist*              ?
+  hprof-conv*           ?
   Only on non-64 bit systems:
-    gdbjithelper		?
-    dexopt			?
-    dmtracedump			?
+    gdbjithelper        ?
+    dexopt              ?
+    dmtracedump         ?
 
 lib/
-  libdvm.so			The Dalvik Virtual Machine itself
-  libapk.so			Support library for handling APK files
-  libdex.so			Support library for handling DEX files
-  libpixelflinger.so		Graphic library
+  libdvm.so             The Dalvik Virtual Machine itself
+  libapk.so             Support library for handling APK files
+  libdex.so             Support library for handling DEX files
+  libpixelflinger.so    Graphic library
 
   Support libraries:
     libcorkscrew.so
-    libnativehelper.so		Support library for Dalvik classes
-    liblog.so			Logging
-    libsafe-iop.so		platform-independent integer operations
+    libnativehelper.so  Support library for Dalvik classes
+    liblog.so           Logging
+    libsafe-iop.so      platform-independent integer operations
     libutils.so
     libcutils.so

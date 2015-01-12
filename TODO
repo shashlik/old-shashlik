@@ -15,20 +15,20 @@ Immediate stuff
 
 Tasks to reach next milestone
  * Preparations
-    + Use the AndroidRuntime class from frameworks-native	----
+    + Use the AndroidRuntime class from frameworks-native       ----
       instead of copying it
-    + Create a binder library but without connections to	----
+    + Create a binder library but without connections to        ----
       the kernel
 
- * Check if the provided file is a correct APK			----
+ * Check if the provided file is a correct APK                  ----
     + Check for the manifest
     + Check the META-INF/MANIFEST.MF file
     + Check for assets/
     + Check for classes.dex
- * Unpack the APK into a temp directory	   			----
- * Get the VM started  	      					----
- * Load system java classes                			----
- * Load application provided dex				----
+ * Unpack the APK into a temp directory                         ----
+ * Get the VM started                                           ----
+ * Load system java classes                                     ----
+ * Load application provided dex                                ----
 
 
 ====================================================================
@@ -37,31 +37,31 @@ Tasks to reach next milestone
 
 
 Build the components of Dalvik
- * vm library							DONE
- * Binaries							DONE
-    + dexlist							Done
-    + dexopt (when using JIT)					Done 
-    + dexdump							Done
- * tools							DONE
+ * vm library                                                   DONE
+ * Binaries                                                     DONE
+    + dexlist                                                   Done
+    + dexopt (when using JIT)                                   Done
+    + dexdump                                                   Done
+ * tools                                                        DONE
 
 New tools
- * properties server (see android-core/libcutils/properties.c)	DONE
+ * properties server (see android-core/libcutils/properties.c)  DONE
 
 
 
-Milestone 1: Basic launcher done (v 0.5)			DONE
+Milestone 1: Basic launcher done (v 0.5)                        DONE
 --------------------------------------------------------------------
 
 
 Handle APK file
- * Check if the provided file is a correct APK			----
- * Unpack the APK into a temp directory	   			----
- * Get the VM started  	      					----
- * Load system java classes                			----
- * Load application provided dex				----
+ * Check if the provided file is a correct APK                  ----
+ * Unpack the APK into a temp directory                         ----
+ * Get the VM started                                           ----
+ * Load system java classes                                     ----
+ * Load application provided dex                                ----
 
 
-Milestone 2: Run a dex file inside the VM (v 0.6)		----
+Milestone 2: Run a dex file inside the VM (v 0.6)               ----
 --------------------------------------------------------------------
 
 
@@ -72,15 +72,15 @@ Write a Java Native Interface (JNI)
     This includes the input from kbd and touch
 
 
-Milestone 3: Functional Java interface (JNI) (v 0.7)		----
+Milestone 3: Functional Java interface (JNI) (v 0.7)            ----
 --------------------------------------------------------------------
 
 
 Write Surfaceflinger
- * Create a OpenGL workspace manager				----
+ * Create a OpenGL workspace manager                            ----
 
 
-Milestone 4: Flappy bird runs (v 0.8)				----
+Milestone 4: Flappy bird runs (v 0.8)                           ----
 --------------------------------------------------------------------
 
 

@@ -17,8 +17,8 @@ System Services
  + ...?
 
 I/O
- + Screen		OpenGL
- + touch		Drag events from the window?
+ + Screen       OpenGL
+ + touch        Drag events from the window?
 
 
 Open Questions
@@ -28,7 +28,7 @@ Open Questions
  + How does an app paint on the window?
        A: The application asks for an OpenGL window, gets one (which should be
           embedded into a standard X/Wayland window and handled by the normal
-	  window manager (kwin).
+          window manager (kwin).
  + How to communicate between services/apps when there is no kernel bridge?
        A: settings: Over a named pipe
        A: serviceflinger: protocol buffers
@@ -54,15 +54,15 @@ Android sources are organized. But right now this is the best estimate.
 
 Development Activities
  + Create Launcher
-    - Build the parts from zygote that will be reused	STEP 1: 1 week  (0.5 due July, 24th)
-    - Write porting code				STEP 2: 2 weeks (0.6 due August, 7th)
+    - Build the parts from zygote that will be reused   STEP 1: 1 week  (0.5 due July, 24th)
+    - Write porting code                                STEP 2: 2 weeks (0.6 due August, 7th)
        . Start VM
        . Load system java classes
        . Load application provided classes
        . Load application
- + Write a Java Native Interface (JNI)			STEP 3: 2 weeks (0.7 due August, 21st)
+ + Write a Java Native Interface (JNI)                  STEP 3: 2 weeks (0.7 due August, 21st)
     This includes the input from kbd and touch
- + Write "Surface Flinger"				STEP 4: 1 week  (0.8 due August, 28th)
+ + Write "Surface Flinger"                              STEP 4: 1 week  (0.8 due August, 28th)
 
 
 ================================================================

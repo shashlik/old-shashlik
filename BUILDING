@@ -84,7 +84,7 @@ This is the reason for the svn switch.
 
 4. libnativehelper
 
-Libnativehalper is another library from Google which is necessary to build
+Libnativehelper is another library from Google which is necessary to build
 Dalvik. It contains support functions for Android's class libraries. This one
 is kept in git.
 
@@ -197,64 +197,41 @@ Building Shashlik is slightly more complicated than building a normal source
 tree. This is because we are taking sources from the Android source tree and
 build them in a way that they are not designed for.
 
-What you need to do is to first build _and_ _install_ the libraries that can
-be built by themselves.  We call these tier 1 libraries. Then you will use
-these installed tier 1 libraries to build the ones that depend on them, which
-we call tier 2 libraries.  After these tier 1 and 2 libraries are built, you
-can build the actual tools and applications that make up the Shashlik project.
-
-Because of the above, you need to create a separate install directory.  We
-recommend SHASHLIK/install.  Note that the install directory should be
-_outside_ the shashlik repo source tree but under the SHASHLIK top directory.
+You can install anywhere you like, basically, but we highly recommend that you
+do so by creating a SHASHLIK/install directory. Note that the install directory
+should be _outside_ the shashlik repo source tree but under the SHASHLIK top
+directory.
 
   cd $SHASHLIK
   mkdir install
 
-For building, we recommend that you create 2 directories: one for the
-dependencies from the Android sources as described above and one for the code
-that actually resides in the shashlik repository. Here we call them builddeps
-and build respectively:
+For building, the procedure is in itself similar to how you normally compile
+any other cmake based project, however the directory structure is vital. The
+build system expects the location of the sources to be as suggested in Getting
+The Sources above. In other words, you should have a directory structure
+similar to the following tree. Those marked with * are directories you should
+be creating, all the others are git clones (and that one svn checkout):
 
-  cd $SHASHLIK/shashlik
-  mkdir builddeps
-  mkdir build
++ SHASHLIK *
+  + install *
+  + src *
+    + android-core
+    + android-frameworks-native
+    + android-libcore
+    + bionic
+    + dalvik
+    + frameworks-base
+    + libnativehelper
+    + safe-iop
+    + shashlik
+      + build *
 
-
-Building the Dependencies
-- - - - - - - - - - - - -
-
-In the builddeps directory, create one subdirectory for each subdirectory of
-shashlik/buildsystem/. At the point of writing this is tier1 and tier2. So you
-will have builddeps/tier1/ and builddeps/tier2/. 
-
-  mkdir -p builddeps/tier1
-  mkdir -p builddeps/tier2
-
-The sources must be built and installed in the order indicated by the name and
-is done by cmake. So from the topdirectory of the shashlik repository, do:
-
-  (cd builddeps/tier1; cmake ../../buildsystem/tier1 -DCMAKE_INSTALL_PREFIX=$SHASHLIK/install && make install)
-  (cd builddeps/tier2; cmake ../../buildsystem/tier2 -DCMAKE_INSTALL_PREFIX=$SHASHLIK/install && make install)
-
-...and so on if there are more than 2 subdirectories of ../../buildsystem.
-
-This will create a series of subdirectories, one for each shared library and
-binary artifact required. They will be built in the order of dependencies,
-building up a working system one piece at a time.
-
-All components in tier1 rely on only 'normal' Linux system libraries (libc,
-etc).  Components in tier2 are libraries that rely on components in tier1, and
-tier3 contains the various executables built on top of tier2/tier1 libraries.
-
-
-Building the Shashlik Sources
-- - - - - - - - - - - - - - -
 
 Lastly you will have to build the shashlik sources that depend on the selected
 Android libraries that were created in the builddeps directory. This is done
-in the build/ directory and it is really easy:
+in the $SHASHLIK/src/shashlik/build/ directory and it is really easy:
 
-  cd build
+  cd $SHASHLIK/src/shashlik/build
   cmake .. -DCMAKE_INSTALL_PREFIX=$SHASHLIK/install
   make install
 
