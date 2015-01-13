@@ -8,8 +8,6 @@ set(SHASHLIK_VERSION_MINOR 5)
 set(SHASHLIK_VERSION_RELEASE 0)
 set(SHASHLIK_VERSION_YEAR 2014)
 
-set(FORCE_32BIT_BUILD false)
-
 # ----------------------------------------------------------------
 # Requirements
 
@@ -39,7 +37,6 @@ include(ECMSetupVersion)
 # ----------------------------------------------------------------
 # System settings
 
-
 # It is necessary to note that we have endian.h, which we do on all systems we
 # target otherwise the android code goes and redefines it all on us. Not so
 # great...
@@ -59,6 +56,17 @@ set(STANDARD_SYS_LIBS  dl pthread z resolv ffi)
 # ----------------------------------------------------------------
 # Various project settings
 
+# This will force a 32bit build (read in various places and sets compiler/linker flags on binaries)
+set(FORCE_32BIT_BUILD false)
+
+# Set JIT_VM to:
+#   false   if you want to run an interpreter (currently necessary on 64 bit systems)
+#   true    if you want just in time compilation to assembler
+#
+# false is the default
+#
+# FIXME: Should we perhaps have a test for 32/64 bit systems?
+set(JIT_VM false)
 
 # It is assumed that the various repos are checked out next to this one
 # This is described in the file BUILDING.

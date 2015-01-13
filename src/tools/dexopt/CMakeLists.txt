@@ -11,5 +11,4 @@ set(dexopt_SRCS
 include_directories(${REPO_PATH} ${REPO_PATH}/vm ${MOD_PATH} ${CMAKE_INSTALL_PREFIX}/include/android-libcore ${CMAKE_INSTALL_PREFIX}/include/nativehelper)
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
 add_executable(dexopt ${dexopt_SRCS})
-target_link_libraries(dexopt ${STANDARD_SYS_LIBS} libcorkscrew.so libdex.so libcutils.so liblog.so libnativehelper.so libnativehelper.so libsafe-iop.so libutils.so dvm)
-
+target_link_libraries(dexopt ${STANDARD_SYS_LIBS} corkscrew dex cutils log nativehelper safe-iop utils dvm)
