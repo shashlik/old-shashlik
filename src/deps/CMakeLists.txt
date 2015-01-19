@@ -15,11 +15,13 @@ add_subdirectory(safe-iop)        # safe-iop
 # ----------------------------------------------------------------
 #                             Dalvik
 
-# vm support libs
+# vm support libraries and tools
 add_subdirectory(libdex)
+add_subdirectory(dx)
 
 # dalvik vm
 add_subdirectory(vm)
+add_subdirectory(javalibrary)
 
 # c++ tools
 add_subdirectory(dexdump)
