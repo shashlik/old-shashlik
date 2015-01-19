@@ -28,7 +28,9 @@ set(shashlik_launcher_SRCS
     main.cpp
     AppRuntime.cpp
     ProcessGlobals.cpp
+)
 
+set(shashlik_launcher_helper_SRCS
     runtime/ShashlikRuntime.cpp
     runtime/Stubs.cpp
 
@@ -37,6 +39,18 @@ set(shashlik_launcher_SRCS
 )
 
 link_directories(${CMAKE_INSTALL_PREFIX}/lib)   # NOTE: This must be before add_executable :/
+
+add_library(shashlik_launcher_helper SHARED ${shashlik_launcher_helper_SRCS})
+
+target_link_libraries(shashlik_launcher_helper
+                      shashlikutils
+                      binder
+                      nativehelper
+                      corkscrew log utils cutils  # android-core
+
+                      ${STANDARD_SYS_LIBS}
+)
+
 add_executable(shashlik_launcher ${shashlik_launcher_SRCS})
 if(FORCE_32BIT_BUILD)
     set_target_properties(shashlik_launcher PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
@@ -47,6 +61,7 @@ set_target_properties(shashlik_launcher PROPERTIES
 )
 
 target_link_libraries(shashlik_launcher
+                      shashlik_launcher_helper
                       shashlikutils
                       binder
                       nativehelper
@@ -55,5 +70,5 @@ target_link_libraries(shashlik_launcher
                       ${STANDARD_SYS_LIBS}
 )
 
+install(TARGETS shashlik_launcher_helper DESTINATION ${LIB_INSTALL_DIR})
 install(TARGETS shashlik_launcher DESTINATION bin )
-

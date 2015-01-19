@@ -1,14 +1,24 @@
 project(dexopt)
 
 add_definitions(-DHAVE_SYS_UIO_H -DANDROID_SMP -DDVM_SHOW_EXCEPTION=1 -DWITH_JIT -DWITH_JIT_TUNING -DARCH_IA32 -DDVM_JMP_TABLE_MTERP=1 -DMTERP_STUB -DHAVE_BIG_ENDIAN -fpermissive -w -DARCH_VARIANT="x86")
-set(REPO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../dalvik)
+set(REPO_PATH ${DALVIK_PATH})
 set(MOD_PATH ${REPO_PATH}/dexopt)
+
+include_directories(${REPO_PATH}
+                    ${MODULE_PATH}
+                    ${LIBENC_PATH}
+                    ${LIBCUTILS_INCLUDES}
+                    ${CMAKE_INSTALL_PREFIX}/include/android-libcore #FIXME
+                    ${LIBNATIVEHELPER_INCLUDEDIRS}
+                    ${LIBANDROIDCORE_INCLUDEDIRS}
+                    ${LIBANDROIDLIBCORE_INCLUDEDIRS}
+                    ${DALVIK_PATH}/vm
+)
 
 set(dexopt_SRCS
    ${MOD_PATH}/OptMain.cpp
 )
 
-include_directories(${REPO_PATH} ${REPO_PATH}/vm ${MOD_PATH} ${CMAKE_INSTALL_PREFIX}/include/android-libcore ${CMAKE_INSTALL_PREFIX}/include/nativehelper)
-include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
 add_executable(dexopt ${dexopt_SRCS})
-target_link_libraries(dexopt ${STANDARD_SYS_LIBS} corkscrew dex cutils log nativehelper safe-iop utils dvm)
+target_link_libraries(dexopt ${STANDARD_SYS_LIBS} corkscrew dex cutils log nativehelper safe-iop utils dvm jni binder shashlik_launcher_helper icuuc icui18n)
+install(TARGETS dexopt DESTINATION ${BIN_INSTALL_DIR})
