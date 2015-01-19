@@ -15,15 +15,16 @@ include_directories(${REPO_PATH}
 )
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
 
-add_definitions(-DDVM_JMP_TABLE_MTERP
+add_definitions(
                 -DDVM_NO_ASM_INTERP
                 -DANDROID_SMP
                 -DDVM_SHOW_EXCEPTION=1
-                -DDVM_JMP_TABLE_MTERP=1
-                -DMTERP_STUB
-		-DHAVE_BIG_ENDIAN  # FIXME: This must be wrong but it currently doesn't build without it
+#                 -DDVM_JMP_TABLE_MTERP=1
+#                 -DMTERP_STUB
+                -DHAVE_BIG_ENDIAN  # FIXME: This must be wrong but it currently doesn't build without it
                 -fpermissive
-                -w
+                -Wno-int-to-pointer-cast
+#                 -w
 )
 
 if (JIT_VM)
@@ -33,14 +34,14 @@ else (JIT_VM)
                     -DdvmAsmSisterStart=0 -DdvmAsmSisterEnd=0 -DDVM_NO_ASM_INTERP=1)
 endif (JIT_VM)
 
-set(libenc_SRCS
-    ${LIBENC_PATH}/dec_base.cpp
-    ${LIBENC_PATH}/enc_base.cpp
-    ${LIBENC_PATH}/enc_wrapper.cpp
-    ${LIBENC_PATH}/enc_tabl.cpp
-)
-
 if (JIT_VM)
+    set(libenc_SRCS
+        ${LIBENC_PATH}/dec_base.cpp
+        ${LIBENC_PATH}/enc_base.cpp
+        ${LIBENC_PATH}/enc_wrapper.cpp
+        ${LIBENC_PATH}/enc_tabl.cpp
+    )
+
     enable_language(ASM)
     set(assembler_SRCS
         ${MODULE_PATH}/mterp/out/InterpAsm-x86.S
@@ -201,10 +202,11 @@ set(vm_HEADERS
 )
 
 add_library(dvm SHARED ${vm_SRCS} ${assembler_SRCS})
+set_target_properties(dvm PROPERTIES COMPILE_FLAGS "-fstrict-aliasing -Wstrict-aliasing=2 -Wall -Wextra -Wno-unused-parameter")
 if(FORCE_32BIT_BUILD)
     set_target_properties(dvm PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
-target_link_libraries(dvm nativehelper dex jni)
+target_link_libraries(dvm nativehelper dex jni ${FFI_LIBRARIES})
 
 install(TARGETS dvm DESTINATION lib)
 install(FILES
