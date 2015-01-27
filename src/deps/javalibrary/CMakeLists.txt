@@ -1496,8 +1496,7 @@ set(javalibrary_SRCS
     ${REPO_PATH}/libdvm/src/main/java/sun/misc/Unsafe.java
 )
 
-set(CMAKE_JNI_TARGET TRUE)
-
+set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx512M -target 1.5 -encoding UTF-8 -Xmaxwarns 9999999)
 add_jar(core ${javalibrary_SRCS})
 install_jar(core ${LIB_INSTALL_DIR}/android)
 #install_jni_symlink(core ${JAVA_LIB_INSTALL_DIR})
