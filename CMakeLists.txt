@@ -125,3 +125,7 @@ set(LIBBINDER_INCLUDES ${CMAKE_SOURCE_DIR}/src/libs/libbinder
 
 
 add_subdirectory(src)
+
+# This must be at the end, or we end up with these post install commands being
+# run before the install proccess is fully completed
+add_subdirectory(postinstall)

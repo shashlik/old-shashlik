@@ -1,0 +1,200 @@
+set(CMAKE_INSTALL_PREFIX @CMAKE_INSTALL_PREFIX@)
+set(LIB_INSTALL_DIR @LIB_INSTALL_DIR@)
+
+find_package(Java 1.6 REQUIRED)
+include(UseJava)
+
+function(dex_preopt INPUT_JAR OUTPUT_ODEX)
+    set(VERIFY "all")
+    set(OPTIMIZE "verified")
+    set(REGISTER_MAPS true)
+    set(UNIPROCESSOR true)
+    set(ALLOK true)
+
+    set(OPTIMIZE_OPTIONS "")
+
+    # Sanity-check and expand the verify option.
+    if (VERIFY MATCHES "none" )
+        set(OPTIMIZE_OPTIONS "v=n")
+    elseif (VERIFY MATCHES "remote" )
+        set(OPTIMIZE_OPTIONS "v=r")
+    elseif (VERIFY MATCHES "all")
+        set(OPTIMIZE_OPTIONS "v=a")
+    else ()
+        message(ERROR "bad value for dex preoptimizer option verify: ${VERIFY}")
+        set(ALLOK false)
+    endif ()
+
+    # Sanity-check and expand the optimize option.
+    if (OPTIMIZE MATCHES "none")
+        set(OPTIMIZE_OPTIONS "${OPTIMIZE_OPTIONS},o=n")
+    elseif (OPTIMIZE MATCHES "verified")
+        set(OPTIMIZE_OPTIONS "${OPTIMIZE_OPTIONS},o=v")
+    elseif (OPTIMIZE MATCHES  "xall")
+        set(OPTIMIZE_OPTIONS "${OPTIMIZE_OPTIONS},o=a")
+    else ()
+        message(ERROR "bad value for dex preoptimizer option optimize: ${OPTIMIZE}")
+        set(ALLOK false)
+    endif ()
+
+    # Expand the register maps selection, if necessary.
+    if (REGISTER_MAPS)
+        set(OPTIMIZE_OPTIONS "${OPTIMIZE_OPTIONS},m=y")
+    endif ()
+
+    # Expand the uniprocessor directive, if necessary.
+    if (UNIPROCESSOR)
+        set(OPTIMIZE_OPTIONS "${OPTIMIZE_OPTIONS},u=y")
+    else ()
+        set(OPTIMIZE_OPTIONS "${OPTIMIZE_OPTIONS},u=n")
+    endif ()
+
+    if (ALLOK)
+        set(ENV{LD_LIBRARY_PATH} ${CMAKE_INSTALL_PREFIX}/lib)
+        set(ENV{BOOTCLASSPATH} ${CMAKE_INSTALL_PREFIX}/lib64/android/system/framework/core.jar)
+        set(ENV{ANDROID_DATA} ${CMAKE_INSTALL_PREFIX}/data)
+        set(ENV{ANDROID_ROOT} ${CMAKE_INSTALL_PREFIX})
+        execute_process(RESULT_VARIABLE dexoptresult COMMAND ${CMAKE_INSTALL_PREFIX}/bin/dexopt --preopt ${INPUT_JAR} ${OUTPUT_ODEX} ${OPTIMIZE_OPTIONS})
+        message(STATUS "LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib ${CMAKE_INSTALL_PREFIX}/bin/dexopt --preopt ${INPUT_JAR} ${OUTPUT_ODEX} ${OPTIMIZE_OPTIONS} reports: ${dexoptresult}")
+    else()
+        message(WARNING "Could not preoptimize!")
+    endif ()
+endfunction()
+
+# installed file and work dir should really be inferable from target name, but let's get it working first
+function(process_installed_android_jar _TARGET_NAME _INSTALLED_FILE _WORK_DIR _ANDROID_ROOT _SYSTEM_FRAMEWORK_DIR)
+    set(LOCAL_WORK_DIR ${_WORK_DIR}/${_TARGET_NAME}-intermediates)
+
+    message(STATUS "Creating local work dir ${LOCAL_WORK_DIR}")
+    # make an intermediary work directory inside the given work dir _WORK_DIR/intermediates
+    file(MAKE_DIRECTORY ${LOCAL_WORK_DIR})
+
+    message(STATUS "Moving jar file ${_INSTALLED_FILE} into the working directory")
+    # move installed file to intermediates/classes.jar
+    file(RENAME ${_INSTALLED_FILE} ${LOCAL_WORK_DIR}/classes.jar)
+
+    # dex classes.jar
+    message(STATUS "Dexing classes.jar for target ${_TARGET_NAME}")
+    execute_process(COMMAND ${CMAKE_INSTALL_PREFIX}/bin/dx -JXms16M -JXmx2048M --dex --output=${LOCAL_WORK_DIR}/classes.dex --core-library ${LOCAL_WORK_DIR}/classes.jar)
+
+    # create new _TARGET_NAME.jar from classes.jar and classes.dex
+    message(STATUS "Creating new jar for target ${_TARGET_NAME}")
+    message(STATUS "Create a new jar just with a dummy file")
+    file(WRITE ${LOCAL_WORK_DIR}/dummy "")
+    execute_process(RESULT_VARIABLE jarresult COMMAND ${Java_JAR_EXECUTABLE} cf ${LOCAL_WORK_DIR}/javalib.jar -C ${LOCAL_WORK_DIR} dummy)
+    message(STATUS "${Java_JAR_EXECUTABLE} cf ${LOCAL_WORK_DIR}/javalib.jar ${LOCAL_WORK_DIR}/dummy reports: ${jarresult}")
+    message(STATUS "Remove the dummy file from the jar and disk")
+    execute_process(COMMAND zip -qd ${LOCAL_WORK_DIR}/javalib.jar dummy)
+    file(REMOVE ${LOCAL_WORK_DIR}/dummy)
+    # add the dex to the jar
+    message(STATUS "Adding classes.dex to the new jar")
+    execute_process(COMMAND zip -qj ${LOCAL_WORK_DIR}/javalib.jar ${LOCAL_WORK_DIR}/classes.dex)
+
+#     if [ -d out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes ] ; then
+#         java_res_jar_flags=$(find out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes -type f -a -not -name "*.class" | sed -e "s?^out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes/? -C out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes ?");
+#         if [ -n "$java_res_jar_flags" ] ; then
+#             echo $java_res_jar_flags >out/target/common/obj/JAVA_LIBRARIES/core_intermediates/java_res_jar_flags; jar uf out/target/common/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar $java_res_jar_flags;
+#         fi;
+#     fi
+#     # update the jar with special local things (jar-arg-list in ABS, generated from PRIVATE_EXTRA_JAR_ARGS)
+#     jar uf out/target/common/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar @out/target/common/obj/JAVA_LIBRARIES/core_intermediates/jar-arg-list
+
+    # preoptimize the new jar
+    # remove old odex, because dex-preopt requires there to not be one already
+    message(STATUS "Preoptimizing the jar for target ${_TARGET_NAME}")
+    file(RENAME ${LOCAL_WORK_DIR}/javalib.jar ${LOCAL_WORK_DIR}/${_TARGET_NAME}.jar)
+    execute_process(COMMAND rm -f ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex)
+    # run dex-preopt (not installed)
+
+#     dalvik/tools/dex-preopt
+#         --dexopt=host/linux-x86/bin/dexopt
+#         --build-dir=out
+#         --product-dir=target/product/generic/dex_bootjars
+#         --boot-dir=${_SYSTEM_FRAMEWORK_DIR}
+#         --boot-jars=core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:telephony-common:voip-common:mms-common:android.policy:services:apache-xml:webviewchromium
+#         --uniprocessor
+#         ${LOCAL_WORK_DIR}/core.jar
+#         ${LOCAL_WORK_DIR}/core.odex
+    dex_preopt(${LOCAL_WORK_DIR}/${_TARGET_NAME}.jar ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex)
+
+    # install the newly created odex and jar
+    message(STATUS "Installing new files for target ${_TARGET_NAME}")
+    file(INSTALL ${LOCAL_WORK_DIR}/${_TARGET_NAME}.jar ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex DESTINATION ${_ANDROID_ROOT}/${_SYSTEM_FRAMEWORK_DIR})
+endfunction()
+
+process_installed_android_jar(core ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/android/core.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/android system/framework)
+
+# message(STATUS "Copying: core classes-full-debug.jar to classes-jarjar.jar")
+# out/host/linux-x86/bin/acp -fp out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes-full-debug.jar out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes-jarjar.jar
+# message(STATUS "Copying: core classes.jar to emma_out/lib/classes-jarjar.jar")
+# out/host/linux-x86/bin/acp -fp out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes-jarjar.jar out/target/common/obj/JAVA_LIBRARIES/core_intermediates/emma_out/lib/classes-jarjar.jar
+# message(STATUS "Copying: core classes.jar to classes.jar")
+# out/host/linux-x86/bin/acp -fp out/target/common/obj/JAVA_LIBRARIES/core_intermediates/emma_out/lib/classes-jarjar.jar out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes.jar
+# message(STATUS "Copying: core classes.jar to noproguard.classes.jar")
+# out/host/linux-x86/bin/acp -fp out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes.jar out/target/common/obj/JAVA_LIBRARIES/core_intermediates/noproguard.classes.jar
+# 
+# message(STATUS "Creating dex from classes.jar for target core")
+# out/host/linux-x86/bin/dx -JXms16M -JXmx2048M --dex --output=out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes-with-local.dex    --core-library out/target/common/obj/JAVA_LIBRARIES/core_intermediates/core-classes.jar
+# message(STATUS "Copying classes.dex")
+# out/host/linux-x86/bin/acp -fp out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes-with-local.dex out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes.dex
+# message(STATUS "Constructing javalib.jar for target core")
+# target Jar: core (out/target/common/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar)
+# touch out/target/common/obj/JAVA_LIBRARIES/core_intermediates//dummy
+# # create jar from dummy
+# (cd out/target/common/obj/JAVA_LIBRARIES/core_intermediates/ && jar cf javalib.jar dummy)
+# # remove the dummy file from the jar (and from disk)
+# zip -qd out/target/common/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar dummy
+# rm out/target/common/obj/JAVA_LIBRARIES/core_intermediates//dummy
+# # add the dex to the jar
+# zip -qj out/target/common/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes.dex
+# 
+# if [ -d out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes ] ; then
+#     java_res_jar_flags=$(find out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes -type f -a -not -name "*.class" | sed -e "s?^out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes/? -C out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes ?");
+#     if [ -n "$java_res_jar_flags" ] ; then
+#         echo $java_res_jar_flags >out/target/common/obj/JAVA_LIBRARIES/core_intermediates/java_res_jar_flags; jar uf out/target/common/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar $java_res_jar_flags;
+#     fi;
+# fi
+# # update the jar with special local things (jar-arg-list in ABS, generated from PRIVATE_EXTRA_JAR_ARGS)
+# jar uf out/target/common/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar @out/target/common/obj/JAVA_LIBRARIES/core_intermediates/jar-arg-list
+# 
+# 
+# out/host/linux-x86/bin/acp -fp out/target/common/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar out/target/product/generic/dex_bootjars/system/framework/core_nodex.jar
+# out/host/linux-x86/bin/acp -fp out/target/product/generic/dex_bootjars/system/framework/core_nodex.jar out/target/product/generic/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar
+# 
+# # Install and pre-optimise core.jar
+# message(STATUS "Installing and preoptimizing (creating odex) jar for target core")
+# Dexpreopt Boot Jar: out/target/product/generic/dex_bootjars/system/framework/core.odex
+# # remove old odex, because dex-preopt requires there to not be one already
+# rm -f out/target/product/generic/dex_bootjars/system/framework/core.odex
+# mkdir -p out/target/product/generic/dex_bootjars/system/framework/
+# # copy core.jar
+# out/host/linux-x86/bin/acp -fp out/target/common/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar out/target/product/generic/dex_bootjars/system/framework/core.jar
+# # run dex-preopt (not installed)
+# dalvik/tools/dex-preopt
+#     --dexopt=host/linux-x86/bin/dexopt
+#     --build-dir=out
+#     --product-dir=target/product/generic/dex_bootjars
+#     --boot-dir=system/framework
+#     --boot-jars=core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:telephony-common:voip-common:mms-common:android.policy:services:apache-xml:webviewchromium
+#     --uniprocessor
+#     target/product/generic/dex_bootjars/system/framework/core.jar
+#     target/product/generic/dex_bootjars/system/framework/core.odex
+# # copy
+# out/host/linux-x86/bin/acp -fp out/target/product/generic/dex_bootjars/system/framework/core.odex out/target/product/generic/obj/JAVA_LIBRARIES/core_intermediates/javalib.odex
+# 
+# Install: out/target/product/generic/system/framework/core.odex
+# out/host/linux-x86/bin/acp -fp out/target/product/generic/obj/JAVA_LIBRARIES/core_intermediates/javalib.odex out/target/product/generic/system/framework/core.odex
+
+
+
+# Install: out/target/product/generic/system/framework/core.jar
+# out/host/linux-x86/bin/acp -fp out/target/product/generic/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar out/target/product/generic/system/framework/core.jar
+
+# Notice file: libcore/NOTICE -- out/target/product/generic/obj/NOTICE_FILES/src//system/framework/core.jar.txt
+# mkdir -p out/target/product/generic/obj/NOTICE_FILES/src//system/framework/
+# cat libcore/NOTICE > out/target/product/generic/obj/NOTICE_FILES/src//system/framework/core.jar.txt
+# 
+# target Prebuilt: tzdata (out/target/product/generic/obj/ETC/tzdata_intermediates/tzdata)
+# out/host/linux-x86/bin/acp -fp bionic/libc/zoneinfo/tzdata out/target/product/generic/obj/ETC/tzdata_intermediates/tzdata
+# Install: out/target/product/generic/system/usr/share/zoneinfo/tzdata
+# out/host/linux-x86/bin/acp -fp out/target/product/generic/obj/ETC/tzdata_intermediates/tzdata out/target/product/generic/system/usr/share/zoneinfo/tzdata
