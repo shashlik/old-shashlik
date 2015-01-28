@@ -55,7 +55,10 @@ function(dex_preopt INPUT_JAR OUTPUT_ODEX)
         set(ENV{ANDROID_DATA} ${CMAKE_INSTALL_PREFIX}/data)
         set(ENV{ANDROID_ROOT} ${CMAKE_INSTALL_PREFIX})
         execute_process(RESULT_VARIABLE dexoptresult COMMAND ${CMAKE_INSTALL_PREFIX}/bin/dexopt --preopt ${INPUT_JAR} ${OUTPUT_ODEX} ${OPTIMIZE_OPTIONS})
-        message(STATUS "LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib ${CMAKE_INSTALL_PREFIX}/bin/dexopt --preopt ${INPUT_JAR} ${OUTPUT_ODEX} ${OPTIMIZE_OPTIONS} reports: ${dexoptresult}")
+        if(dexoptresult)
+            message(SEND_ERROR "Preoptimization failed!")
+            message(FATAL_ERROR "LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib ${CMAKE_INSTALL_PREFIX}/bin/dexopt --preopt ${INPUT_JAR} ${OUTPUT_ODEX} ${OPTIMIZE_OPTIONS} reports: ${dexoptresult}")
+        endif()
     else()
         message(WARNING "Could not preoptimize!")
     endif ()
@@ -82,44 +85,55 @@ function(process_installed_android_jar _TARGET_NAME _INSTALLED_FILE _WORK_DIR _A
     message(STATUS "Create a new jar just with a dummy file")
     file(WRITE ${LOCAL_WORK_DIR}/dummy "")
     execute_process(RESULT_VARIABLE jarresult COMMAND ${Java_JAR_EXECUTABLE} cf ${LOCAL_WORK_DIR}/javalib.jar -C ${LOCAL_WORK_DIR} dummy)
-    message(STATUS "${Java_JAR_EXECUTABLE} cf ${LOCAL_WORK_DIR}/javalib.jar ${LOCAL_WORK_DIR}/dummy reports: ${jarresult}")
-    message(STATUS "Remove the dummy file from the jar and disk")
-    execute_process(COMMAND zip -qd ${LOCAL_WORK_DIR}/javalib.jar dummy)
-    file(REMOVE ${LOCAL_WORK_DIR}/dummy)
-    # add the dex to the jar
-    message(STATUS "Adding classes.dex to the new jar")
-    execute_process(COMMAND zip -qj ${LOCAL_WORK_DIR}/javalib.jar ${LOCAL_WORK_DIR}/classes.dex)
+    if(jarresult)
+        message(SEND_ERROR "Could not create new jar!")
+        message(FATAL_ERROR "${Java_JAR_EXECUTABLE} cf ${LOCAL_WORK_DIR}/javalib.jar ${LOCAL_WORK_DIR}/dummy reports: ${jarresult}")
+    else()
+        message(STATUS "Remove the dummy file from the jar and disk")
+        execute_process(COMMAND zip -qd ${LOCAL_WORK_DIR}/javalib.jar dummy)
+        file(REMOVE ${LOCAL_WORK_DIR}/dummy)
+        # add the dex to the jar
+        message(STATUS "Adding classes.dex to the new jar")
+        execute_process(COMMAND zip -qj ${LOCAL_WORK_DIR}/javalib.jar ${LOCAL_WORK_DIR}/classes.dex)
 
-#     if [ -d out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes ] ; then
-#         java_res_jar_flags=$(find out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes -type f -a -not -name "*.class" | sed -e "s?^out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes/? -C out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes ?");
-#         if [ -n "$java_res_jar_flags" ] ; then
-#             echo $java_res_jar_flags >out/target/common/obj/JAVA_LIBRARIES/core_intermediates/java_res_jar_flags; jar uf out/target/common/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar $java_res_jar_flags;
-#         fi;
-#     fi
-#     # update the jar with special local things (jar-arg-list in ABS, generated from PRIVATE_EXTRA_JAR_ARGS)
-#     jar uf out/target/common/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar @out/target/common/obj/JAVA_LIBRARIES/core_intermediates/jar-arg-list
+#         if [ -d out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes ] ; then
+#             java_res_jar_flags=$(find out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes -type f -a -not -name "*.class" | sed -e "s?^out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes/? -C out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes ?");
+#             if [ -n "$java_res_jar_flags" ] ; then
+#                 echo $java_res_jar_flags >out/target/common/obj/JAVA_LIBRARIES/core_intermediates/java_res_jar_flags; jar uf out/target/common/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar $java_res_jar_flags;
+#             fi;
+#         fi
+#         # update the jar with special local things (jar-arg-list in ABS, generated from PRIVATE_EXTRA_JAR_ARGS)
+#         jar uf out/target/common/obj/JAVA_LIBRARIES/core_intermediates/javalib.jar @out/target/common/obj/JAVA_LIBRARIES/core_intermediates/jar-arg-list
 
-    # preoptimize the new jar
-    # remove old odex, because dex-preopt requires there to not be one already
-    message(STATUS "Preoptimizing the jar for target ${_TARGET_NAME}")
-    file(RENAME ${LOCAL_WORK_DIR}/javalib.jar ${LOCAL_WORK_DIR}/${_TARGET_NAME}.jar)
-    execute_process(COMMAND rm -f ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex)
-    # run dex-preopt (not installed)
+        message(STATUS "Cleaning up unneeded or stale files")
+        file(REMOVE ${_ANDROID_ROOT}/${_SYSTEM_FRAMEWORK_DIR}/classes.dex)
+        file(REMOVE ${_ANDROID_ROOT}/${_SYSTEM_FRAMEWORK_DIR}/classes.jar)
+        file(REMOVE ${_ANDROID_ROOT}/${_SYSTEM_FRAMEWORK_DIR}/${_TARGET_NAME}.jar)
+        file(REMOVE ${_ANDROID_ROOT}/${_SYSTEM_FRAMEWORK_DIR}/${_TARGET_NAME}.odex)
 
-#     dalvik/tools/dex-preopt
-#         --dexopt=host/linux-x86/bin/dexopt
-#         --build-dir=out
-#         --product-dir=target/product/generic/dex_bootjars
-#         --boot-dir=${_SYSTEM_FRAMEWORK_DIR}
-#         --boot-jars=core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:telephony-common:voip-common:mms-common:android.policy:services:apache-xml:webviewchromium
-#         --uniprocessor
-#         ${LOCAL_WORK_DIR}/core.jar
-#         ${LOCAL_WORK_DIR}/core.odex
-    dex_preopt(${LOCAL_WORK_DIR}/${_TARGET_NAME}.jar ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex)
+        # preoptimize the new jar
+        # remove old odex, because dex-preopt requires there to not be one already
+        message(STATUS "Preoptimizing the jar for target ${_TARGET_NAME}")
+        file(RENAME ${LOCAL_WORK_DIR}/javalib.jar ${LOCAL_WORK_DIR}/${_TARGET_NAME}.jar)
+        execute_process(COMMAND rm -f ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex)
+        # run dex-preopt (not installed)
 
-    # install the newly created odex and jar
-    message(STATUS "Installing new files for target ${_TARGET_NAME}")
-    file(INSTALL ${LOCAL_WORK_DIR}/${_TARGET_NAME}.jar ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex DESTINATION ${_ANDROID_ROOT}/${_SYSTEM_FRAMEWORK_DIR})
+#         dalvik/tools/dex-preopt
+#             --dexopt=host/linux-x86/bin/dexopt
+#             --build-dir=out
+#             --product-dir=target/product/generic/dex_bootjars
+#             --boot-dir=${_SYSTEM_FRAMEWORK_DIR}
+#             --boot-jars=core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:telephony-common:voip-common:mms-common:android.policy:services:apache-xml:webviewchromium
+#             --uniprocessor
+#             ${LOCAL_WORK_DIR}/core.jar
+#             ${LOCAL_WORK_DIR}/core.odex
+        dex_preopt(${LOCAL_WORK_DIR}/./${_TARGET_NAME}.jar ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex)
+
+        # install the newly created odex and jar
+        message(STATUS "Installing new files for target ${_TARGET_NAME}")
+        set(PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex DESTINATION ${_ANDROID_ROOT}/${_SYSTEM_FRAMEWORK_DIR})
+        file(INSTALL ${LOCAL_WORK_DIR}/${_TARGET_NAME}.jar ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex DESTINATION ${_ANDROID_ROOT}/${_SYSTEM_FRAMEWORK_DIR})
+    endif()
 endfunction()
 
 process_installed_android_jar(core ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/android/core.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/android system/framework)
