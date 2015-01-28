@@ -45,6 +45,9 @@ elseif(${Java_VERSION} VERSION_EQUAL "1.7" OR ${Java_VERSION} VERSION_GREATER "1
     message(FATAL_ERROR "Your Java SDK is ${Java_VERSION}, which is too high. Shashlik is based on KitKat, which explicitly requires Java 6 to compile successfully.")
 endif()
 
+include(TestBigEndian)
+TEST_BIG_ENDIAN(SystemIsBigEndian)
+
 # ----------------------------------------------------------------
 # System settings
 

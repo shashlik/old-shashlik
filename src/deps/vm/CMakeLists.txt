@@ -21,11 +21,16 @@ add_definitions(
                 -DDVM_SHOW_EXCEPTION=1
 #                 -DDVM_JMP_TABLE_MTERP=1
 #                 -DMTERP_STUB
-                -DHAVE_BIG_ENDIAN  # FIXME: This must be wrong but it currently doesn't build without it
                 -fpermissive
                 -Wno-int-to-pointer-cast
 #                 -w
 )
+
+if(SystemIsBigEndian)
+    add_definitions(-DHAVE_BIG_ENDIAN)
+else()
+    add_definitions(-DHAVE_LITTLE_ENDIAN)
+endif()
 
 if (JIT_VM)
    add_definitions(${JIT_DEFS})
