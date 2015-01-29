@@ -56,7 +56,7 @@ endif(FORCE_32BIT_BUILD)
 
 target_link_libraries(dex LINK_INTERFACE_LIBRARIES ${STANDARD_SYS_LIBS})
 
-install(TARGETS dex DESTINATION lib)
+install(TARGETS dex DESTINATION ${LIB_INSTALL_DIR})
 install(FILES
         ${dex_HEADERS}
         DESTINATION include/dex)

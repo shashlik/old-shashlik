@@ -24,4 +24,4 @@ set(create_test_dmtrace_SRCS
 )
 add_executable(create_test_dmtrace ${create_test_dmtrace_SRCS})
 target_link_libraries(create_test_dmtrace ${STANDARD_SYS_LIBS} corkscrew dex cutils lognativehelper safe-iop utils dvm)
-install(TARGETS create_test_dmtrace DESTINATION bin)
+install(TARGETS create_test_dmtrace DESTINATION ${BIN_INSTALL_DIR})

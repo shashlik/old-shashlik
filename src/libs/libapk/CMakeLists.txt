@@ -16,7 +16,7 @@ add_library(apk SHARED ${libapk_SRCS})
 
 target_link_libraries(apk KF5::Archive Qt5::Core)
 
-install(TARGETS apk DESTINATION lib)
+install(TARGETS apk DESTINATION ${LIB_INSTALL_DIR})
 install(FILES
         ${libapk_HEADERS}
         DESTINATION include/libapk)

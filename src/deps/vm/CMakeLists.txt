@@ -19,8 +19,8 @@ add_definitions(
                 -DDVM_NO_ASM_INTERP
                 -DANDROID_SMP
                 -DDVM_SHOW_EXCEPTION=1
-#                 -DDVM_JMP_TABLE_MTERP=1
-#                 -DMTERP_STUB
+                -DDVM_JMP_TABLE_MTERP=1
+                -DMTERP_STUB
                 -fpermissive
                 -Wno-int-to-pointer-cast
 #                 -w
@@ -213,7 +213,7 @@ if(FORCE_32BIT_BUILD)
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(dvm nativehelper dex jni ${FFI_LIBRARIES})
 
-install(TARGETS dvm DESTINATION lib)
+install(TARGETS dvm DESTINATION ${LIB_INSTALL_DIR})
 install(FILES
         ${vm_HEADERS}
         DESTINATION include/dex)

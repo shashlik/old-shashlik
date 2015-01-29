@@ -33,7 +33,7 @@ target_link_libraries(shashlikutils
                       Qt5::Core
 )
 
-install(TARGETS shashlikutils DESTINATION lib)
+install(TARGETS shashlikutils DESTINATION ${LIB_INSTALL_DIR})
 install(FILES
         ${libshashlikutils_HEADERS}
         DESTINATION include)

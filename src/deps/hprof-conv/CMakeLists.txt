@@ -41,5 +41,5 @@ target_link_libraries(hprof-conv dex
                                  ${STANDARD_SYS_LIBS}
                       )
 
-install(TARGETS hprof-conv DESTINATION bin)
+install(TARGETS hprof-conv DESTINATION ${BIN_INSTALL_DIR})
 

@@ -76,7 +76,7 @@ target_link_libraries(binder LINK_INTERFACE_LIBRARIES
 			     ${STANDARD_SYS_LIBS}
                       )
 
-install(TARGETS binder DESTINATION lib)
+install(TARGETS binder DESTINATION ${LIB_INSTALL_DIR})
 install(FILES
         ${binder_LIB_HEADERS}
         DESTINATION include/binder)

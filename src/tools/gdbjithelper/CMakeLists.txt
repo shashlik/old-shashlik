@@ -17,4 +17,4 @@ include_directories(${REPO_PATH} ${MOD_PATH} ${CMAKE_INSTALL_PREFIX}/include/and
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
 add_executable(gdbjithelper ${gdbjithelper_SRCS})
 target_link_libraries(gdbjithelper ${STANDARD_SYS_LIBS} corkscrew dex cutils log nativehelper safe-iop utils)
-install(TARGETS gdbjithelper DESTINATION bin)
+install(TARGETS gdbjithelper DESTINATION ${BIN_INSTALL_DIR})

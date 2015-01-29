@@ -97,7 +97,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(utils PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
-install(TARGETS utils DESTINATION lib)
+install(TARGETS utils DESTINATION ${LIB_INSTALL_DIR})
 install(FILES
         ${utils_HEADERS}
         DESTINATION include/utils)
