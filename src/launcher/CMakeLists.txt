@@ -71,4 +71,4 @@ target_link_libraries(shashlik_launcher
 )
 
 install(TARGETS shashlik_launcher_helper DESTINATION ${LIB_INSTALL_DIR})
-install(TARGETS shashlik_launcher DESTINATION bin )
+install(TARGETS shashlik_launcher DESTINATION ${BIN_INSTALL_DIR} )

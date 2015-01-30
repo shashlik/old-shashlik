@@ -40,5 +40,5 @@ target_link_libraries(dexlist  dex
                                ${STANDARD_SYS_LIBS}
                       )
 
-install(TARGETS dexlist DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS dexlist DESTINATION ${ANDROID_BIN_DIR})
 

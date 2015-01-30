@@ -172,7 +172,7 @@ target_link_libraries(jni utils nativehelper #KF5::Archive
 			  #Qt5::Core
 )
 
-install(TARGETS jni DESTINATION lib)
+install(TARGETS jni DESTINATION ${LIB_INSTALL_DIR})
 install(FILES
         ${libjni_HEADERS}
         DESTINATION include/libjni)

@@ -73,7 +73,7 @@ endif(FORCE_32BIT_BUILD)
 
 target_link_libraries(binder LINK_INTERFACE_LIBRARIES
                              log utils cutils
-			     ${STANDARD_SYS_LIBS}
+                            ${STANDARD_SYS_LIBS}
                       )
 
 install(TARGETS binder DESTINATION ${LIB_INSTALL_DIR})

@@ -389,5 +389,5 @@ add_jar(dx
     MANIFEST ${DALVIK_PATH}/dx/etc/manifest.txt
 )
 
-install_jar(dx ${BIN_INSTALL_DIR})
-install(PROGRAMS ${DALVIK_PATH}/dx/etc/dx DESTINATION ${BIN_INSTALL_DIR})
+install_jar(dx ${ANDROID_BIN_DIR})
+install(PROGRAMS ${DALVIK_PATH}/dx/etc/dx DESTINATION ${ANDROID_BIN_DIR})

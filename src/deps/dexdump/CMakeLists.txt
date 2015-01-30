@@ -41,5 +41,5 @@ target_link_libraries(dexdump dex
                               ${STANDARD_SYS_LIBS}
                       )
 
-install(TARGETS dexdump DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS dexdump DESTINATION ${ANDROID_BIN_DIR})
 

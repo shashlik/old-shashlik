@@ -65,7 +65,10 @@ add_definitions(-DHAVE_SYS_UIO_H
 # Standard system libraries that everything links against
 set(STANDARD_SYS_LIBS  dl pthread z resolv ffi)
 
-
+# The android root directory is the installation location for the android system
+# itself, and used by the vm's various bits to load and check things.
+set(ANDROID_ROOT ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/android)
+set(ANDROID_BIN_DIR ${ANDROID_ROOT}/system/bin)
 
 # ----------------------------------------------------------------
 # Various project settings
