@@ -57,7 +57,7 @@ if(FORCE_32BIT_BUILD)
 endif(FORCE_32BIT_BUILD)
 
 set_target_properties(shashlik_launcher PROPERTIES
-    OUTPUT_NAME shashlik-launcher
+    OUTPUT_NAME shashlik-launcher.bin
 )
 
 target_link_libraries(shashlik_launcher
@@ -72,3 +72,4 @@ target_link_libraries(shashlik_launcher
 
 install(TARGETS shashlik_launcher_helper DESTINATION ${LIB_INSTALL_DIR})
 install(TARGETS shashlik_launcher DESTINATION ${BIN_INSTALL_DIR} )
+install(PROGRAMS shashlik-launcher DESTINATION ${BIN_INSTALL_DIR})
