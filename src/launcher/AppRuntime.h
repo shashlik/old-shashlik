@@ -14,7 +14,7 @@
 //#include <android_runtime/AndroidRuntime.h>
 //#include <sys/personality.h>
 
-#include "runtime/ShashlikRuntime.h"
+#include <android_runtime/AndroidRuntime.h>
 #include <nativehelper/jni.h>
 
 //class JNIEnv;
@@ -24,7 +24,7 @@ namespace shashlik {
 
 using namespace android;
 
-class AppRuntime : public ShashlikRuntime
+class AppRuntime : public AndroidRuntime
 {
 public:
     AppRuntime();

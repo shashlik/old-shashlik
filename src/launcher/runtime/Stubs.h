@@ -44,7 +44,7 @@ extern int register_android_media_ToneGenerator(JNIEnv *env);
 extern int register_android_util_FloatMath(JNIEnv* env);
 
 
-namespace shashlik
+namespace android
 {
 
 

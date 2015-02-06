@@ -18,6 +18,7 @@ include_directories(${LIBBINDER_INCLUDES}
                     ${LIBUTILS_INCLUDES}
                     ${LIBCUTILS_INCLUDES}
                     ${LIBNATIVEHELPER_INCLUDEDIRS}
+                    ${SKIA_INCLUDES}
                     ${CMAKE_INSTALL_PREFIX}/include
                     ${CMAKE_SOURCE_DIR}/src/libs/libshashlikutils
                     ${CMAKE_BINARY_DIR}     # for shashlikversion.h
@@ -31,11 +32,8 @@ set(shashlik_launcher_SRCS
 )
 
 set(shashlik_launcher_helper_SRCS
-    runtime/ShashlikRuntime.cpp
+    ${ANDROID_FRAMEWORKS_BASE}/core/jni/AndroidRuntime.cpp
     runtime/Stubs.cpp
-
-    # Old stuff that we may have to bring back in later.
-    #${ANDROID_FRAMEWORKS_BASE}/core/jni/AndroidRuntime.cpp
 )
 
 link_directories(${CMAKE_INSTALL_PREFIX}/lib)   # NOTE: This must be before add_executable :/
@@ -46,6 +44,8 @@ target_link_libraries(shashlik_launcher_helper
                       shashlikutils
                       binder
                       nativehelper
+                      skia
+                      jni
                       corkscrew log utils cutils  # android-core
 
                       ${STANDARD_SYS_LIBS}
@@ -65,6 +65,8 @@ target_link_libraries(shashlik_launcher
                       shashlikutils
                       binder
                       nativehelper
+                      skia
+                      jni
                       corkscrew log utils cutils  # android-core
 
                       ${STANDARD_SYS_LIBS}

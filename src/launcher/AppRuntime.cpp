@@ -110,7 +110,7 @@ void AppRuntime::onStarted()
     ALOGV("App process: starting thread pool.\n");
     proc->startThreadPool();
 
-    ShashlikRuntime* ar = ShashlikRuntime::getRuntime();
+    AndroidRuntime* ar = AndroidRuntime::getRuntime();
     ar->callMain(m_className, m_class, m_argC, m_argV);
 
     IPCThreadState::self()->stopProcess();
@@ -133,7 +133,7 @@ void AppRuntime::onExit(int code)
 	IPCThreadState::self()->stopProcess();
     }
 
-    ShashlikRuntime::onExit(code);
+    AndroidRuntime::onExit(code);
 }
 
 
