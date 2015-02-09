@@ -1,3 +1,5 @@
+#this should use the stuff in the tree, not our own thing. we're downloading it anyway, so use that instead
+
 
 project(libjni)
 
@@ -8,17 +10,16 @@ add_definitions(-DHAVE_ANDROID_OS   # To make cutils/trace work.  FIXME: Check w
 )
 
 
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/..   # For runtime/ . Reorganize this better once it works
                     ${LIBCUTILS_INCLUDES}
                     ${LIBNATIVEHELPER_INCLUDEDIRS}
-                    ${CMAKE_INSTALL_PREFIX}/include
                     ${LIBBINDER_INCLUDES}
-                    #${CMAKE_BINARY_DIR}     # for shashlikversion.h
-                    #${ANDROID_FRAMEWORKS_BASE}/include
+                    ${ANDROID_FRAMEWORKS_BASE}/include
+                    ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified string.h
                     )
 
+
+set(JNI_SOURCE_DIR ${ANDROID_FRAMEWORKS_BASE}/core/jni)
 
 set(libjni_SRCS
     #android_animation_PropertyValuesHolder.cpp
@@ -48,7 +49,7 @@ set(libjni_SRCS
     #android_media_AudioRecord.cpp
     #android_media_AudioSystem.cpp
     #android_media_AudioTrack.cpp
-    #android_media_JetPlayer.cpp
+    #${JNI_SOURCE_DIR}/android_media_JetPlayer.cpp
     #android_media_RemoteDisplay.cpp
     #android_media_ToneGenerator.cpp
     #android_net_LocalSocketImpl.cpp
@@ -65,28 +66,28 @@ set(libjni_SRCS
     #android_opengl_GLES20.cpp
     #android_opengl_GLES30.cpp
 #    android_os_Debug.cpp              # Problems: includes memtrack.h
-    android_os_FileUtils.cpp          # Builds
+    ${JNI_SOURCE_DIR}/android_os_FileUtils.cpp          # Builds
 #    android_os_MemoryFile.cpp         # Problems: cast 64 bit / jint
 #    android_os_MessageQueue.cpp       # Problems: include utils/Looper.h
-    android_os_Parcel.cpp             # Problems: cast 64 bit / jint
+    ${JNI_SOURCE_DIR}/android_os_Parcel.cpp             # Problems: cast 64 bit / jint
     #android_os_SELinux.cpp
 #    android_os_SystemClock.cpp       # Problems: ioctl(...ANDROID_ALARM_SET_RTC ...)
-    android_os_SystemProperties.cpp   # Builds
-    android_os_Trace.cpp              # Builds
+    ${JNI_SOURCE_DIR}/android_os_SystemProperties.cpp   # Builds
+    ${JNI_SOURCE_DIR}/android_os_Trace.cpp              # Builds
     #android_os_UEventObserver.cpp
     #AndroidRuntime.cpp
     #android_server_NetworkManagementSocketTagger.cpp
     #android_server_Watchdog.cpp
-    android_text_AndroidBidi.cpp      # Builds
-    android_text_AndroidCharacter.cpp # Builds
+    ${JNI_SOURCE_DIR}/android_text_AndroidBidi.cpp      # Builds
+    ${JNI_SOURCE_DIR}/android_text_AndroidCharacter.cpp # Builds
 #    android_text_format_Time.cpp     # Problems: includes bionic_time.h
-#    android_util_AssetManager.cpp     # Problems: includes android_runtime/android_util_AssetManager.h>
-    android_util_Binder.cpp           # Problems: cast 64 bit / int32_t
-    android_util_EventLog.cpp	      # Builds
-    android_util_FileObserver.cpp     # Builds
+    ${JNI_SOURCE_DIR}/android_util_AssetManager.cpp     # Problems: includes android_runtime/android_util_AssetManager.h>
+    ${JNI_SOURCE_DIR}/android_util_Binder.cpp           # Problems: cast 64 bit / int32_t
+    ${JNI_SOURCE_DIR}/android_util_EventLog.cpp	      # Builds
+    ${JNI_SOURCE_DIR}/android_util_FileObserver.cpp     # Builds
 #    android_util_FloatMath.cpp	      # Problems: Uses SK_ARRAY_COUNT from SkTypes.h (Skia)
-    android_util_Log.cpp	      # Builds
-    android_util_Process.cpp	      # Builds
+    ${JNI_SOURCE_DIR}/android_util_Log.cpp	      # Builds
+    ${JNI_SOURCE_DIR}/android_util_Process.cpp	      # Builds
 #    android_util_StringBlock.cpp      # Problems: includes androidfw/ResourceTypes.h
 #    android_util_XmlBlock.cpp          # Problems: includes androidfw/AssetManager.h
     #android_view_DisplayEventReceiver.cpp
@@ -109,7 +110,7 @@ set(libjni_SRCS
     #android_view_TextureView.cpp
     #android_view_VelocityTracker.cpp
     #BindTest.cpp
-    #com_android_internal_content_NativeLibraryHelper.cpp
+    ${JNI_SOURCE_DIR}/com_android_internal_content_NativeLibraryHelper.cpp
     #com_android_internal_net_NetworkStatsFactory.cpp
     #com_android_internal_os_ZygoteInit.cpp
     #com_google_android_gles_jni_EGLImpl.cpp
@@ -168,11 +169,11 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(jni PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
-target_link_libraries(jni utils nativehelper #KF5::Archive
+target_link_libraries(jni androidfw utils nativehelper stripped_bionic #KF5::Archive
 			  #Qt5::Core
 )
 
-install(TARGETS jni DESTINATION lib)
+install(TARGETS jni DESTINATION ${LIB_INSTALL_DIR})
 install(FILES
         ${libjni_HEADERS}
         DESTINATION include/libjni)

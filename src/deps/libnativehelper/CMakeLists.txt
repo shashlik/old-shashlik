@@ -35,7 +35,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(nativehelper PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
-install(TARGETS nativehelper DESTINATION lib)
+install(TARGETS nativehelper DESTINATION ${LIB_INSTALL_DIR})
 install(FILES
         ${nativehelper_HEADERS}
         DESTINATION ${CMAKE_INSTALL_PREFIX}/include/nativehelper)

@@ -101,7 +101,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(cutils PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
-install(TARGETS cutils DESTINATION lib)
+install(TARGETS cutils DESTINATION ${LIB_INSTALL_DIR})
 install(FILES
         ${cutils_HEADERS}
         DESTINATION include/cutils)

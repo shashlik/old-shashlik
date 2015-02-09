@@ -4,15 +4,14 @@ set(REPO_PATH ${ANDROID_CORE_PATH})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${LIBCUTILS_INCLUDES})
 
-# add_definitions(-DHAVE_ANDROID_OS   # To make android threads work.  FIXME: Check what other consequences this has.
-# )
-
 add_definitions(-DHAVE_POSIX_FILEMAP
                 -DHAVE_OFF64_T
                 -DHAVE_SYS_UIO_H
                 -DHAVE_PTHREADS
                 -DOS_PATH_SEPARATOR='/'
-                -DANDROID_SMP=1)
+                -DANDROID_SMP=1
+                -DHAVE_ANDROID_OS   # To make android threads work.  FIXME: Check what other consequences this has.
+)
 
 set(utils_SRCS
    ${REPO_PATH}/libutils/BasicHashtable.cpp
@@ -98,7 +97,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(utils PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
-install(TARGETS utils DESTINATION lib)
+install(TARGETS utils DESTINATION ${LIB_INSTALL_DIR})
 install(FILES
         ${utils_HEADERS}
         DESTINATION include/utils)

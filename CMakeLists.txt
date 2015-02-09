@@ -13,7 +13,7 @@ set(SHASHLIK_VERSION_YEAR 2014)
 
 
 find_package(ECM 1.0.0 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_SOURCE_DIR}/cmake)
 
 
 # For Qt5 and KF5 stuff, you must set the CMake module path first. See
@@ -33,6 +33,20 @@ include(KDECMakeSettings)
 include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
 
+find_package(FFI REQUIRED)
+
+
+find_package(Java 1.6 REQUIRED)
+include(UseJava)
+
+if(${Java_VERSION} VERSION_LESS "1.6")
+    message(FATAL_ERROR "Your Java SDK is ${Java_VERSION}, which is too low. Shashlik is based on KitKat, which explicitly requires Java 6 to compile successfully.")
+elseif(${Java_VERSION} VERSION_EQUAL "1.7" OR ${Java_VERSION} VERSION_GREATER "1.7")
+    message(FATAL_ERROR "Your Java SDK is ${Java_VERSION}, which is too high. Shashlik is based on KitKat, which explicitly requires Java 6 to compile successfully.")
+endif()
+
+include(TestBigEndian)
+TEST_BIG_ENDIAN(SystemIsBigEndian)
 
 # ----------------------------------------------------------------
 # System settings
@@ -51,7 +65,11 @@ add_definitions(-DHAVE_SYS_UIO_H
 # Standard system libraries that everything links against
 set(STANDARD_SYS_LIBS  dl pthread z resolv ffi)
 
-
+# The android root directory is the installation location for the android system
+# itself, and used by the vm's various bits to load and check things.
+set(ANDROID_ROOT ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/android)
+set(ANDROID_BIN_DIR ${ANDROID_ROOT}/system/bin)
+set(ANDROID_LIB_DIR ${LIB_INSTALL_DIR})
 
 # ----------------------------------------------------------------
 # Various project settings
@@ -75,9 +93,11 @@ set(GENERAL_SOURCE_PATH ${CMAKE_SOURCE_DIR}/..)
 set(ANDROID_CORE_PATH              ${GENERAL_SOURCE_PATH}/android-core)
 set(ANDROID_LIBCORE_PATH           ${GENERAL_SOURCE_PATH}/android-libcore)
 set(ANDROID_FRAMEWORKS_NATIVE_PATH ${GENERAL_SOURCE_PATH}/android-frameworks-native)
+set(ANDROID_FRAMEWORKS_BASE        ${GENERAL_SOURCE_PATH}/frameworks-base)
 set(DALVIK_PATH                    ${GENERAL_SOURCE_PATH}/dalvik)
 set(NATIVEHELPER_PATH              ${GENERAL_SOURCE_PATH}/libnativehelper)
 set(SAFE_IOP_PATH                  ${GENERAL_SOURCE_PATH}/safe-iop)
+set(SKIA_PATH                      ${GENERAL_SOURCE_PATH}/skia)
 
 
 # Tier 1 libraries
@@ -98,6 +118,8 @@ set(LIBNATIVEHELPER_INCLUDEDIRS ${NATIVEHELPER_PATH}/include/nativehelper ${NATI
 # safe-iop
 set(SAFE_IOP_INCLUDES ${SAFE_IOP_PATH}/include)
 
+set(SKIA_INCLUDES ${SKIA_PATH}/include/c ${SKIA_PATH}/include/config ${SKIA_PATH}/include/core ${SKIA_PATH}/include/effects ${SKIA_PATH}/include/gpu ${SKIA_PATH}/include/images ${SKIA_PATH}/include/pathops ${SKIA_PATH}/include/pipe ${SKIA_PATH}/include/ports ${SKIA_PATH}/include/utils ${SKIA_PATH}/include/xml)
+
 # Tier2 libraries
 
 # Dalvik
@@ -114,3 +136,7 @@ set(LIBBINDER_INCLUDES ${CMAKE_SOURCE_DIR}/src/libs/libbinder
 
 
 add_subdirectory(src)
+
+# This must be at the end, or we end up with these post install commands being
+# run before the install proccess is fully completed
+add_subdirectory(postinstall)
