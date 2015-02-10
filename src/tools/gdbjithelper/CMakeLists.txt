@@ -16,5 +16,8 @@ set(gdbjithelper_SRCS
 include_directories(${REPO_PATH} ${MOD_PATH} ${CMAKE_INSTALL_PREFIX}/include/android-libcore ${CMAKE_INSTALL_PREFIX}/include/nativehelper)
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
 add_executable(gdbjithelper ${gdbjithelper_SRCS})
+if(FORCE_32BIT_BUILD)
+    set_target_properties(gdbjithelper PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
 target_link_libraries(gdbjithelper ${STANDARD_SYS_LIBS} corkscrew dex cutils log nativehelper safe-iop utils)
 install(TARGETS gdbjithelper DESTINATION ${ANDROID_BIN_DIR})

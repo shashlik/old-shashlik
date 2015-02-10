@@ -16,12 +16,18 @@ set(dmtracedump_SRCS
    ${MOD_PATH}/TraceDump.c
 )
 add_executable(dmtracedump ${dmtracedump_SRCS})
-target_link_libraries(dmtracedump ${STANDARD_SYS_LIBS} corkscrew dex cutils log nativehelper safe-iop utils dvm)
-install(TARGETS dmtracedump DESTINATION bin)
+if(FORCE_32BIT_BUILD)
+    set_target_properties(dmtracedump PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
+target_link_libraries(dmtracedump ${STANDARD_SYS_LIBS} shashlik_launcher_helper corkscrew dex cutils log nativehelper safe-iop utils dvm icuuc icui18n)
+install(TARGETS dmtracedump DESTINATION ${ANDROID_BIN_DIR})
 
 set(create_test_dmtrace_SRCS
    ${MOD_PATH}/CreateTestTrace.c
 )
 add_executable(create_test_dmtrace ${create_test_dmtrace_SRCS})
-target_link_libraries(create_test_dmtrace ${STANDARD_SYS_LIBS} corkscrew dex cutils lognativehelper safe-iop utils dvm)
+if(FORCE_32BIT_BUILD)
+    set_target_properties(create_test_dmtrace PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
+target_link_libraries(create_test_dmtrace ${STANDARD_SYS_LIBS} shashlik_launcher_helper corkscrew dex cutils log nativehelper safe-iop utils dvm icuuc icui18n)
 install(TARGETS create_test_dmtrace DESTINATION ${ANDROID_BIN_DIR})

@@ -86,7 +86,7 @@ set(FORCE_32BIT_BUILD true)
 # false is the default
 #
 # FIXME: Should we perhaps have a test for 32/64 bit systems?
-set(JIT_VM false)
+set(JIT_VM true)
 
 # It is assumed that the various repos are checked out next to this one
 # This is described in the file BUILDING.
