@@ -75,7 +75,9 @@ set(ANDROID_LIB_DIR ${LIB_INSTALL_DIR})
 # Various project settings
 
 # This will force a 32bit build (read in various places and sets compiler/linker flags on binaries)
-set(FORCE_32BIT_BUILD false)
+# The reason we do this is that the dalvik vm expects to be running as 32bit, and we can't get
+# around this until a switch to art is made.
+set(FORCE_32BIT_BUILD true)
 
 # Set JIT_VM to:
 #   false   if you want to run an interpreter (currently necessary on 64 bit systems)
