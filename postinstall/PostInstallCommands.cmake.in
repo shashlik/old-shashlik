@@ -135,10 +135,11 @@ function(process_installed_android_jar _TARGET_NAME _INSTALLED_FILE _WORK_DIR _S
 endfunction()
 
 set(ENV{LD_LIBRARY_PATH} ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR})
-set(ENV{BOOTCLASSPATH} ${ANDROID_ROOT}/system/framework/core.jar)
+set(ENV{BOOTCLASSPATH} ${ANDROID_ROOT}/system/framework/core.jar:${ANDROID_ROOT}/system/framework/framework.jar)
 set(ENV{ANDROID_DATA} ${ANDROID_ROOT}/data)
 set(ENV{ANDROID_ROOT} ${ANDROID_ROOT})
 process_installed_android_jar(core ${ANDROID_ROOT}/core.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary system/framework)
+process_installed_android_jar(framework ${ANDROID_ROOT}/framework.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary system/framework)
 
 # message(STATUS "Copying: core classes-full-debug.jar to classes-jarjar.jar")
 # out/host/linux-x86/bin/acp -fp out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes-full-debug.jar out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes-jarjar.jar

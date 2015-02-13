@@ -9,7 +9,7 @@ export ANDROID_DATA=\"${ANDROID_ROOT}/data\"
 export ANDROID_STORAGE=\"${ANDROID_ROOT}/storage\"
 export ASEC_MOUNTPOINT=\"${ANDROID_ROOT}/mnt/asec\"
 export LOOP_MOUNTPOINT=\"${ANDROID_ROOT}/mnt/obb\"
-export BOOTCLASSPATH=\"${ANDROID_ROOT}/system/framework/core.jar\"
+export BOOTCLASSPATH=\"${ANDROID_ROOT}/system/framework/core.jar:${ANDROID_ROOT}/system/framework/framework.jar\"
 exec $@
 ")
 install(PROGRAMS ${PROJECT_BINARY_DIR}/shashlik_env_wrapper.sh DESTINATION ${CMAKE_INSTALL_PREFIX}/${BIN_INSTALL_DIR})
