@@ -34,7 +34,6 @@ set(shashlik_launcher_SRCS
 )
 
 set(shashlik_launcher_helper_SRCS
-    ${ANDROID_FRAMEWORKS_BASE}/core/jni/AndroidRuntime.cpp
     runtime/Stubs.cpp
 )
 
