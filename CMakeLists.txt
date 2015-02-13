@@ -34,6 +34,7 @@ include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
 
 find_package(FFI REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 
 find_package(Java 1.6 REQUIRED)
