@@ -64,7 +64,7 @@ add_definitions(-DHAVE_SYS_UIO_H
 )
 
 # Standard system libraries that everything links against
-set(STANDARD_SYS_LIBS  dl pthread z resolv ffi)
+set(STANDARD_SYS_LIBS  dl pthread resolv ffi)
 
 # The android root directory is the installation location for the android system
 # itself, and used by the vm's various bits to load and check things.
@@ -88,6 +88,10 @@ set(FORCE_32BIT_BUILD true)
 #
 # FIXME: Should we perhaps have a test for 32/64 bit systems?
 set(JIT_VM true)
+
+# This sets whether or not to build the various development helper tools which are
+# not required for the normal operation of the launcher itself.
+set(BUILD_TOOLS true)
 
 # It is assumed that the various repos are checked out next to this one
 # This is described in the file BUILDING.

@@ -1,2 +1,2 @@
 #!/bin/sh
-exec shashlik_env_wrapper shashlik-launcher.bin
+exec ./shashlik_env_wrapper.sh ./shashlik-launcher.bin

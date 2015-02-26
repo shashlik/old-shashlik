@@ -38,7 +38,7 @@ target_link_libraries(dexdump dex
                               nativehelper
                               safe-iop
                               corkscrew log utils cutils # android-core
-                              ${STANDARD_SYS_LIBS}
+                              ${STANDARD_SYS_LIBS} z
                       )
 
 install(TARGETS dexdump DESTINATION ${ANDROID_BIN_DIR})

@@ -29,27 +29,12 @@ add_subdirectory(aidl) # must be before the java libraries, as it is used to cre
 
 # dalvik vm
 add_subdirectory(vm)
-add_subdirectory(javalibrary)
-add_subdirectory(javalibrary-frameworks)
+# add_subdirectory(javalibrary)
+# add_subdirectory(javalibrary-frameworks)
 add_subdirectory(libjavacore)
-
-# c++ tools
-add_subdirectory(dexdump)
-add_subdirectory(dexlist)
-add_subdirectory(hprof-conv)
-
-if (JIT_VM)
-# FIXME: These can only be built on a 32 bit system.  Somebody with such a
-#        system will have to move them from buildsystem/tier2.
-
-##    add_subdirectory(gdbjithelper)
-##    add_subdirectory(dexopt)
-##    add_subdirectory(dmtracedump)
-endif(JIT_VM)
 
 #java tools
 #add_subdirectory(dexgen)
-#add_subdirectory(dx)
 #add_subdirectory(hit)
 #add_subdirectory(tools/dexdeps)
 
