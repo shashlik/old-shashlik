@@ -46,11 +46,9 @@ endif(FORCE_32BIT_BUILD)
 
 target_link_libraries(shashlik_launcher_helper
                       shashlikutils
-                      binder
-                      nativehelper
                       skia
                       jni
-                      corkscrew log utils cutils  # android-core
+                      corkscrew
 
                       ${STANDARD_SYS_LIBS}
 )
@@ -66,11 +64,6 @@ set_target_properties(shashlik_launcher PROPERTIES
 
 target_link_libraries(shashlik_launcher
                       shashlik_launcher_helper
-                      shashlikutils
-                      skia
-                      dvm
-                      corkscrew
-
                       ${STANDARD_SYS_LIBS}
 )
 
