@@ -23,6 +23,7 @@ add_subdirectory(libandroidfw)    # frameworks-base
 #                             Dalvik
 
 # vm support libraries and tools
+add_subdirectory(libjni)
 add_subdirectory(libdex)
 add_subdirectory(dx)
 add_subdirectory(aidl) # must be before the java libraries, as it is used to create the interfaces
