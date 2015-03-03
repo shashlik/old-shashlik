@@ -42,11 +42,7 @@ endif(FORCE_32BIT_BUILD)
 
 target_link_libraries(shashlik_jni
                       shashlikutils
-                      skia
                       jni
-                      corkscrew
-
-                      ${STANDARD_SYS_LIBS}
 )
 
 add_executable(shashlik_launcher ${shashlik_launcher_SRCS})
@@ -60,7 +56,6 @@ set_target_properties(shashlik_launcher PROPERTIES
 
 target_link_libraries(shashlik_launcher
                       shashlik_jni
-                      ${STANDARD_SYS_LIBS}
 )
 
 install(TARGETS shashlik_jni DESTINATION ${LIB_INSTALL_DIR})

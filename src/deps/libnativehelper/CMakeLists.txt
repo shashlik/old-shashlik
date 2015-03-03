@@ -34,6 +34,7 @@ add_library(nativehelper SHARED ${nativehelper_SRCS})
 if(FORCE_32BIT_BUILD)
     set_target_properties(nativehelper PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
+target_link_libraries(nativehelper dl)
 
 install(TARGETS nativehelper DESTINATION ${LIB_INSTALL_DIR})
 install(FILES

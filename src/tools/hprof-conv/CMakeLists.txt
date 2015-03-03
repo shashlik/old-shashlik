@@ -38,7 +38,7 @@ target_link_libraries(hprof-conv dex
                                  nativehelper
                                  safe-iop
                                  corkscrew log utils cutils  # android-core
-                                 ${STANDARD_SYS_LIBS} z
+                                 z
                       )
 
 install(TARGETS hprof-conv DESTINATION ${ANDROID_BIN_DIR})

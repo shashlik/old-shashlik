@@ -37,7 +37,7 @@ target_link_libraries(dexlist  dex
                                nativehelper
                                safe-iop
                                corkscrew log utils cutils  # Targets in this tree
-                               ${STANDARD_SYS_LIBS} z
+                               z
                       )
 
 install(TARGETS dexlist DESTINATION ${ANDROID_BIN_DIR})

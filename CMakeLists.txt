@@ -63,9 +63,6 @@ add_definitions(-DHAVE_SYS_UIO_H
                 -DHAVE_POSIX_CLOCKS
 )
 
-# Standard system libraries that everything links against
-set(STANDARD_SYS_LIBS  dl pthread resolv ffi)
-
 # The android root directory is the installation location for the android system
 # itself, and used by the vm's various bits to load and check things.
 set(ANDROID_ROOT ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/android)
@@ -87,6 +84,8 @@ set(FORCE_32BIT_BUILD true)
 # false is the default
 #
 # FIXME: Should we perhaps have a test for 32/64 bit systems?
+# NOTE: As we are basing Shashlik on KitKat at the moment, 32bit is required. When we
+#       switch to Lollipop or greater, 64bit will become an option, but not until then.
 set(JIT_VM true)
 
 # This sets whether or not to build the various development helper tools which are
