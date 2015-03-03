@@ -30,7 +30,7 @@ add_subdirectory(aidl) # must be before the java libraries, as it is used to cre
 
 # dalvik vm
 add_subdirectory(vm)
-add_subdirectory(javalibrary)
+add_subdirectory(javalibrary-core)
 add_subdirectory(javalibrary-frameworks)
 add_subdirectory(libjavacore)
 
