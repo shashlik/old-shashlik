@@ -1,4 +1,4 @@
-project(javalibrary)
+project(javalibrary_core)
 
 set(REPO_PATH ${ANDROID_LIBCORE_PATH})
 
