@@ -2255,6 +2255,46 @@ foreach(_fileNameAndPathWithoutExtension ${aidl_entries_to_handle})
     list(APPEND javalibrary_frameworks_interface_SRCS "${CMAKE_CURRENT_BINARY_DIR}/${_fileNameAndPathWithoutExtension}.java")
 endforeach()
 
-set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary/core.jar -classpath ${PROJECT_BINARY_DIR}/framework.jar -extdirs \"\")
-add_jar(framework ${javalibrary_frameworks_SRCS} ${javalibrary_frameworks_interface_SRCS})
+add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml
+    COMMAND touch ${CMAKE_CURRENT_BINARY_DIR}/dummy
+    COMMAND jar cf package-export.apk dummy
+    COMMAND zip -qd ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk dummy
+    COMMAND rm ${CMAKE_CURRENT_BINARY_DIR}/dummy
+    COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/src
+# no webview here, at least yet
+#    COMMAND aapt package -x -z -m  -J ${CMAKE_CURRENT_BINARY_DIR}/src -M frameworks/base/core/res/AndroidManifest.xml -P ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml -S frameworks/webview/chromium/overlay/frameworks/base/core/res/res -S frameworks/base/core/res/res -A frameworks/base/core/res/assets  -G ${CMAKE_CURRENT_BINARY_DIR}/proguard_options --min-sdk-version 19 --target-sdk-version 19 --version-code 19 --version-name 4.4.4-eng.leinir.20150212.133909
+    COMMAND aapt package -u -x -z   -M ${REPO_PATH}/core/res/AndroidManifest.xml -S ${REPO_PATH}/core/res/res -A ${REPO_PATH}/core/res/assets  --min-sdk-version 19 --target-sdk-version 19 --product default --version-code 19 --version-name 4.4.4-eng.leinir.20150212.133909   -F ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk
+    COMMAND aapt package -x -z -m  -J ${CMAKE_CURRENT_BINARY_DIR}/src -M ${REPO_PATH}/core/res/AndroidManifest.xml -P ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml -S ${REPO_PATH}/core/res/res -A ${REPO_PATH}/core/res/assets  -G ${CMAKE_CURRENT_BINARY_DIR}/proguard_options --min-sdk-version 19 --target-sdk-version 19 --version-code 19 --version-name 4.4.4-eng.leinir.20150212.133909
+)
+add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/R.java
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml
+    COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal
+    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/src/com/android/internal/R.java ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/R.java
+)
+# add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/Manifest.java
+#     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml
+#     COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal
+#     COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/src/com/android/internal/Manifest.java ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/Manifest.java
+# )
+add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/common/R/android/R.java
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml
+    COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/common/R/android
+    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/src/android/R.java ${CMAKE_CURRENT_BINARY_DIR}/common/R/android/R.java
+)
+add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/common/R/android/Manifest.java
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml
+    COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/common/R/android
+    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/src/android/Manifest.java ${CMAKE_CURRENT_BINARY_DIR}/common/R/android/Manifest.java
+)
+
+set(framework_R_SRCS
+    ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/R.java
+#     ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/Manifest.java
+    ${CMAKE_CURRENT_BINARY_DIR}/common/R/android/R.java
+    ${CMAKE_CURRENT_BINARY_DIR}/common/R/android/Manifest.java
+)
+set_source_files_properties(${framework_R_SRCS} PROPERTIES GENERATED TRUE)
+
+set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
+add_jar(framework SOURCES ${framework_R_SRCS} ${javalibrary_frameworks_SRCS} ${javalibrary_frameworks_interface_SRCS} INCLUDE_JARS core conscrypt)
 install_jar(framework ${LIB_INSTALL_DIR}/android)
