@@ -177,7 +177,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(jni PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
-target_link_libraries(jni ffi corkscrew skia safe-iop icuuc icui18n androidfw nativehelper stripped_bionic #KF5::Archive
+target_link_libraries(jni ffi skia safe-iop icuuc icui18n androidfw nativehelper stripped_bionic #KF5::Archive
 			  #Qt5::Core
 )
 
