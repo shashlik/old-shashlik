@@ -16,6 +16,7 @@ add_subdirectory(libnativehelper) # native-helper
 add_subdirectory(safe-iop)        # safe-iop
 
 add_subdirectory(skia)            # skia graphics library
+add_subdirectory(openssl)         # openssl secure socket layer library
 
 add_subdirectory(libandroidfw)    # frameworks-base
 
@@ -27,10 +28,12 @@ add_subdirectory(libjni)
 add_subdirectory(libdex)
 add_subdirectory(dx)
 add_subdirectory(aidl) # must be before the java libraries, as it is used to create the interfaces
+add_subdirectory(aapt)
 
 # dalvik vm
 add_subdirectory(vm)
 add_subdirectory(javalibrary-core)
+add_subdirectory(javalibrary-conscrypt)
 add_subdirectory(javalibrary-frameworks)
 add_subdirectory(libjavacore)
 

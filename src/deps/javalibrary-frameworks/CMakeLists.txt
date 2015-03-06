@@ -2296,5 +2296,6 @@ set(framework_R_SRCS
 set_source_files_properties(${framework_R_SRCS} PROPERTIES GENERATED TRUE)
 
 set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
-add_jar(framework SOURCES ${framework_R_SRCS} ${javalibrary_frameworks_SRCS} ${javalibrary_frameworks_interface_SRCS} INCLUDE_JARS core conscrypt)
+find_jar(BOUNCYCASTLE_JAR NAMES bcprov)
+add_jar(framework SOURCES ${framework_R_SRCS} ${javalibrary_frameworks_SRCS} ${javalibrary_frameworks_interface_SRCS} INCLUDE_JARS core conscrypt ${BOUNCYCASTLE_JAR})
 install_jar(framework ${LIB_INSTALL_DIR}/android)
