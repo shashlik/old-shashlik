@@ -46,6 +46,8 @@ elseif(${Java_VERSION} VERSION_EQUAL "1.7" OR ${Java_VERSION} VERSION_GREATER "1
     message(FATAL_ERROR "Your Java SDK is ${Java_VERSION}, which is too high. Shashlik is based on KitKat, which explicitly requires Java 6 to compile successfully.")
 endif()
 
+include(JarjarModule)
+
 include(TestBigEndian)
 TEST_BIG_ENDIAN(SystemIsBigEndian)
 
@@ -76,6 +78,10 @@ set(ANDROID_LIB_DIR ${LIB_INSTALL_DIR})
 # The reason we do this is that the dalvik vm expects to be running as 32bit, and we can't get
 # around this until a switch to art is made.
 set(FORCE_32BIT_BUILD true)
+if(FORCE_32BIT_BUILD)
+    # This is less than beautiful, but it works for now
+    link_directories(/usr/lib/)
+endif(FORCE_32BIT_BUILD)
 
 # Set JIT_VM to:
 #   false   if you want to run an interpreter (currently necessary on 64 bit systems)
