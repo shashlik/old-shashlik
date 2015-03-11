@@ -2,6 +2,13 @@ project(javalibrary_frameworks)
 
 set(REPO_PATH ${ANDROID_FRAMEWORKS_BASE})
 
+# this should be generated... this is cheating
+set(eventlogtags_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/eventlogtags/core/java/android/content/EventLogTags.java
+    ${CMAKE_CURRENT_SOURCE_DIR}/eventlogtags/core/java/android/speech/tts/EventLogTags.java
+#     ${REPO_PATH}/core/java/android/webkit/EventLogTags.java
+)
+
 set(aidl_entries_to_handle
     core/java/android/accessibilityservice/IAccessibilityServiceConnection
     core/java/android/accessibilityservice/IAccessibilityServiceClient
@@ -963,18 +970,18 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/speech/tts/TextToSpeechService.java
     ${REPO_PATH}/core/java/android/speech/tts/TtsEngines.java
     ${REPO_PATH}/core/java/android/speech/tts/UtteranceProgressListener.java
-    ${REPO_PATH}/core/java/android/test/AndroidTestCase.java
-    ${REPO_PATH}/core/java/android/test/FlakyTest.java
-    ${REPO_PATH}/core/java/android/test/InstrumentationTestCase.java
-    ${REPO_PATH}/core/java/android/test/InstrumentationTestSuite.java
-    ${REPO_PATH}/core/java/android/test/PerformanceTestCase.java
-    ${REPO_PATH}/core/java/android/test/RepetitiveTest.java
-    ${REPO_PATH}/core/java/android/test/UiThreadTest.java
-    ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/LargeTest.java
-    ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/MediumTest.java
-    ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/SmallTest.java
-    ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/Smoke.java
-    ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/Suppress.java
+#     ${REPO_PATH}/core/java/android/test/AndroidTestCase.java
+#     ${REPO_PATH}/core/java/android/test/FlakyTest.java
+#     ${REPO_PATH}/core/java/android/test/InstrumentationTestCase.java
+#     ${REPO_PATH}/core/java/android/test/InstrumentationTestSuite.java
+#     ${REPO_PATH}/core/java/android/test/PerformanceTestCase.java
+#     ${REPO_PATH}/core/java/android/test/RepetitiveTest.java
+#     ${REPO_PATH}/core/java/android/test/UiThreadTest.java
+#     ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/LargeTest.java
+#     ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/MediumTest.java
+#     ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/SmallTest.java
+#     ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/Smoke.java
+#     ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/Suppress.java
     ${REPO_PATH}/core/java/android/text/AlteredCharSequence.java
     ${REPO_PATH}/core/java/android/text/AndroidBidi.java
     ${REPO_PATH}/core/java/android/text/AndroidCharacter.java
@@ -2296,6 +2303,6 @@ set(framework_R_SRCS
 set_source_files_properties(${framework_R_SRCS} PROPERTIES GENERATED TRUE)
 
 set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
-find_jar(BOUNCYCASTLE_JAR NAMES bcprov)
-add_jar(framework SOURCES ${framework_R_SRCS} ${javalibrary_frameworks_SRCS} ${javalibrary_frameworks_interface_SRCS} INCLUDE_JARS core conscrypt ${BOUNCYCASTLE_JAR})
+find_jar(JUNIT_JAR NAMES junit)
+add_jar(framework SOURCES ${eventlogtags_SRCS} ${framework_R_SRCS} ${javalibrary_frameworks_SRCS} ${javalibrary_frameworks_interface_SRCS} INCLUDE_JARS core conscrypt ext okhttp bouncycastle ${JUNIT_JAR})
 install_jar(framework ${LIB_INSTALL_DIR}/android)
