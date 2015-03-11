@@ -2,6 +2,11 @@
 # otherwise the android code goes and redefines it all on us. not so great
 add_definitions(-DHAVE_ENDIAN_H)
 
+# c++ tools
+add_subdirectory(dexdump)
+add_subdirectory(dexlist)
+add_subdirectory(hprof-conv)
+
 add_subdirectory(dexopt)
 
 if (JIT_VM)

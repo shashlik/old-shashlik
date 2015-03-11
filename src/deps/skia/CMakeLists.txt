@@ -1,10 +1,12 @@
 project(skia)
 
+find_package(HarfBuzz REQUIRED)
 find_package(Fontconfig REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(GIF REQUIRED)
-find_package(GLU REQUIRED)
+find_package(WebP REQUIRED)
+find_package(OpenGL REQUIRED)
 
 set(SKIA_SRC_PATH ${SKIA_PATH}/src)
 
@@ -518,7 +520,10 @@ set(skia_gr_SRCS
     )
 
 add_library(skia SHARED ${skia_SRCS} ${skia_skgr_SRCS} ${skia_nulldbg_gpu_SRCS} ${skia_gr_SRCS})
-target_link_libraries(skia harfbuzz z ${FONTCONFIG_LIBRARIES} ${FREETYPE_LIBRARIES} ${JPEG_LIBRARIES} ${GIF_LIBRARIES} webp webpdemux webpmux ${OPENGL_LIBRARIES})
+if(FORCE_32BIT_BUILD)
+    set_target_properties(skia PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
+target_link_libraries(skia ${HARFBUZZ_LIBRARIES} z ${FONTCONFIG_LIBRARIES} ${FREETYPE_LIBRARIES} ${JPEG_LIBRARIES} ${GIF_LIBRARIES} ${WEBP_LIBRARIES} ${OPENGL_LIBRARIES})
 install(TARGETS skia DESTINATION ${LIB_INSTALL_DIR})
 
 # set(SKIA_SRC_PATH ${SKIA_PATH}/src)

@@ -96,6 +96,7 @@ add_library(utils SHARED ${utils_SRCS})
 if(FORCE_32BIT_BUILD)
     set_target_properties(utils PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
+target_link_libraries(utils pthread corkscrew)
 
 install(TARGETS utils DESTINATION ${LIB_INSTALL_DIR})
 install(FILES

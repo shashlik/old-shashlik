@@ -1,12 +1,9 @@
 project(shashlik_launcher)
 
-
-add_subdirectory(libjni)
-
-
 #find_package(KF5CoreAddons NO_MODULE)
 #find_package(KF5DBusAddons NO_MODULE)
 #find_package(Qt5Network ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
+find_package(Qt5Core)
 
 add_definitions(-fPIC
                 -fpermissive    # For redeclaration of char32_t (among other things?)
@@ -23,6 +20,7 @@ include_directories(${LIBBINDER_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/src/libs/libshashlikutils
                     ${CMAKE_BINARY_DIR}     # for shashlikversion.h
                     ${ANDROID_FRAMEWORKS_BASE}/include
+                    ${QT5CORE32_INCLUDE_DIRS}
                     )
 
 set(shashlik_launcher_SRCS
@@ -31,24 +29,22 @@ set(shashlik_launcher_SRCS
     ProcessGlobals.cpp
 )
 
-set(shashlik_launcher_helper_SRCS
-    ${ANDROID_FRAMEWORKS_BASE}/core/jni/AndroidRuntime.cpp
+set(shashlik_jni_SRCS
     runtime/Stubs.cpp
 )
 
 link_directories(${CMAKE_INSTALL_PREFIX}/lib)   # NOTE: This must be before add_executable :/
 
-add_library(shashlik_launcher_helper SHARED ${shashlik_launcher_helper_SRCS})
+add_library(shashlik_jni SHARED ${shashlik_jni_SRCS})
+if(FORCE_32BIT_BUILD)
+    set_target_properties(shashlik_jni PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
 
-target_link_libraries(shashlik_launcher_helper
+target_link_libraries(shashlik_jni
                       shashlikutils
-                      binder
-                      nativehelper
-                      skia
                       jni
-                      corkscrew log utils cutils  # android-core
-
-                      ${STANDARD_SYS_LIBS}
+                      javacrypto
+                      javacore
 )
 
 add_executable(shashlik_launcher ${shashlik_launcher_SRCS})
@@ -61,17 +57,9 @@ set_target_properties(shashlik_launcher PROPERTIES
 )
 
 target_link_libraries(shashlik_launcher
-                      shashlik_launcher_helper
-                      shashlikutils
-                      binder
-                      nativehelper
-                      skia
-                      jni
-                      corkscrew log utils cutils  # android-core
-
-                      ${STANDARD_SYS_LIBS}
+                      shashlik_jni
 )
 
-install(TARGETS shashlik_launcher_helper DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS shashlik_jni DESTINATION ${LIB_INSTALL_DIR})
 install(TARGETS shashlik_launcher DESTINATION ${BIN_INSTALL_DIR} )
 install(PROGRAMS shashlik-launcher DESTINATION ${BIN_INSTALL_DIR})

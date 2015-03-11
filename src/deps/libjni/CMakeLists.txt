@@ -7,14 +7,22 @@ project(libjni)
 
 add_definitions(-DHAVE_ANDROID_OS   # To make cutils/trace work.  FIXME: Check what other consequences this has.
                 -fpermissive  # FIXME: for pointer to int conversion in printf on x86_64
+
+                -DHAVE_CONFIG_H -DKHTML_NO_EXCEPTIONS -DGKWQ_NO_JAVA
+                -DNO_SUPPORT_JS_BINDING -DQT_NO_WHEELEVENT -DKHTML_NO_XBL
+                -U__APPLE__
+                -DPACKED=""
+                -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
 )
 
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${SKIA_INCLUDES}
                     ${LIBCUTILS_INCLUDES}
                     ${LIBNATIVEHELPER_INCLUDEDIRS}
                     ${LIBBINDER_INCLUDES}
                     ${ANDROID_FRAMEWORKS_BASE}/include
+#                     ${GENERAL_SOURCE_PATH}/bionic/libc/private
                     ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified string.h
                     )
 
@@ -22,6 +30,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 set(JNI_SOURCE_DIR ${ANDROID_FRAMEWORKS_BASE}/core/jni)
 
 set(libjni_SRCS
+    ${JNI_SOURCE_DIR}/AndroidRuntime.cpp
+#     ${JNI_SOURCE_DIR}/Time.cpp
     #android_animation_PropertyValuesHolder.cpp
     #android_app_backup_FullBackup.cpp
     #android_app_NativeActivity.cpp
@@ -75,7 +85,6 @@ set(libjni_SRCS
     ${JNI_SOURCE_DIR}/android_os_SystemProperties.cpp   # Builds
     ${JNI_SOURCE_DIR}/android_os_Trace.cpp              # Builds
     #android_os_UEventObserver.cpp
-    #AndroidRuntime.cpp
     #android_server_NetworkManagementSocketTagger.cpp
     #android_server_Watchdog.cpp
     ${JNI_SOURCE_DIR}/android_text_AndroidBidi.cpp      # Builds
@@ -88,8 +97,8 @@ set(libjni_SRCS
 #    android_util_FloatMath.cpp	      # Problems: Uses SK_ARRAY_COUNT from SkTypes.h (Skia)
     ${JNI_SOURCE_DIR}/android_util_Log.cpp	      # Builds
     ${JNI_SOURCE_DIR}/android_util_Process.cpp	      # Builds
-#    android_util_StringBlock.cpp      # Problems: includes androidfw/ResourceTypes.h
-#    android_util_XmlBlock.cpp          # Problems: includes androidfw/AssetManager.h
+    ${JNI_SOURCE_DIR}/android_util_StringBlock.cpp      # Problems: includes androidfw/ResourceTypes.h
+    ${JNI_SOURCE_DIR}/android_util_XmlBlock.cpp          # Problems: includes androidfw/AssetManager.h
     #android_view_DisplayEventReceiver.cpp
     #android_view_GLES20Canvas.cpp
     #android_view_GLES20DisplayList.cpp
@@ -117,7 +126,6 @@ set(libjni_SRCS
     #com_google_android_gles_jni_GLImpl.cpp
     #GraphicsExternGlue.h
     #GraphicsRegisterGlue.h
-    #Time.cpp
 
     #graphics/AutoDecodeCancel.cpp
     #graphics/Bitmap.cpp
@@ -169,7 +177,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(jni PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
-target_link_libraries(jni androidfw utils nativehelper stripped_bionic #KF5::Archive
+target_link_libraries(jni ffi skia safe-iop icuuc icui18n androidfw nativehelper stripped_bionic #KF5::Archive
 			  #Qt5::Core
 )
 

@@ -34,6 +34,7 @@ include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
 
 find_package(FFI REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 
 find_package(Java 1.6 REQUIRED)
@@ -44,6 +45,8 @@ if(${Java_VERSION} VERSION_LESS "1.6")
 elseif(${Java_VERSION} VERSION_EQUAL "1.7" OR ${Java_VERSION} VERSION_GREATER "1.7")
     message(FATAL_ERROR "Your Java SDK is ${Java_VERSION}, which is too high. Shashlik is based on KitKat, which explicitly requires Java 6 to compile successfully.")
 endif()
+
+include(JarjarModule)
 
 include(TestBigEndian)
 TEST_BIG_ENDIAN(SystemIsBigEndian)
@@ -62,9 +65,6 @@ add_definitions(-DHAVE_SYS_UIO_H
                 -DHAVE_POSIX_CLOCKS
 )
 
-# Standard system libraries that everything links against
-set(STANDARD_SYS_LIBS  dl pthread z resolv ffi)
-
 # The android root directory is the installation location for the android system
 # itself, and used by the vm's various bits to load and check things.
 set(ANDROID_ROOT ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/android)
@@ -75,7 +75,13 @@ set(ANDROID_LIB_DIR ${LIB_INSTALL_DIR})
 # Various project settings
 
 # This will force a 32bit build (read in various places and sets compiler/linker flags on binaries)
-set(FORCE_32BIT_BUILD false)
+# The reason we do this is that the dalvik vm expects to be running as 32bit, and we can't get
+# around this until a switch to art is made.
+set(FORCE_32BIT_BUILD true)
+if(FORCE_32BIT_BUILD)
+    # This is less than beautiful, but it works for now
+    link_directories(/usr/lib/)
+endif(FORCE_32BIT_BUILD)
 
 # Set JIT_VM to:
 #   false   if you want to run an interpreter (currently necessary on 64 bit systems)
@@ -84,7 +90,13 @@ set(FORCE_32BIT_BUILD false)
 # false is the default
 #
 # FIXME: Should we perhaps have a test for 32/64 bit systems?
-set(JIT_VM false)
+# NOTE: As we are basing Shashlik on KitKat at the moment, 32bit is required. When we
+#       switch to Lollipop or greater, 64bit will become an option, but not until then.
+set(JIT_VM true)
+
+# This sets whether or not to build the various development helper tools which are
+# not required for the normal operation of the launcher itself.
+set(BUILD_TOOLS true)
 
 # It is assumed that the various repos are checked out next to this one
 # This is described in the file BUILDING.

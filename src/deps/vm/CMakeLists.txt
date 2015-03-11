@@ -16,14 +16,16 @@ include_directories(${REPO_PATH}
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
 
 add_definitions(
-                -DDVM_NO_ASM_INTERP
-                -DANDROID_SMP
-                -DDVM_SHOW_EXCEPTION=1
-                -DDVM_JMP_TABLE_MTERP=1
-                -DMTERP_STUB
-                -fpermissive
-                -Wno-int-to-pointer-cast
-#                 -w
+    -DANDROID_SMP=1
+    -fstrict-aliasing -Wstrict-aliasing=2
+    -Wall -Wextra -Wno-unused-parameter
+    -DARCH_IA32
+    -DARCH_VARIANT="x86"
+    -DDVM_SHOW_EXCEPTION=1
+    -DWITH_JIT=1
+    -DDVM_JMP_TABLE_MTERP=1
+    -DMTERP_STUB
+#     -UNDEBUG -DDEBUG=1 -DLOG_NDEBUG=1 -DWITH_DALVIK_ASSERT -DWITH_SELF_VERIFICATION
 )
 
 if(SystemIsBigEndian)
@@ -211,7 +213,7 @@ set_target_properties(dvm PROPERTIES COMPILE_FLAGS "-fstrict-aliasing -Wstrict-a
 if(FORCE_32BIT_BUILD)
     set_target_properties(dvm PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
-target_link_libraries(dvm nativehelper dex jni ${FFI_LIBRARIES})
+target_link_libraries(dvm dex jni ${FFI_LIBRARIES})
 
 install(TARGETS dvm DESTINATION ${LIB_INSTALL_DIR})
 install(FILES

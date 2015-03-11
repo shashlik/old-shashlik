@@ -25,5 +25,8 @@ set(dexopt_SRCS
 )
 
 add_executable(dexopt ${dexopt_SRCS})
-target_link_libraries(dexopt ${STANDARD_SYS_LIBS} corkscrew dex cutils log nativehelper safe-iop utils dvm jni binder shashlik_launcher_helper icuuc icui18n)
+if(FORCE_32BIT_BUILD)
+    set_target_properties(dexopt PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
+target_link_libraries(dexopt shashlik_jni dvm)
 install(TARGETS dexopt DESTINATION ${ANDROID_BIN_DIR})

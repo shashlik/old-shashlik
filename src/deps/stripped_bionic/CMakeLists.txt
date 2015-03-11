@@ -14,4 +14,7 @@ set(stripped_bionic_SRCS
 )
 
 add_library(stripped_bionic SHARED ${stripped_bionic_SRCS})
+if(FORCE_32BIT_BUILD)
+    set_target_properties(stripped_bionic PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
 install(TARGETS stripped_bionic DESTINATION ${ANDROID_LIB_DIR})

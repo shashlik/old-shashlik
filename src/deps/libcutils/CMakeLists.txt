@@ -100,6 +100,7 @@ add_library(cutils SHARED ${cutils_SRCS})
 if(FORCE_32BIT_BUILD)
     set_target_properties(cutils PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
+target_link_libraries(cutils pthread resolv)
 
 install(TARGETS cutils DESTINATION ${LIB_INSTALL_DIR})
 install(FILES

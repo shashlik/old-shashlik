@@ -3,14 +3,12 @@ project(libshashlikutils)
 # generate shashlikversion.h
 configure_file(shashlikversion.h.cmake ${CMAKE_BINARY_DIR}/shashlikversion.h)
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Core)
-if(FORCE_32BIT_BUILD)
-    STRING(REPLACE "lib64" "lib" Qt5Core_LIBRARIES ${Qt5Core_LIBRARIES})
-endif(FORCE_32BIT_BUILD)
+find_package(Qt5Core) # Yes, this is a hack. We need the 32bit libraries
 #find_package(KF5Archive NO_MODULE)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_BINARY_DIR}
+                    ${QT5CORE32_INCLUDE_DIRS}
 )
 
 set(libshashlikutils_SRCS
@@ -23,6 +21,7 @@ set(libshashlikutils_HEADERS
     ${CMAKE_BINARY_DIR}/shashlikversion.h
 )
 
+include_directories(${Qt5Core_INCLUDE_DIRS})
 add_library(shashlikutils SHARED ${libshashlikutils_SRCS})
 if(FORCE_32BIT_BUILD)
     set_target_properties(shashlikutils PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
@@ -30,7 +29,7 @@ endif(FORCE_32BIT_BUILD)
 
 target_link_libraries(shashlikutils
 		      #KF5::Archive
-                      Qt5::Core
+                      ${QT5CORE32_LIBRARIES}
 )
 
 install(TARGETS shashlikutils DESTINATION ${LIB_INSTALL_DIR})

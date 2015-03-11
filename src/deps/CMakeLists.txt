@@ -16,6 +16,7 @@ add_subdirectory(libnativehelper) # native-helper
 add_subdirectory(safe-iop)        # safe-iop
 
 add_subdirectory(skia)            # skia graphics library
+add_subdirectory(openssl)         # openssl secure socket layer library
 
 add_subdirectory(libandroidfw)    # frameworks-base
 
@@ -23,30 +24,24 @@ add_subdirectory(libandroidfw)    # frameworks-base
 #                             Dalvik
 
 # vm support libraries and tools
+add_subdirectory(libjni)
 add_subdirectory(libdex)
 add_subdirectory(dx)
+add_subdirectory(aidl) # must be before the java libraries, as it is used to create the interfaces
+add_subdirectory(aapt)
 
 # dalvik vm
 add_subdirectory(vm)
-add_subdirectory(javalibrary)
-
-# c++ tools
-add_subdirectory(dexdump)
-add_subdirectory(dexlist)
-add_subdirectory(hprof-conv)
-
-if (JIT_VM)
-# FIXME: These can only be built on a 32 bit system.  Somebody with such a
-#        system will have to move them from buildsystem/tier2.
-
-##    add_subdirectory(gdbjithelper)
-##    add_subdirectory(dexopt)
-##    add_subdirectory(dmtracedump)
-endif(JIT_VM)
+add_subdirectory(javalibrary-core)
+add_subdirectory(javalibrary-conscrypt)
+add_subdirectory(javalibrary-bouncycastle)
+add_subdirectory(javalibrary-ext)
+add_subdirectory(javalibrary-okhttp)
+add_subdirectory(javalibrary-frameworks)
+add_subdirectory(libjavacore)
 
 #java tools
 #add_subdirectory(dexgen)
-#add_subdirectory(dx)
 #add_subdirectory(hit)
 #add_subdirectory(tools/dexdeps)
 
