@@ -34,9 +34,9 @@
 #include <nativehelper/jni.h>
 
 
-namespace shashlik {
+namespace android {
 
-using namespace android;
+// using namespace android;
 
 class ShashlikRuntime
 {

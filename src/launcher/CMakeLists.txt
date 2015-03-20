@@ -26,7 +26,7 @@ include_directories(${LIBBINDER_INCLUDES}
 set(shashlik_launcher_SRCS
     main.cpp
     AppRuntime.cpp
-    ProcessGlobals.cpp
+#     ProcessGlobals.cpp
 )
 
 set(shashlik_jni_SRCS
@@ -57,7 +57,7 @@ set_target_properties(shashlik_launcher PROPERTIES
 )
 
 target_link_libraries(shashlik_launcher
-                      shashlik_jni
+                      dvm
 )
 
 install(TARGETS shashlik_jni DESTINATION ${LIB_INSTALL_DIR})

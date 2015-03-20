@@ -19,10 +19,10 @@
 
 //class JNIEnv;
 
-namespace shashlik {
+namespace android {
 
 
-using namespace android;
+// using namespace android;
 
 class AppRuntime : public AndroidRuntime
 {

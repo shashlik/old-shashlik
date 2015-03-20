@@ -43,8 +43,8 @@ void app_usage()
 }
 
 
-using namespace shashlik;
-//using namespace android;
+// using namespace shashlik;
+using namespace android;
 
 
 /*
