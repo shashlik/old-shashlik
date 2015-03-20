@@ -59,8 +59,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(EGL PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(EGL
-    cutils utils log GLES_trace GLES_android
-    pthread dl
+    GLES_trace GLES_android
 )
 target_include_directories(EGL
     PRIVATE
@@ -85,7 +84,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(GLES_trace PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(GLES_trace
-    cutils utils log protobuf-cpp-2.3.0-lite lzf
+    cutils utils protobuf-cpp-2.3.0-lite lzf
     #stlport 
 )
 target_compile_definitions(GLES_trace
@@ -110,8 +109,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(GLES_android PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(GLES_android
-    cutils hardware utils log pixelflinger ETC1 ui
-    pthread dl
+    pixelflinger ETC1 ui
 )
 target_compile_definitions(GLES_android
     PRIVATE
@@ -145,8 +143,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(GLESv1_CM PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(GLESv1_CM
-    cutils log EGL
-    pthread dl
+    EGL
 )
 target_compile_definitions(GLESv1_CM
     PRIVATE
@@ -166,8 +163,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(GLESv2 PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(GLESv2
-    cutils utils log EGL
-    pthread dl
+    EGL
 )
 target_compile_definitions(GLESv2
     PRIVATE

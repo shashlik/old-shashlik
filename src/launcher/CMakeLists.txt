@@ -42,7 +42,6 @@ endif(FORCE_32BIT_BUILD)
 
 target_link_libraries(shashlik_jni
                       shashlikutils
-                      jni
                       javacrypto
                       javacore
 )

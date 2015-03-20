@@ -47,8 +47,8 @@ target_compile_definitions(sqlite3
 )
 target_link_libraries(sqlite3
     sqlite3_android
-    icuuc icui18n utils log
-    pthread dl
+    icuuc icui18n utils
+    dl
     )
 
 if(FORCE_32BIT_BUILD)

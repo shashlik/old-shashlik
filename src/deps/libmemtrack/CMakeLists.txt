@@ -11,7 +11,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(memtrack PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(memtrack
-    log hardware
+    hardware
 )
 target_include_directories(memtrack
     PRIVATE

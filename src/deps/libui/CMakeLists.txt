@@ -19,7 +19,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(ui PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(ui
-    cutils hardware utils log sync
+    hardware utils sync
 )
 target_include_directories(ui
     PRIVATE
