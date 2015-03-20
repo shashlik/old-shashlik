@@ -11,6 +11,7 @@ set(BIONIC_LIBC_SRC_DIR ${GENERAL_SOURCE_PATH}/bionic/libc)
 set(stripped_bionic_SRCS
     ${BIONIC_LIBC_SRC_DIR}/string/strlcat.c
     ${BIONIC_LIBC_SRC_DIR}/string/strlcpy.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/malloc_debug_common.c
 )
 
 add_library(stripped_bionic SHARED ${stripped_bionic_SRCS})
