@@ -6,7 +6,6 @@ find_package(Freetype REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(GIF REQUIRED)
 find_package(WebP REQUIRED)
-find_package(OpenGL REQUIRED)
 
 set(SKIA_SRC_PATH ${SKIA_PATH}/src)
 
@@ -42,17 +41,8 @@ include_directories(
     ${OPENGL_INCLUDE_DIR}
     )
 
+
 add_definitions(
-    -DANDROID_LARGE_MEMORY_DEVICE
-    -DDCT_IFAST_SUPPORTED
-    # using freetype's embolden allows us to adjust fake bold settings at
-    # draw-time, at which point we know which SkTypeface is being drawn
-    -DSK_USE_FREETYPE_EMBOLDEN
-#     -DSK_BUILD_FOR_ANDROID
-    #Android provides at least FreeType 2.4.0 at runtime.
-    -DSK_FONTHOST_FREETYPE_RUNTIME_VERSION=0x020400
-    #Skia should not use dlopen on Android.
-    -DSK_CAN_USE_DLOPEN=0
     # Android's -D_FORTIFY_SOURCE=2 extensions are incompatibile with SkString.
     # Revert to -D_FORTIFY_SOURCE=1
     -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1
@@ -61,6 +51,57 @@ add_definitions(
     -Wno-unused-parameter
     )
 
+# This is not the best thing in the world. It does, however, ensure that we can compile
+# certain bits of the code against system libraries, which lack android modifications,
+# and still build...
+set(skia_noworkey_SRCS
+#     ${SKIA_SRC_PATH}/core/SkScalerContext.cpp
+    ${SKIA_SRC_PATH}/images/SkImageDecoder_libjpeg.cpp
+    ${SKIA_SRC_PATH}/images/SkImageDecoder_libpng.cpp
+    ${SKIA_SRC_PATH}/images/SkJpegUtility.cpp
+    ${SKIA_SRC_PATH}/gpu/gl/unix/SkNativeGLContext_unix.cpp
+    ${SKIA_SRC_PATH}/pdf/SkPDFDevice.cpp
+)
+set(skia_noworkey2_SRCS
+    ${SKIA_SRC_PATH}/core/SkScalerContext.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/font_interface_workaround.cpp
+)
+add_library(skia_hack STATIC ${skia_noworkey_SRCS})
+add_library(skia_hack2 STATIC ${skia_noworkey2_SRCS})
+target_compile_definitions(skia_hack
+    PUBLIC
+    -DANDROID_LARGE_MEMORY_DEVICE
+    -DDCT_IFAST_SUPPORTED
+    # using freetype's embolden allows us to adjust fake bold settings at
+    # draw-time, at which point we know which SkTypeface is being drawn
+    -DSK_USE_FREETYPE_EMBOLDEN
+#     -DSK_BUILD_FOR_ANDROID
+#     -DSK_BUILD_FOR_ANDROID_FRAMEWORK
+    #Android provides at least FreeType 2.4.0 at runtime.
+    -DSK_FONTHOST_FREETYPE_RUNTIME_VERSION=0x020400
+    #Skia should not use dlopen on Android.
+    -DSK_CAN_USE_DLOPEN=0
+    )
+target_compile_definitions(skia_hack2
+    PUBLIC
+    -DANDROID_LARGE_MEMORY_DEVICE
+    -DDCT_IFAST_SUPPORTED
+    # using freetype's embolden allows us to adjust fake bold settings at
+    # draw-time, at which point we know which SkTypeface is being drawn
+    -DSK_USE_FREETYPE_EMBOLDEN
+    -DSK_BUILD_FOR_ANDROID
+#     -DSK_BUILD_FOR_ANDROID_FRAMEWORK
+    #Android provides at least FreeType 2.4.0 at runtime.
+    -DSK_FONTHOST_FREETYPE_RUNTIME_VERSION=0x020400
+    #Skia should not use dlopen on Android.
+    -DSK_CAN_USE_DLOPEN=0
+    )
+if(FORCE_32BIT_BUILD)
+    set_target_properties(skia_hack PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+    set_target_properties(skia_hack2 PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
+
+
 # IMPORTANT: The build order of the SkImageDecoder_*.cpp files
 # defines the order image decoders are tested when decoding a
 # stream. The last decoder is the first one tested, so the .cpp
@@ -68,6 +109,7 @@ add_definitions(
 # used, to the most likely (jpeg and png should be the last two
 # for instance.)
 set(skia_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/sk_thread_platform_workaround.cpp
     ${SKIA_SRC_PATH}/core/Sk64.cpp
     ${SKIA_SRC_PATH}/core/SkAnnotation.cpp
     ${SKIA_SRC_PATH}/core/SkAAClip.cpp
@@ -175,7 +217,7 @@ set(skia_SRCS
     ${SKIA_SRC_PATH}/core/SkRTree.cpp
     ${SKIA_SRC_PATH}/core/SkScaledImageCache.cpp
     ${SKIA_SRC_PATH}/core/SkScalar.cpp
-    ${SKIA_SRC_PATH}/core/SkScalerContext.cpp
+#     ${SKIA_SRC_PATH}/core/SkScalerContext.cpp
     ${SKIA_SRC_PATH}/core/SkScan.cpp
     ${SKIA_SRC_PATH}/core/SkScan_AntiPath.cpp
     ${SKIA_SRC_PATH}/core/SkScan_Antihair.cpp
@@ -283,8 +325,8 @@ set(skia_SRCS
     ${SKIA_SRC_PATH}/images/SkImageDecoder_libico.cpp
     ${SKIA_SRC_PATH}/images/SkImageDecoder_libwebp.cpp
     ${SKIA_SRC_PATH}/images/SkImageDecoder_libgif.cpp
-    ${SKIA_SRC_PATH}/images/SkImageDecoder_libjpeg.cpp
-    ${SKIA_SRC_PATH}/images/SkImageDecoder_libpng.cpp
+#     ${SKIA_SRC_PATH}/images/SkImageDecoder_libjpeg.cpp
+#     ${SKIA_SRC_PATH}/images/SkImageDecoder_libpng.cpp
     ${SKIA_SRC_PATH}/images/SkImageEncoder.cpp
     ${SKIA_SRC_PATH}/images/SkImageEncoder_Factory.cpp
     ${SKIA_SRC_PATH}/images/SkImageEncoder_argb.cpp
@@ -292,7 +334,7 @@ set(skia_SRCS
     ${SKIA_SRC_PATH}/images/SkImageRefPool.cpp
     ${SKIA_SRC_PATH}/images/SkImageRef_ashmem.cpp
     ${SKIA_SRC_PATH}/images/SkImageRef_GlobalPool.cpp
-    ${SKIA_SRC_PATH}/images/SkJpegUtility.cpp
+#     ${SKIA_SRC_PATH}/images/SkJpegUtility.cpp
     ${SKIA_SRC_PATH}/images/SkMovie.cpp
     ${SKIA_SRC_PATH}/images/SkMovie_gif.cpp
     ${SKIA_SRC_PATH}/images/SkPageFlipper.cpp
@@ -344,7 +386,7 @@ set(skia_SRCS
     ${SKIA_SRC_PATH}/ports/SkTime_Unix.cpp
     ${SKIA_SRC_PATH}/ports/SkTLS_pthread.cpp
     ${SKIA_SRC_PATH}/pdf/SkPDFCatalog.cpp
-    ${SKIA_SRC_PATH}/pdf/SkPDFDevice.cpp
+#     ${SKIA_SRC_PATH}/pdf/SkPDFDevice.cpp
     ${SKIA_SRC_PATH}/pdf/SkPDFDeviceFlattener.cpp
     ${SKIA_SRC_PATH}/pdf/SkPDFDocument.cpp
     ${SKIA_SRC_PATH}/pdf/SkPDFFont.cpp
@@ -516,14 +558,28 @@ set(skia_gr_SRCS
     ${SKIA_SRC_PATH}/gpu/gl/GrGpuGL_program.cpp
 #     ${SKIA_SRC_PATH}/gpu/gl/android/GrGLCreateNativeInterface_android.cpp
     ${SKIA_SRC_PATH}/gpu/gl/unix/GrGLCreateNativeInterface_unix.cpp
-    ${SKIA_SRC_PATH}/gpu/gl/unix/SkNativeGLContext_unix.cpp
+#     ${SKIA_SRC_PATH}/gpu/gl/unix/SkNativeGLContext_unix.cpp
     )
 
 add_library(skia SHARED ${skia_SRCS} ${skia_skgr_SRCS} ${skia_nulldbg_gpu_SRCS} ${skia_gr_SRCS})
+target_compile_definitions(skia
+    PUBLIC
+    -DANDROID_LARGE_MEMORY_DEVICE
+    -DDCT_IFAST_SUPPORTED
+    # using freetype's embolden allows us to adjust fake bold settings at
+    # draw-time, at which point we know which SkTypeface is being drawn
+    -DSK_USE_FREETYPE_EMBOLDEN
+    -DSK_BUILD_FOR_ANDROID
+    -DSK_BUILD_FOR_ANDROID_FRAMEWORK
+    #Android provides at least FreeType 2.4.0 at runtime.
+    -DSK_FONTHOST_FREETYPE_RUNTIME_VERSION=0x020400
+    #Skia should not use dlopen on Android.
+    -DSK_CAN_USE_DLOPEN=0
+    )
 if(FORCE_32BIT_BUILD)
     set_target_properties(skia PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
-target_link_libraries(skia ${HARFBUZZ_LIBRARIES} z ${FONTCONFIG_LIBRARIES} ${FREETYPE_LIBRARIES} ${JPEG_LIBRARIES} ${GIF_LIBRARIES} ${WEBP_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(skia ${HARFBUZZ_LIBRARIES} ${HARFBUZZ_ICU_LIBRARIES} z ${FONTCONFIG_LIBRARIES} ${FREETYPE_LIBRARIES} ${JPEG_LIBRARIES} ${GIF_LIBRARIES} ${WEBP_LIBRARIES} ${OPENGL_LIBRARIES} skia_hack skia_hack2)
 install(TARGETS skia DESTINATION ${LIB_INSTALL_DIR})
 
 # set(SKIA_SRC_PATH ${SKIA_PATH}/src)
