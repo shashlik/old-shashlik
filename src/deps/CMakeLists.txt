@@ -10,6 +10,7 @@ add_subdirectory(liblog)          # android-core
 add_subdirectory(libutils)        # android-core
 add_subdirectory(libcutils)       # android-core
 add_subdirectory(libpixelflinger) # android-core
+add_subdirectory(libusbhost)      # android-core
 
 add_subdirectory(libnativehelper) # native-helper
 
@@ -17,8 +18,20 @@ add_subdirectory(safe-iop)        # safe-iop
 
 add_subdirectory(skia)            # skia graphics library
 add_subdirectory(openssl)         # openssl secure socket layer library
+add_subdirectory(sqlite)          # single file embedded database library
+add_subdirectory(libhardware)     # hardware abstraction layer
+add_subdirectory(liblzf)          # very fast compression library
+add_subdirectory(libmemtrack)     # memory tracker
+add_subdirectory(libnetutils)     # networking utility functions
+add_subdirectory(libprotobuf)     # Google's protocol buffers library
 
 add_subdirectory(libandroidfw)    # frameworks-base
+
+add_subdirectory(libgui)
+add_subdirectory(libsync)
+add_subdirectory(libui)
+add_subdirectory(libinput)
+add_subdirectory(opengl-libs)     # frameworks-native
 
 # ----------------------------------------------------------------
 #                             Dalvik
@@ -38,6 +51,8 @@ add_subdirectory(javalibrary-bouncycastle)
 add_subdirectory(javalibrary-ext)
 add_subdirectory(javalibrary-okhttp)
 add_subdirectory(javalibrary-frameworks)
+add_subdirectory(javalibrary-voip)
+add_subdirectory(javalibrary-telephony)
 add_subdirectory(libjavacore)
 
 #java tools

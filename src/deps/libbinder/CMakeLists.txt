@@ -7,7 +7,7 @@ include_directories(${LIBBINDER_INCLUDES}
                     ${LIBUTILS_INCLUDES}
                     ${LIBCUTILS_INCLUDES}
 )
-message("INC DIRS ARE ${LIBBINDER_INCLUDES}")
+#message("INC DIRS ARE ${LIBBINDER_INCLUDES}")
 
 add_definitions(-fpermissive                # for redeclaration of  char32_t
 )
@@ -20,11 +20,11 @@ set(binder_LIB_SRCS
     ${MODULE_PATH}/Debug.cpp
     #    ${MODULE_PATH}/IAppOpsCallback.cpp
     #    ${MODULE_PATH}/IAppOpsService.cpp
-    #    ${MODULE_PATH}/IInterface.cpp
+    ${MODULE_PATH}/IInterface.cpp
     #    ${MODULE_PATH}/IMemory.cpp
     ${MODULE_PATH}/IPCThreadState.cpp
-    #    ${MODULE_PATH}/IPermissionController.cpp
-    #    ${MODULE_PATH}/IServiceManager.cpp
+    ${MODULE_PATH}/IPermissionController.cpp
+    ${MODULE_PATH}/IServiceManager.cpp
     #    ${MODULE_PATH}/MemoryBase.cpp
     #    ${MODULE_PATH}/MemoryDealer.cpp
     #    ${MODULE_PATH}/MemoryHeapBase.cpp

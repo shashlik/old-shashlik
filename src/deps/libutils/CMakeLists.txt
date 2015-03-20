@@ -2,7 +2,11 @@ project(utils)
 
 set(REPO_PATH ${ANDROID_CORE_PATH})
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${LIBCUTILS_INCLUDES})
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${LIBCUTILS_INCLUDES}
+    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
+)
 
 add_definitions(-DHAVE_POSIX_FILEMAP
                 -DHAVE_OFF64_T
@@ -22,7 +26,7 @@ set(utils_SRCS
    ${REPO_PATH}/libutils/LinearAllocator.cpp
    ${REPO_PATH}/libutils/LinearTransform.cpp
    ${REPO_PATH}/libutils/Log.cpp
-   #   ${REPO_PATH}/libutils/Looper.cpp
+   ${REPO_PATH}/libutils/Looper.cpp
    ${REPO_PATH}/libutils/misc.cpp
    ${REPO_PATH}/libutils/PropertyMap.cpp
    ${REPO_PATH}/libutils/RefBase.cpp
@@ -63,7 +67,7 @@ set(utils_HEADERS
    ${REPO_PATH}/include/utils/LinearTransform.h
    ${REPO_PATH}/include/utils/List.h
    ${REPO_PATH}/include/utils/Log.h
-   #    ${REPO_PATH}/include/utils/Looper.h
+   ${REPO_PATH}/include/utils/Looper.h
    ${REPO_PATH}/include/utils/LruCache.h
    ${REPO_PATH}/include/utils/misc.h
    ${REPO_PATH}/include/utils/Mutex.h
