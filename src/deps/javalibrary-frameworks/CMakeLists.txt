@@ -9,6 +9,11 @@ set(eventlogtags_SRCS
 #     ${REPO_PATH}/core/java/android/webkit/EventLogTags.java
 )
 
+set(eventlogtags2_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/eventlogtags/com/android/server/EventLogTags.java
+    ${CMAKE_CURRENT_SOURCE_DIR}/eventlogtags/com/android/server/am/EventLogTags.java
+)
+
 set(aidl_entries_to_handle
     core/java/android/accessibilityservice/IAccessibilityServiceConnection
     core/java/android/accessibilityservice/IAccessibilityServiceClient
@@ -122,6 +127,7 @@ set(aidl_entries_to_handle
     core/java/android/print/ILayoutResultCallback
     core/java/android/print/IPrinterDiscoveryObserver
     core/java/android/print/IPrintDocumentAdapter
+    core/java/android/print/IPrintDocumentAdapterObserver
     core/java/android/print/IPrintJobStateChangeListener
     core/java/android/print/IPrintManager
     core/java/android/print/IPrintSpooler
@@ -207,17 +213,22 @@ set(aidl_entries_to_handle
     media/java/android/media/IAudioService
     media/java/android/media/IAudioFocusDispatcher
     media/java/android/media/IAudioRoutesObserver
+    media/java/android/media/IMediaRouterClient
+    media/java/android/media/IMediaRouterService
     media/java/android/media/IMediaScannerListener
     media/java/android/media/IMediaScannerService
     media/java/android/media/IRemoteControlClient
     media/java/android/media/IRemoteControlDisplay
+    media/java/android/media/IRemoteDisplayCallback
+    media/java/android/media/IRemoteDisplayProvider
     media/java/android/media/IRemoteVolumeObserver
     media/java/android/media/IRingtonePlayer
     telephony/java/com/android/internal/telephony/IPhoneStateListener
     telephony/java/com/android/internal/telephony/IPhoneSubInfo
     telephony/java/com/android/internal/telephony/ITelephony
-    telephony/java/com/android/internal/telephony/ISms
+    telephony/java/com/android/internal/telephony/ITelephonyListener
     telephony/java/com/android/internal/telephony/ITelephonyRegistry
+    telephony/java/com/android/internal/telephony/ISms
     telephony/java/com/android/internal/telephony/IWapPushManager
     wifi/java/android/net/wifi/IWifiManager
     wifi/java/android/net/wifi/p2p/IWifiP2pManager
@@ -237,6 +248,7 @@ set(aidl_entries_to_handle
 # find -L frameworks-base/drm/java -name "*.java" >> javafiles-for-corestuffthing
 # find -L frameworks-base/opengl/java -name "*.java" >> javafiles-for-corestuffthing
 # find -L frameworks-base/sax/java -name "*.java" >> javafiles-for-corestuffthing
+# find -L frameworks-base/services/java -name "*.java" >> javafiles-for-corestuffthing
 # find -L frameworks-base/telephony/java -name "*.java" >> javafiles-for-corestuffthing
 # find -L frameworks-base/wifi/java -name "*.java" >> javafiles-for-corestuffthing
 # find -L frameworks-base/keystore/java -name "*.java" >> javafiles-for-corestuffthing
@@ -286,13 +298,11 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/annotation/SuppressLint.java
     ${REPO_PATH}/core/java/android/annotation/TargetApi.java
     ${REPO_PATH}/core/java/android/annotation/Widget.java
+    ${REPO_PATH}/core/java/android/annotation/PrivateApi.java
     ${REPO_PATH}/core/java/android/app/ActionBar.java
-    ${REPO_PATH}/core/java/android/app/Activity.java
     ${REPO_PATH}/core/java/android/app/ActivityGroup.java
-    ${REPO_PATH}/core/java/android/app/ActivityManager.java
     ${REPO_PATH}/core/java/android/app/ActivityManagerNative.java
     ${REPO_PATH}/core/java/android/app/ActivityOptions.java
-    ${REPO_PATH}/core/java/android/app/ActivityThread.java
     ${REPO_PATH}/core/java/android/app/AlarmManager.java
     ${REPO_PATH}/core/java/android/app/AlertDialog.java
     ${REPO_PATH}/core/java/android/app/AliasActivity.java
@@ -304,7 +314,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/app/ApplicationPackageManager.java
     ${REPO_PATH}/core/java/android/app/ApplicationThreadNative.java
     ${REPO_PATH}/core/java/android/app/BackStackRecord.java
-    ${REPO_PATH}/core/java/android/app/ContextImpl.java
     ${REPO_PATH}/core/java/android/app/DatePickerDialog.java
     ${REPO_PATH}/core/java/android/app/Dialog.java
     ${REPO_PATH}/core/java/android/app/DialogFragment.java
@@ -318,17 +327,12 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/app/IApplicationThread.java
     ${REPO_PATH}/core/java/android/app/Instrumentation.java
     ${REPO_PATH}/core/java/android/app/IntentService.java
-    ${REPO_PATH}/core/java/android/app/KeyguardManager.java
     ${REPO_PATH}/core/java/android/app/LauncherActivity.java
     ${REPO_PATH}/core/java/android/app/ListActivity.java
     ${REPO_PATH}/core/java/android/app/ListFragment.java
-    ${REPO_PATH}/core/java/android/app/LoadedApk.java
     ${REPO_PATH}/core/java/android/app/LoaderManager.java
     ${REPO_PATH}/core/java/android/app/LocalActivityManager.java
-    ${REPO_PATH}/core/java/android/app/MediaRouteActionProvider.java
-    ${REPO_PATH}/core/java/android/app/MediaRouteButton.java
     ${REPO_PATH}/core/java/android/app/NativeActivity.java
-    ${REPO_PATH}/core/java/android/app/Notification.java
     ${REPO_PATH}/core/java/android/app/NotificationManager.java
     ${REPO_PATH}/core/java/android/app/OnActivityPausedListener.java
     ${REPO_PATH}/core/java/android/app/PendingIntent.java
@@ -342,15 +346,12 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/app/SearchableInfo.java
     ${REPO_PATH}/core/java/android/app/Service.java
     ${REPO_PATH}/core/java/android/app/SharedPreferencesImpl.java
-    ${REPO_PATH}/core/java/android/app/StatusBarManager.java
     ${REPO_PATH}/core/java/android/app/TabActivity.java
     ${REPO_PATH}/core/java/android/app/TaskStackBuilder.java
     ${REPO_PATH}/core/java/android/app/TimePickerDialog.java
     ${REPO_PATH}/core/java/android/app/UiAutomation.java
-    ${REPO_PATH}/core/java/android/app/UiAutomationConnection.java
     ${REPO_PATH}/core/java/android/app/UiModeManager.java
     ${REPO_PATH}/core/java/android/app/WallpaperInfo.java
-    ${REPO_PATH}/core/java/android/app/WallpaperManager.java
     ${REPO_PATH}/core/java/android/app/admin/DeviceAdminInfo.java
     ${REPO_PATH}/core/java/android/app/admin/DeviceAdminReceiver.java
     ${REPO_PATH}/core/java/android/app/admin/DevicePolicyManager.java
@@ -373,24 +374,32 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/app/backup/RestoreSet.java
     ${REPO_PATH}/core/java/android/app/backup/SharedPreferencesBackupHelper.java
     ${REPO_PATH}/core/java/android/app/backup/WallpaperBackupHelper.java
+    ${REPO_PATH}/core/java/android/app/Activity.java
+    ${REPO_PATH}/core/java/android/app/ActivityManager.java
+    ${REPO_PATH}/core/java/android/app/ActivityThread.java
+    ${REPO_PATH}/core/java/android/app/ContextImpl.java
+    ${REPO_PATH}/core/java/android/app/KeyguardManager.java
+    ${REPO_PATH}/core/java/android/app/LoadedApk.java
+    ${REPO_PATH}/core/java/android/app/MediaRouteActionProvider.java
+    ${REPO_PATH}/core/java/android/app/MediaRouteButton.java
+    ${REPO_PATH}/core/java/android/app/Notification.java
+    ${REPO_PATH}/core/java/android/app/StatusBarManager.java
+    ${REPO_PATH}/core/java/android/app/UiAutomationConnection.java
+    ${REPO_PATH}/core/java/android/app/WallpaperManager.java
     ${REPO_PATH}/core/java/android/appwidget/AppWidgetHost.java
     ${REPO_PATH}/core/java/android/appwidget/AppWidgetHostView.java
     ${REPO_PATH}/core/java/android/appwidget/AppWidgetManager.java
     ${REPO_PATH}/core/java/android/appwidget/AppWidgetProvider.java
     ${REPO_PATH}/core/java/android/appwidget/AppWidgetProviderInfo.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothA2dp.java
-    ${REPO_PATH}/core/java/android/bluetooth/BluetoothAdapter.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothAssignedNumbers.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothClass.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothDevice.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothDevicePicker.java
-    ${REPO_PATH}/core/java/android/bluetooth/BluetoothGatt.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothGattCallback.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothGattCharacteristic.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothGattDescriptor.java
-    ${REPO_PATH}/core/java/android/bluetooth/BluetoothGattServer.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothGattServerCallback.java
-    ${REPO_PATH}/core/java/android/bluetooth/BluetoothGattService.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothHeadset.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothHealth.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothHealthAppConfiguration.java
@@ -406,6 +415,11 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothServerSocket.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothSocket.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothTetheringDataTracker.java
+    ${REPO_PATH}/core/java/android/bluetooth/BluetoothAdapter.java
+    ${REPO_PATH}/core/java/android/bluetooth/BluetoothAdvScanData.java
+    ${REPO_PATH}/core/java/android/bluetooth/BluetoothGatt.java
+    ${REPO_PATH}/core/java/android/bluetooth/BluetoothGattServer.java
+    ${REPO_PATH}/core/java/android/bluetooth/BluetoothGattService.java
     ${REPO_PATH}/core/java/android/bluetooth/BluetoothUuid.java
     ${REPO_PATH}/core/java/android/content/AbstractThreadedSyncAdapter.java
     ${REPO_PATH}/core/java/android/content/ActivityNotFoundException.java
@@ -419,7 +433,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/content/ComponentCallbacks2.java
     ${REPO_PATH}/core/java/android/content/ComponentName.java
     ${REPO_PATH}/core/java/android/content/ContentInsertHandler.java
-    ${REPO_PATH}/core/java/android/content/ContentProvider.java
     ${REPO_PATH}/core/java/android/content/ContentProviderClient.java
     ${REPO_PATH}/core/java/android/content/ContentProviderNative.java
     ${REPO_PATH}/core/java/android/content/ContentProviderOperation.java
@@ -453,7 +466,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/content/SyncAdapterType.java
     ${REPO_PATH}/core/java/android/content/SyncAdaptersCache.java
     ${REPO_PATH}/core/java/android/content/SyncContext.java
-    ${REPO_PATH}/core/java/android/content/SyncInfo.java
     ${REPO_PATH}/core/java/android/content/SyncRequest.java
     ${REPO_PATH}/core/java/android/content/SyncResult.java
     ${REPO_PATH}/core/java/android/content/SyncStats.java
@@ -481,7 +493,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/content/pm/PackageInfoLite.java
     ${REPO_PATH}/core/java/android/content/pm/PackageItemInfo.java
     ${REPO_PATH}/core/java/android/content/pm/PackageManager.java
-    ${REPO_PATH}/core/java/android/content/pm/PackageParser.java
     ${REPO_PATH}/core/java/android/content/pm/PackageStats.java
     ${REPO_PATH}/core/java/android/content/pm/PackageUserState.java
     ${REPO_PATH}/core/java/android/content/pm/ParceledListSlice.java
@@ -499,6 +510,7 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/content/pm/VerifierDeviceIdentity.java
     ${REPO_PATH}/core/java/android/content/pm/VerifierInfo.java
     ${REPO_PATH}/core/java/android/content/pm/XmlSerializerAndParser.java
+    ${REPO_PATH}/core/java/android/content/pm/PackageParser.java
     ${REPO_PATH}/core/java/android/content/res/AssetFileDescriptor.java
     ${REPO_PATH}/core/java/android/content/res/AssetManager.java
     ${REPO_PATH}/core/java/android/content/res/ColorStateList.java
@@ -512,6 +524,8 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/content/res/TypedArray.java
     ${REPO_PATH}/core/java/android/content/res/XmlBlock.java
     ${REPO_PATH}/core/java/android/content/res/XmlResourceParser.java
+    ${REPO_PATH}/core/java/android/content/ContentProvider.java
+    ${REPO_PATH}/core/java/android/content/SyncInfo.java
     ${REPO_PATH}/core/java/android/database/AbstractCursor.java
     ${REPO_PATH}/core/java/android/database/AbstractWindowedCursor.java
     ${REPO_PATH}/core/java/android/database/BulkCursorDescriptor.java
@@ -603,7 +617,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/gesture/Learner.java
     ${REPO_PATH}/core/java/android/gesture/OrientedBoundingBox.java
     ${REPO_PATH}/core/java/android/gesture/Prediction.java
-    ${REPO_PATH}/core/java/android/hardware/Camera.java
     ${REPO_PATH}/core/java/android/hardware/CameraInfo.java
     ${REPO_PATH}/core/java/android/hardware/ConsumerIrManager.java
     ${REPO_PATH}/core/java/android/hardware/GeomagneticField.java
@@ -616,37 +629,36 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/hardware/SensorManager.java
     ${REPO_PATH}/core/java/android/hardware/SerialManager.java
     ${REPO_PATH}/core/java/android/hardware/SerialPort.java
-    ${REPO_PATH}/core/java/android/hardware/SystemSensorManager.java
     ${REPO_PATH}/core/java/android/hardware/TriggerEvent.java
     ${REPO_PATH}/core/java/android/hardware/TriggerEventListener.java
     ${REPO_PATH}/core/java/android/hardware/camera2/CameraAccessException.java
-    ${REPO_PATH}/core/java/android/hardware/camera2/CameraCharacteristics.java
-    ${REPO_PATH}/core/java/android/hardware/camera2/CameraDevice.java
     ${REPO_PATH}/core/java/android/hardware/camera2/CameraManager.java
     ${REPO_PATH}/core/java/android/hardware/camera2/CameraMetadata.java
     ${REPO_PATH}/core/java/android/hardware/camera2/CaptureFailure.java
     ${REPO_PATH}/core/java/android/hardware/camera2/CaptureRequest.java
-    ${REPO_PATH}/core/java/android/hardware/camera2/CaptureResult.java
     ${REPO_PATH}/core/java/android/hardware/camera2/Face.java
     ${REPO_PATH}/core/java/android/hardware/camera2/Rational.java
     ${REPO_PATH}/core/java/android/hardware/camera2/Size.java
-    ${REPO_PATH}/core/java/android/hardware/camera2/impl/CameraDevice.java
     ${REPO_PATH}/core/java/android/hardware/camera2/impl/CameraMetadataNative.java
     ${REPO_PATH}/core/java/android/hardware/camera2/impl/MetadataMarshalClass.java
     ${REPO_PATH}/core/java/android/hardware/camera2/impl/MetadataMarshalRect.java
     ${REPO_PATH}/core/java/android/hardware/camera2/impl/MetadataMarshalSize.java
     ${REPO_PATH}/core/java/android/hardware/camera2/impl/MetadataMarshalString.java
+    ${REPO_PATH}/core/java/android/hardware/camera2/impl/CameraDevice.java
     ${REPO_PATH}/core/java/android/hardware/camera2/utils/BinderHolder.java
     ${REPO_PATH}/core/java/android/hardware/camera2/utils/CameraBinderDecorator.java
     ${REPO_PATH}/core/java/android/hardware/camera2/utils/CameraRuntimeException.java
     ${REPO_PATH}/core/java/android/hardware/camera2/utils/Decorator.java
     ${REPO_PATH}/core/java/android/hardware/camera2/utils/UncheckedThrow.java
-    ${REPO_PATH}/core/java/android/hardware/display/DisplayManager.java
-    ${REPO_PATH}/core/java/android/hardware/display/DisplayManagerGlobal.java
+    ${REPO_PATH}/core/java/android/hardware/camera2/CameraCharacteristics.java
+    ${REPO_PATH}/core/java/android/hardware/camera2/CameraDevice.java
+    ${REPO_PATH}/core/java/android/hardware/camera2/CaptureResult.java
     ${REPO_PATH}/core/java/android/hardware/display/VirtualDisplay.java
     ${REPO_PATH}/core/java/android/hardware/display/WifiDisplay.java
     ${REPO_PATH}/core/java/android/hardware/display/WifiDisplaySessionInfo.java
     ${REPO_PATH}/core/java/android/hardware/display/WifiDisplayStatus.java
+    ${REPO_PATH}/core/java/android/hardware/display/DisplayManager.java
+    ${REPO_PATH}/core/java/android/hardware/display/DisplayManagerGlobal.java
     ${REPO_PATH}/core/java/android/hardware/input/InputManager.java
     ${REPO_PATH}/core/java/android/hardware/input/KeyboardLayout.java
     ${REPO_PATH}/core/java/android/hardware/location/GeofenceHardware.java
@@ -664,6 +676,8 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/hardware/usb/UsbInterface.java
     ${REPO_PATH}/core/java/android/hardware/usb/UsbManager.java
     ${REPO_PATH}/core/java/android/hardware/usb/UsbRequest.java
+    ${REPO_PATH}/core/java/android/hardware/Camera.java
+    ${REPO_PATH}/core/java/android/hardware/SystemSensorManager.java
     ${REPO_PATH}/core/java/android/inputmethodservice/AbstractInputMethodService.java
     ${REPO_PATH}/core/java/android/inputmethodservice/ExtractButton.java
     ${REPO_PATH}/core/java/android/inputmethodservice/ExtractEditLayout.java
@@ -676,7 +690,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/inputmethodservice/SoftInputWindow.java
     ${REPO_PATH}/core/java/android/net/BaseNetworkStateTracker.java
     ${REPO_PATH}/core/java/android/net/CaptivePortalTracker.java
-    ${REPO_PATH}/core/java/android/net/ConnectivityManager.java
     ${REPO_PATH}/core/java/android/net/Credentials.java
     ${REPO_PATH}/core/java/android/net/DhcpInfo.java
     ${REPO_PATH}/core/java/android/net/DhcpResults.java
@@ -694,9 +707,7 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/net/LocalServerSocket.java
     ${REPO_PATH}/core/java/android/net/LocalSocket.java
     ${REPO_PATH}/core/java/android/net/LocalSocketAddress.java
-    ${REPO_PATH}/core/java/android/net/LocalSocketImpl.java
     ${REPO_PATH}/core/java/android/net/MailTo.java
-    ${REPO_PATH}/core/java/android/net/MobileDataStateTracker.java
     ${REPO_PATH}/core/java/android/net/MobileLinkQualityInfo.java
     ${REPO_PATH}/core/java/android/net/NetworkConfig.java
     ${REPO_PATH}/core/java/android/net/NetworkIdentity.java
@@ -710,10 +721,8 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/net/NetworkStatsHistory.java
     ${REPO_PATH}/core/java/android/net/NetworkTemplate.java
     ${REPO_PATH}/core/java/android/net/NetworkUtils.java
-    ${REPO_PATH}/core/java/android/net/PacProxySelector.java
     ${REPO_PATH}/core/java/android/net/ParseException.java
     ${REPO_PATH}/core/java/android/net/Proxy.java
-    ${REPO_PATH}/core/java/android/net/ProxyProperties.java
     ${REPO_PATH}/core/java/android/net/RouteInfo.java
     ${REPO_PATH}/core/java/android/net/SSLCertificateSocketFactory.java
     ${REPO_PATH}/core/java/android/net/SSLSessionCache.java
@@ -722,7 +731,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/net/TrafficStats.java
     ${REPO_PATH}/core/java/android/net/Uri.java
     ${REPO_PATH}/core/java/android/net/UrlQuerySanitizer.java
-    ${REPO_PATH}/core/java/android/net/VpnService.java
     ${REPO_PATH}/core/java/android/net/WebAddress.java
     ${REPO_PATH}/core/java/android/net/WifiLinkQualityInfo.java
     ${REPO_PATH}/core/java/android/net/arp/ArpPeer.java
@@ -760,9 +768,15 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/net/http/Timer.java
     ${REPO_PATH}/core/java/android/net/http/X509TrustManagerExtensions.java
     ${REPO_PATH}/core/java/android/net/nsd/DnsSdTxtRecord.java
-    ${REPO_PATH}/core/java/android/net/nsd/NsdManager.java
     ${REPO_PATH}/core/java/android/net/nsd/NsdServiceInfo.java
+    ${REPO_PATH}/core/java/android/net/nsd/NsdManager.java
     ${REPO_PATH}/core/java/android/net/wimax/WimaxManagerConstants.java
+    ${REPO_PATH}/core/java/android/net/ConnectivityManager.java
+    ${REPO_PATH}/core/java/android/net/LocalSocketImpl.java
+    ${REPO_PATH}/core/java/android/net/MobileDataStateTracker.java
+    ${REPO_PATH}/core/java/android/net/PacProxySelector.java
+    ${REPO_PATH}/core/java/android/net/ProxyProperties.java
+    ${REPO_PATH}/core/java/android/net/VpnService.java
     ${REPO_PATH}/core/java/android/nfc/ApduList.java
     ${REPO_PATH}/core/java/android/nfc/BeamShareData.java
     ${REPO_PATH}/core/java/android/nfc/ErrorCodes.java
@@ -770,7 +784,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/nfc/NdefMessage.java
     ${REPO_PATH}/core/java/android/nfc/NdefRecord.java
     ${REPO_PATH}/core/java/android/nfc/NfcActivityManager.java
-    ${REPO_PATH}/core/java/android/nfc/NfcAdapter.java
     ${REPO_PATH}/core/java/android/nfc/NfcEvent.java
     ${REPO_PATH}/core/java/android/nfc/NfcManager.java
     ${REPO_PATH}/core/java/android/nfc/Tag.java
@@ -793,16 +806,14 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/nfc/tech/NfcF.java
     ${REPO_PATH}/core/java/android/nfc/tech/NfcV.java
     ${REPO_PATH}/core/java/android/nfc/tech/TagTechnology.java
+    ${REPO_PATH}/core/java/android/nfc/NfcAdapter.java
     ${REPO_PATH}/core/java/android/os/AsyncResult.java
     ${REPO_PATH}/core/java/android/os/AsyncTask.java
     ${REPO_PATH}/core/java/android/os/BadParcelableException.java
     ${REPO_PATH}/core/java/android/os/BatteryManager.java
     ${REPO_PATH}/core/java/android/os/BatteryProperties.java
-    ${REPO_PATH}/core/java/android/os/BatteryStats.java
     ${REPO_PATH}/core/java/android/os/Binder.java
     ${REPO_PATH}/core/java/android/os/Broadcaster.java
-    ${REPO_PATH}/core/java/android/os/Build.java
-    ${REPO_PATH}/core/java/android/os/Bundle.java
     ${REPO_PATH}/core/java/android/os/CancellationSignal.java
     ${REPO_PATH}/core/java/android/os/CommonClock.java
     ${REPO_PATH}/core/java/android/os/CommonTimeConfig.java
@@ -815,22 +826,16 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/os/Environment.java
     ${REPO_PATH}/core/java/android/os/FactoryTest.java
     ${REPO_PATH}/core/java/android/os/FileObserver.java
-    ${REPO_PATH}/core/java/android/os/FileUtils.java
     ${REPO_PATH}/core/java/android/os/Handler.java
     ${REPO_PATH}/core/java/android/os/HandlerThread.java
     ${REPO_PATH}/core/java/android/os/IBinder.java
     ${REPO_PATH}/core/java/android/os/IInterface.java
     ${REPO_PATH}/core/java/android/os/IServiceManager.java
-    ${REPO_PATH}/core/java/android/os/Looper.java
     ${REPO_PATH}/core/java/android/os/MemoryFile.java
-    ${REPO_PATH}/core/java/android/os/Message.java
-    ${REPO_PATH}/core/java/android/os/MessageQueue.java
     ${REPO_PATH}/core/java/android/os/Messenger.java
     ${REPO_PATH}/core/java/android/os/NetworkOnMainThreadException.java
     ${REPO_PATH}/core/java/android/os/NullVibrator.java
     ${REPO_PATH}/core/java/android/os/OperationCanceledException.java
-    ${REPO_PATH}/core/java/android/os/Parcel.java
-    ${REPO_PATH}/core/java/android/os/ParcelFileDescriptor.java
     ${REPO_PATH}/core/java/android/os/ParcelFormatException.java
     ${REPO_PATH}/core/java/android/os/ParcelUuid.java
     ${REPO_PATH}/core/java/android/os/Parcelable.java
@@ -875,6 +880,15 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/os/storage/StorageManager.java
     ${REPO_PATH}/core/java/android/os/storage/StorageResultCode.java
     ${REPO_PATH}/core/java/android/os/storage/StorageVolume.java
+    ${REPO_PATH}/core/java/android/os/BatteryStats.java
+    ${REPO_PATH}/core/java/android/os/Build.java
+    ${REPO_PATH}/core/java/android/os/Bundle.java
+    ${REPO_PATH}/core/java/android/os/FileUtils.java
+    ${REPO_PATH}/core/java/android/os/Looper.java
+    ${REPO_PATH}/core/java/android/os/Message.java
+    ${REPO_PATH}/core/java/android/os/MessageQueue.java
+    ${REPO_PATH}/core/java/android/os/Parcel.java
+    ${REPO_PATH}/core/java/android/os/ParcelFileDescriptor.java
     ${REPO_PATH}/core/java/android/preference/CheckBoxPreference.java
     ${REPO_PATH}/core/java/android/preference/DialogPreference.java
     ${REPO_PATH}/core/java/android/preference/EditTextPreference.java
@@ -882,7 +896,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/preference/ListPreference.java
     ${REPO_PATH}/core/java/android/preference/MultiCheckPreference.java
     ${REPO_PATH}/core/java/android/preference/MultiSelectListPreference.java
-    ${REPO_PATH}/core/java/android/preference/Preference.java
     ${REPO_PATH}/core/java/android/preference/PreferenceActivity.java
     ${REPO_PATH}/core/java/android/preference/PreferenceCategory.java
     ${REPO_PATH}/core/java/android/preference/PreferenceFragment.java
@@ -898,25 +911,26 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/preference/SwitchPreference.java
     ${REPO_PATH}/core/java/android/preference/TwoStatePreference.java
     ${REPO_PATH}/core/java/android/preference/VolumePreference.java
+    ${REPO_PATH}/core/java/android/preference/Preference.java
+    ${REPO_PATH}/core/java/android/print/PrintFileDocumentAdapter.java
+    ${REPO_PATH}/core/java/android/print/PrintJobId.java
+    ${REPO_PATH}/core/java/android/print/PrinterDiscoverySession.java
+    ${REPO_PATH}/core/java/android/print/PrinterId.java
+    ${REPO_PATH}/core/java/android/print/pdf/PrintedPdfDocument.java
     ${REPO_PATH}/core/java/android/print/PageRange.java
     ${REPO_PATH}/core/java/android/print/PrintAttributes.java
     ${REPO_PATH}/core/java/android/print/PrintDocumentAdapter.java
     ${REPO_PATH}/core/java/android/print/PrintDocumentInfo.java
-    ${REPO_PATH}/core/java/android/print/PrintFileDocumentAdapter.java
     ${REPO_PATH}/core/java/android/print/PrintJob.java
-    ${REPO_PATH}/core/java/android/print/PrintJobId.java
     ${REPO_PATH}/core/java/android/print/PrintJobInfo.java
     ${REPO_PATH}/core/java/android/print/PrintManager.java
     ${REPO_PATH}/core/java/android/print/PrinterCapabilitiesInfo.java
-    ${REPO_PATH}/core/java/android/print/PrinterDiscoverySession.java
-    ${REPO_PATH}/core/java/android/print/PrinterId.java
     ${REPO_PATH}/core/java/android/print/PrinterInfo.java
-    ${REPO_PATH}/core/java/android/print/pdf/PrintedPdfDocument.java
     ${REPO_PATH}/core/java/android/printservice/PrintDocument.java
+    ${REPO_PATH}/core/java/android/printservice/PrinterDiscoverySession.java
     ${REPO_PATH}/core/java/android/printservice/PrintJob.java
     ${REPO_PATH}/core/java/android/printservice/PrintService.java
     ${REPO_PATH}/core/java/android/printservice/PrintServiceInfo.java
-    ${REPO_PATH}/core/java/android/printservice/PrinterDiscoverySession.java
     ${REPO_PATH}/core/java/android/provider/AlarmClock.java
     ${REPO_PATH}/core/java/android/provider/BaseColumns.java
     ${REPO_PATH}/core/java/android/provider/Browser.java
@@ -924,19 +938,19 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/provider/CalendarContract.java
     ${REPO_PATH}/core/java/android/provider/CallLog.java
     ${REPO_PATH}/core/java/android/provider/Contacts.java
-    ${REPO_PATH}/core/java/android/provider/ContactsContract.java
-    ${REPO_PATH}/core/java/android/provider/DocumentsContract.java
-    ${REPO_PATH}/core/java/android/provider/DocumentsProvider.java
     ${REPO_PATH}/core/java/android/provider/Downloads.java
     ${REPO_PATH}/core/java/android/provider/LiveFolders.java
     ${REPO_PATH}/core/java/android/provider/MediaStore.java
     ${REPO_PATH}/core/java/android/provider/OpenableColumns.java
     ${REPO_PATH}/core/java/android/provider/SearchRecentSuggestions.java
-    ${REPO_PATH}/core/java/android/provider/Settings.java
     ${REPO_PATH}/core/java/android/provider/SyncConstValue.java
     ${REPO_PATH}/core/java/android/provider/SyncStateContract.java
     ${REPO_PATH}/core/java/android/provider/UserDictionary.java
     ${REPO_PATH}/core/java/android/provider/VoicemailContract.java
+    ${REPO_PATH}/core/java/android/provider/ContactsContract.java
+    ${REPO_PATH}/core/java/android/provider/DocumentsContract.java
+    ${REPO_PATH}/core/java/android/provider/DocumentsProvider.java
+    ${REPO_PATH}/core/java/android/provider/Settings.java
     ${REPO_PATH}/core/java/android/security/IKeystoreService.java
     ${REPO_PATH}/core/java/android/service/dreams/DreamService.java
     ${REPO_PATH}/core/java/android/service/dreams/Sandman.java
@@ -966,22 +980,22 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/speech/tts/SynthesisCallback.java
     ${REPO_PATH}/core/java/android/speech/tts/SynthesisPlaybackQueueItem.java
     ${REPO_PATH}/core/java/android/speech/tts/SynthesisRequest.java
-    ${REPO_PATH}/core/java/android/speech/tts/TextToSpeech.java
     ${REPO_PATH}/core/java/android/speech/tts/TextToSpeechService.java
-    ${REPO_PATH}/core/java/android/speech/tts/TtsEngines.java
     ${REPO_PATH}/core/java/android/speech/tts/UtteranceProgressListener.java
-#     ${REPO_PATH}/core/java/android/test/AndroidTestCase.java
-#     ${REPO_PATH}/core/java/android/test/FlakyTest.java
-#     ${REPO_PATH}/core/java/android/test/InstrumentationTestCase.java
-#     ${REPO_PATH}/core/java/android/test/InstrumentationTestSuite.java
-#     ${REPO_PATH}/core/java/android/test/PerformanceTestCase.java
-#     ${REPO_PATH}/core/java/android/test/RepetitiveTest.java
-#     ${REPO_PATH}/core/java/android/test/UiThreadTest.java
-#     ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/LargeTest.java
-#     ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/MediumTest.java
-#     ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/SmallTest.java
-#     ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/Smoke.java
-#     ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/Suppress.java
+    ${REPO_PATH}/core/java/android/speech/tts/TextToSpeech.java
+    ${REPO_PATH}/core/java/android/speech/tts/TtsEngines.java
+    ${REPO_PATH}/core/java/android/test/AndroidTestCase.java
+    ${REPO_PATH}/core/java/android/test/FlakyTest.java
+    ${REPO_PATH}/core/java/android/test/InstrumentationTestCase.java
+    ${REPO_PATH}/core/java/android/test/InstrumentationTestSuite.java
+    ${REPO_PATH}/core/java/android/test/PerformanceTestCase.java
+    ${REPO_PATH}/core/java/android/test/RepetitiveTest.java
+    ${REPO_PATH}/core/java/android/test/UiThreadTest.java
+    ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/LargeTest.java
+    ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/MediumTest.java
+    ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/SmallTest.java
+    ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/Smoke.java
+    ${REPO_PATH}/core/java/android/test/suitebuilder/annotation/Suppress.java
     ${REPO_PATH}/core/java/android/text/AlteredCharSequence.java
     ${REPO_PATH}/core/java/android/text/AndroidBidi.java
     ${REPO_PATH}/core/java/android/text/AndroidCharacter.java
@@ -994,9 +1008,7 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/text/Editable.java
     ${REPO_PATH}/core/java/android/text/GetChars.java
     ${REPO_PATH}/core/java/android/text/GraphicsOperations.java
-    ${REPO_PATH}/core/java/android/text/Html.java
     ${REPO_PATH}/core/java/android/text/InputFilter.java
-    ${REPO_PATH}/core/java/android/text/InputType.java
     ${REPO_PATH}/core/java/android/text/Layout.java
     ${REPO_PATH}/core/java/android/text/LoginFilter.java
     ${REPO_PATH}/core/java/android/text/MeasuredText.java
@@ -1093,6 +1105,8 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/text/util/Linkify.java
     ${REPO_PATH}/core/java/android/text/util/Rfc822Token.java
     ${REPO_PATH}/core/java/android/text/util/Rfc822Tokenizer.java
+    ${REPO_PATH}/core/java/android/text/Html.java
+    ${REPO_PATH}/core/java/android/text/InputType.java
     ${REPO_PATH}/core/java/android/transition/AutoTransition.java
     ${REPO_PATH}/core/java/android/transition/ChangeBounds.java
     ${REPO_PATH}/core/java/android/transition/ChangeText.java
@@ -1100,15 +1114,15 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/transition/Fade.java
     ${REPO_PATH}/core/java/android/transition/Recolor.java
     ${REPO_PATH}/core/java/android/transition/Rotate.java
-    ${REPO_PATH}/core/java/android/transition/Scene.java
     ${REPO_PATH}/core/java/android/transition/Slide.java
-    ${REPO_PATH}/core/java/android/transition/Transition.java
-    ${REPO_PATH}/core/java/android/transition/TransitionInflater.java
-    ${REPO_PATH}/core/java/android/transition/TransitionManager.java
     ${REPO_PATH}/core/java/android/transition/TransitionSet.java
     ${REPO_PATH}/core/java/android/transition/TransitionValues.java
     ${REPO_PATH}/core/java/android/transition/TransitionValuesMaps.java
     ${REPO_PATH}/core/java/android/transition/Visibility.java
+    ${REPO_PATH}/core/java/android/transition/Scene.java
+    ${REPO_PATH}/core/java/android/transition/Transition.java
+    ${REPO_PATH}/core/java/android/transition/TransitionInflater.java
+    ${REPO_PATH}/core/java/android/transition/TransitionManager.java
     ${REPO_PATH}/core/java/android/util/AndroidException.java
     ${REPO_PATH}/core/java/android/util/AndroidRuntimeException.java
     ${REPO_PATH}/core/java/android/util/ArrayMap.java
@@ -1144,7 +1158,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/util/LongSparseLongArray.java
     ${REPO_PATH}/core/java/android/util/LruCache.java
     ${REPO_PATH}/core/java/android/util/MalformedJsonException.java
-    ${REPO_PATH}/core/java/android/util/MapCollections.java
     ${REPO_PATH}/core/java/android/util/MathUtils.java
     ${REPO_PATH}/core/java/android/util/MonthDisplayHelper.java
     ${REPO_PATH}/core/java/android/util/NoSuchPropertyException.java
@@ -1176,16 +1189,16 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/util/TypedValue.java
     ${REPO_PATH}/core/java/android/util/Xml.java
     ${REPO_PATH}/core/java/android/util/XmlPullAttributes.java
+    ${REPO_PATH}/core/java/android/util/MapCollections.java
     ${REPO_PATH}/core/java/android/view/AbsSavedState.java
     ${REPO_PATH}/core/java/android/view/AccessibilityInteractionController.java
     ${REPO_PATH}/core/java/android/view/AccessibilityIterators.java
     ${REPO_PATH}/core/java/android/view/ActionMode.java
     ${REPO_PATH}/core/java/android/view/ActionProvider.java
-    ${REPO_PATH}/core/java/android/view/Choreographer.java
+    ${REPO_PATH}/core/java/android/view/WindowManager.java
     ${REPO_PATH}/core/java/android/view/CollapsibleActionView.java
     ${REPO_PATH}/core/java/android/view/ContextMenu.java
     ${REPO_PATH}/core/java/android/view/ContextThemeWrapper.java
-    ${REPO_PATH}/core/java/android/view/Display.java
     ${REPO_PATH}/core/java/android/view/DisplayAdjustments.java
     ${REPO_PATH}/core/java/android/view/DisplayEventReceiver.java
     ${REPO_PATH}/core/java/android/view/DisplayInfo.java
@@ -1212,7 +1225,7 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/view/InputDevice.java
     ${REPO_PATH}/core/java/android/view/InputEvent.java
     ${REPO_PATH}/core/java/android/view/InputEventConsistencyVerifier.java
-    ${REPO_PATH}/core/java/android/view/InputEventReceiver.java
+    ${REPO_PATH}/core/java/android/view/ViewRootImpl.java
     ${REPO_PATH}/core/java/android/view/InputEventSender.java
     ${REPO_PATH}/core/java/android/view/InputFilter.java
     ${REPO_PATH}/core/java/android/view/InputQueue.java
@@ -1228,7 +1241,7 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/view/OrientationListener.java
     ${REPO_PATH}/core/java/android/view/PointerIcon.java
     ${REPO_PATH}/core/java/android/view/RemotableViewMethod.java
-    ${REPO_PATH}/core/java/android/view/ScaleGestureDetector.java
+    ${REPO_PATH}/core/java/android/view/VolumePanel.java
     ${REPO_PATH}/core/java/android/view/SoundEffectConstants.java
     ${REPO_PATH}/core/java/android/view/SubMenu.java
     ${REPO_PATH}/core/java/android/view/Surface.java
@@ -1239,7 +1252,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/view/TextureView.java
     ${REPO_PATH}/core/java/android/view/TouchDelegate.java
     ${REPO_PATH}/core/java/android/view/VelocityTracker.java
-    ${REPO_PATH}/core/java/android/view/View.java
     ${REPO_PATH}/core/java/android/view/ViewConfiguration.java
     ${REPO_PATH}/core/java/android/view/ViewDebug.java
     ${REPO_PATH}/core/java/android/view/ViewGroup.java
@@ -1248,13 +1260,10 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/view/ViewOverlay.java
     ${REPO_PATH}/core/java/android/view/ViewParent.java
     ${REPO_PATH}/core/java/android/view/ViewPropertyAnimator.java
-    ${REPO_PATH}/core/java/android/view/ViewRootImpl.java
     ${REPO_PATH}/core/java/android/view/ViewStub.java
     ${REPO_PATH}/core/java/android/view/ViewTreeObserver.java
-    ${REPO_PATH}/core/java/android/view/VolumePanel.java
     ${REPO_PATH}/core/java/android/view/Window.java
     ${REPO_PATH}/core/java/android/view/WindowId.java
-    ${REPO_PATH}/core/java/android/view/WindowManager.java
     ${REPO_PATH}/core/java/android/view/WindowManagerGlobal.java
     ${REPO_PATH}/core/java/android/view/WindowManagerImpl.java
     ${REPO_PATH}/core/java/android/view/WindowManagerPolicy.java
@@ -1262,11 +1271,11 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/view/accessibility/AccessibilityEventSource.java
     ${REPO_PATH}/core/java/android/view/accessibility/AccessibilityInteractionClient.java
     ${REPO_PATH}/core/java/android/view/accessibility/AccessibilityManager.java
-    ${REPO_PATH}/core/java/android/view/accessibility/AccessibilityNodeInfo.java
     ${REPO_PATH}/core/java/android/view/accessibility/AccessibilityNodeInfoCache.java
     ${REPO_PATH}/core/java/android/view/accessibility/AccessibilityNodeProvider.java
     ${REPO_PATH}/core/java/android/view/accessibility/AccessibilityRecord.java
     ${REPO_PATH}/core/java/android/view/accessibility/CaptioningManager.java
+    ${REPO_PATH}/core/java/android/view/accessibility/AccessibilityNodeInfo.java
     ${REPO_PATH}/core/java/android/view/animation/AccelerateDecelerateInterpolator.java
     ${REPO_PATH}/core/java/android/view/animation/AccelerateInterpolator.java
     ${REPO_PATH}/core/java/android/view/animation/AlphaAnimation.java
@@ -1290,16 +1299,16 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/view/inputmethod/BaseInputConnection.java
     ${REPO_PATH}/core/java/android/view/inputmethod/CompletionInfo.java
     ${REPO_PATH}/core/java/android/view/inputmethod/CorrectionInfo.java
-    ${REPO_PATH}/core/java/android/view/inputmethod/EditorInfo.java
     ${REPO_PATH}/core/java/android/view/inputmethod/ExtractedText.java
     ${REPO_PATH}/core/java/android/view/inputmethod/ExtractedTextRequest.java
     ${REPO_PATH}/core/java/android/view/inputmethod/InputBinding.java
-    ${REPO_PATH}/core/java/android/view/inputmethod/InputConnection.java
     ${REPO_PATH}/core/java/android/view/inputmethod/InputConnectionWrapper.java
     ${REPO_PATH}/core/java/android/view/inputmethod/InputMethod.java
-    ${REPO_PATH}/core/java/android/view/inputmethod/InputMethodInfo.java
     ${REPO_PATH}/core/java/android/view/inputmethod/InputMethodManager.java
     ${REPO_PATH}/core/java/android/view/inputmethod/InputMethodSession.java
+    ${REPO_PATH}/core/java/android/view/inputmethod/EditorInfo.java
+    ${REPO_PATH}/core/java/android/view/inputmethod/InputConnection.java
+    ${REPO_PATH}/core/java/android/view/inputmethod/InputMethodInfo.java
     ${REPO_PATH}/core/java/android/view/inputmethod/InputMethodSubtype.java
     ${REPO_PATH}/core/java/android/view/textservice/SentenceSuggestionsInfo.java
     ${REPO_PATH}/core/java/android/view/textservice/SpellCheckerInfo.java
@@ -1308,6 +1317,11 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/view/textservice/SuggestionsInfo.java
     ${REPO_PATH}/core/java/android/view/textservice/TextInfo.java
     ${REPO_PATH}/core/java/android/view/textservice/TextServicesManager.java
+    ${REPO_PATH}/core/java/android/view/Choreographer.java
+    ${REPO_PATH}/core/java/android/view/Display.java
+    ${REPO_PATH}/core/java/android/view/InputEventReceiver.java
+    ${REPO_PATH}/core/java/android/view/ScaleGestureDetector.java
+    ${REPO_PATH}/core/java/android/view/View.java
     ${REPO_PATH}/core/java/android/webkit/BrowserDownloadListener.java
     ${REPO_PATH}/core/java/android/webkit/CacheManager.java
     ${REPO_PATH}/core/java/android/webkit/ConsoleMessage.java
@@ -1343,14 +1357,14 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/webkit/WebSettings.java
     ${REPO_PATH}/core/java/android/webkit/WebStorage.java
     ${REPO_PATH}/core/java/android/webkit/WebSyncManager.java
-    ${REPO_PATH}/core/java/android/webkit/WebView.java
     ${REPO_PATH}/core/java/android/webkit/WebViewClient.java
     ${REPO_PATH}/core/java/android/webkit/WebViewDatabase.java
     ${REPO_PATH}/core/java/android/webkit/WebViewFactory.java
-    ${REPO_PATH}/core/java/android/webkit/WebViewFactoryProvider.java
     ${REPO_PATH}/core/java/android/webkit/WebViewFragment.java
     ${REPO_PATH}/core/java/android/webkit/WebViewProvider.java
-    ${REPO_PATH}/core/java/android/widget/AbsListView.java
+    ${REPO_PATH}/core/java/android/webkit/WebView.java
+    ${REPO_PATH}/core/java/android/webkit/WebViewFactoryProvider.java
+    ${REPO_PATH}/core/java/android/widget/CalendarView.java
     ${REPO_PATH}/core/java/android/widget/AbsSeekBar.java
     ${REPO_PATH}/core/java/android/widget/AbsSpinner.java
     ${REPO_PATH}/core/java/android/widget/AbsoluteLayout.java
@@ -1370,7 +1384,7 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/widget/BaseAdapter.java
     ${REPO_PATH}/core/java/android/widget/BaseExpandableListAdapter.java
     ${REPO_PATH}/core/java/android/widget/Button.java
-    ${REPO_PATH}/core/java/android/widget/CalendarView.java
+    ${REPO_PATH}/core/java/android/widget/Editor.java
     ${REPO_PATH}/core/java/android/widget/CheckBox.java
     ${REPO_PATH}/core/java/android/widget/Checkable.java
     ${REPO_PATH}/core/java/android/widget/CheckedTextView.java
@@ -1386,7 +1400,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/widget/DoubleDigitManager.java
     ${REPO_PATH}/core/java/android/widget/EdgeEffect.java
     ${REPO_PATH}/core/java/android/widget/EditText.java
-    ${REPO_PATH}/core/java/android/widget/Editor.java
     ${REPO_PATH}/core/java/android/widget/ExpandableListAdapter.java
     ${REPO_PATH}/core/java/android/widget/ExpandableListConnector.java
     ${REPO_PATH}/core/java/android/widget/ExpandableListPosition.java
@@ -1465,6 +1478,7 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/widget/ZoomButton.java
     ${REPO_PATH}/core/java/android/widget/ZoomButtonsController.java
     ${REPO_PATH}/core/java/android/widget/ZoomControls.java
+    ${REPO_PATH}/core/java/android/widget/AbsListView.java
     ${REPO_PATH}/core/java/com/android/internal/annotations/GuardedBy.java
     ${REPO_PATH}/core/java/com/android/internal/annotations/Immutable.java
     ${REPO_PATH}/core/java/com/android/internal/annotations/VisibleForTesting.java
@@ -1476,20 +1490,24 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/com/android/internal/app/ExternalMediaFormatActivity.java
     ${REPO_PATH}/core/java/com/android/internal/app/HeavyWeightSwitcherActivity.java
     ${REPO_PATH}/core/java/com/android/internal/app/LocalePicker.java
-    ${REPO_PATH}/core/java/com/android/internal/app/MediaRouteChooserDialogFragment.java
     ${REPO_PATH}/core/java/com/android/internal/app/NetInitiatedActivity.java
     ${REPO_PATH}/core/java/com/android/internal/app/PlatLogoActivity.java
     ${REPO_PATH}/core/java/com/android/internal/app/ProcessMap.java
+    ${REPO_PATH}/core/java/com/android/internal/app/RestrictionsPinActivity.java
+    ${REPO_PATH}/core/java/com/android/internal/app/MediaRouteChooserDialog.java
+    ${REPO_PATH}/core/java/com/android/internal/app/MediaRouteChooserDialogFragment.java
+    ${REPO_PATH}/core/java/com/android/internal/app/MediaRouteControllerDialog.java
+    ${REPO_PATH}/core/java/com/android/internal/app/MediaRouteControllerDialogFragment.java
+    ${REPO_PATH}/core/java/com/android/internal/app/MediaRouteDialogPresenter.java
     ${REPO_PATH}/core/java/com/android/internal/app/ProcessStats.java
     ${REPO_PATH}/core/java/com/android/internal/app/ResolverActivity.java
-    ${REPO_PATH}/core/java/com/android/internal/app/RestrictionsPinActivity.java
     ${REPO_PATH}/core/java/com/android/internal/backup/BackupConstants.java
     ${REPO_PATH}/core/java/com/android/internal/backup/LocalTransport.java
     ${REPO_PATH}/core/java/com/android/internal/backup/LocalTransportService.java
     ${REPO_PATH}/core/java/com/android/internal/content/NativeLibraryHelper.java
     ${REPO_PATH}/core/java/com/android/internal/content/PackageHelper.java
-    ${REPO_PATH}/core/java/com/android/internal/content/PackageMonitor.java
     ${REPO_PATH}/core/java/com/android/internal/content/SelectionBuilder.java
+    ${REPO_PATH}/core/java/com/android/internal/content/PackageMonitor.java
     ${REPO_PATH}/core/java/com/android/internal/database/SortCursor.java
     ${REPO_PATH}/core/java/com/android/internal/http/HttpDateTime.java
     ${REPO_PATH}/core/java/com/android/internal/http/multipart/ByteArrayPartSource.java
@@ -1513,12 +1531,10 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/com/android/internal/os/AtomicFile.java
     ${REPO_PATH}/core/java/com/android/internal/os/BackgroundThread.java
     ${REPO_PATH}/core/java/com/android/internal/os/BaseCommand.java
-    ${REPO_PATH}/core/java/com/android/internal/os/BatteryStatsImpl.java
     ${REPO_PATH}/core/java/com/android/internal/os/BinderInternal.java
     ${REPO_PATH}/core/java/com/android/internal/os/HandlerCaller.java
     ${REPO_PATH}/core/java/com/android/internal/os/LoggingPrintStream.java
     ${REPO_PATH}/core/java/com/android/internal/os/PkgUsageStats.java
-    ${REPO_PATH}/core/java/com/android/internal/os/PowerProfile.java
     ${REPO_PATH}/core/java/com/android/internal/os/ProcessCpuTracker.java
     ${REPO_PATH}/core/java/com/android/internal/os/RuntimeInit.java
     ${REPO_PATH}/core/java/com/android/internal/os/SamplingProfilerIntegration.java
@@ -1526,9 +1542,11 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/com/android/internal/os/TransferPipe.java
     ${REPO_PATH}/core/java/com/android/internal/os/WrapperInit.java
     ${REPO_PATH}/core/java/com/android/internal/os/ZygoteConnection.java
-    ${REPO_PATH}/core/java/com/android/internal/os/ZygoteInit.java
     ${REPO_PATH}/core/java/com/android/internal/os/ZygoteSecurityException.java
     ${REPO_PATH}/core/java/com/android/internal/os/storage/ExternalStorageFormatter.java
+    ${REPO_PATH}/core/java/com/android/internal/os/BatteryStatsImpl.java
+    ${REPO_PATH}/core/java/com/android/internal/os/PowerProfile.java
+    ${REPO_PATH}/core/java/com/android/internal/os/ZygoteInit.java
     ${REPO_PATH}/core/java/com/android/internal/policy/IPolicy.java
     ${REPO_PATH}/core/java/com/android/internal/policy/PolicyManager.java
     ${REPO_PATH}/core/java/com/android/internal/preference/YesNoPreference.java
@@ -1566,7 +1584,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/com/android/internal/view/ActionBarPolicy.java
     ${REPO_PATH}/core/java/com/android/internal/view/BaseIWindow.java
     ${REPO_PATH}/core/java/com/android/internal/view/BaseSurfaceHolder.java
-    ${REPO_PATH}/core/java/com/android/internal/view/CheckableLinearLayout.java
     ${REPO_PATH}/core/java/com/android/internal/view/IInputConnectionWrapper.java
     ${REPO_PATH}/core/java/com/android/internal/view/InputBindResult.java
     ${REPO_PATH}/core/java/com/android/internal/view/InputConnectionWrapper.java
@@ -1577,28 +1594,27 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/com/android/internal/view/menu/ActionMenu.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/ActionMenuItem.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/ActionMenuItemView.java
-    ${REPO_PATH}/core/java/com/android/internal/view/menu/ActionMenuPresenter.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/ActionMenuView.java
-    ${REPO_PATH}/core/java/com/android/internal/view/menu/BaseMenuPresenter.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/ContextMenuBuilder.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/ExpandedMenuView.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/IconMenuItemView.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/IconMenuPresenter.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/IconMenuView.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/ListMenuItemView.java
-    ${REPO_PATH}/core/java/com/android/internal/view/menu/ListMenuPresenter.java
-    ${REPO_PATH}/core/java/com/android/internal/view/menu/MenuBuilder.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/MenuDialogHelper.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/MenuItemImpl.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/MenuPopupHelper.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/MenuPresenter.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/MenuView.java
     ${REPO_PATH}/core/java/com/android/internal/view/menu/SubMenuBuilder.java
+    ${REPO_PATH}/core/java/com/android/internal/view/menu/ActionMenuPresenter.java
+    ${REPO_PATH}/core/java/com/android/internal/view/menu/BaseMenuPresenter.java
+    ${REPO_PATH}/core/java/com/android/internal/view/menu/ListMenuPresenter.java
+    ${REPO_PATH}/core/java/com/android/internal/view/menu/MenuBuilder.java
     ${REPO_PATH}/core/java/com/android/internal/widget/AbsActionBarView.java
     ${REPO_PATH}/core/java/com/android/internal/widget/ActionBarContainer.java
     ${REPO_PATH}/core/java/com/android/internal/widget/ActionBarContextView.java
     ${REPO_PATH}/core/java/com/android/internal/widget/ActionBarOverlayLayout.java
-    ${REPO_PATH}/core/java/com/android/internal/widget/ActionBarView.java
     ${REPO_PATH}/core/java/com/android/internal/widget/AutoScrollHelper.java
     ${REPO_PATH}/core/java/com/android/internal/widget/DialogTitle.java
     ${REPO_PATH}/core/java/com/android/internal/widget/DrawableHolder.java
@@ -1628,6 +1644,7 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/com/android/internal/widget/multiwaveview/PointCloud.java
     ${REPO_PATH}/core/java/com/android/internal/widget/multiwaveview/TargetDrawable.java
     ${REPO_PATH}/core/java/com/android/internal/widget/multiwaveview/Tweener.java
+    ${REPO_PATH}/core/java/com/android/internal/widget/ActionBarView.java
     ${REPO_PATH}/core/java/com/android/server/NetworkManagementSocketTagger.java
     ${REPO_PATH}/core/java/com/android/server/ResettableTimeout.java
     ${REPO_PATH}/core/java/com/android/server/net/BaseNetworkObserver.java
@@ -1640,8 +1657,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/com/google/android/util/SmileyResources.java
     ${REPO_PATH}/graphics/java/android/graphics/Atlas.java
     ${REPO_PATH}/graphics/java/android/graphics/AvoidXfermode.java
-    ${REPO_PATH}/graphics/java/android/graphics/Bitmap.java
-    ${REPO_PATH}/graphics/java/android/graphics/BitmapFactory.java
     ${REPO_PATH}/graphics/java/android/graphics/BitmapRegionDecoder.java
     ${REPO_PATH}/graphics/java/android/graphics/BitmapShader.java
     ${REPO_PATH}/graphics/java/android/graphics/BlurMaskFilter.java
@@ -1705,12 +1720,10 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/graphics/java/android/graphics/drawable/ClipDrawable.java
     ${REPO_PATH}/graphics/java/android/graphics/drawable/ColorDrawable.java
     ${REPO_PATH}/graphics/java/android/graphics/drawable/Drawable.java
-    ${REPO_PATH}/graphics/java/android/graphics/drawable/DrawableContainer.java
     ${REPO_PATH}/graphics/java/android/graphics/drawable/GradientDrawable.java
     ${REPO_PATH}/graphics/java/android/graphics/drawable/InsetDrawable.java
     ${REPO_PATH}/graphics/java/android/graphics/drawable/LayerDrawable.java
     ${REPO_PATH}/graphics/java/android/graphics/drawable/LevelListDrawable.java
-    ${REPO_PATH}/graphics/java/android/graphics/drawable/NinePatchDrawable.java
     ${REPO_PATH}/graphics/java/android/graphics/drawable/PaintDrawable.java
     ${REPO_PATH}/graphics/java/android/graphics/drawable/PictureDrawable.java
     ${REPO_PATH}/graphics/java/android/graphics/drawable/RotateDrawable.java
@@ -1724,10 +1737,12 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/graphics/java/android/graphics/drawable/shapes/RectShape.java
     ${REPO_PATH}/graphics/java/android/graphics/drawable/shapes/RoundRectShape.java
     ${REPO_PATH}/graphics/java/android/graphics/drawable/shapes/Shape.java
+    ${REPO_PATH}/graphics/java/android/graphics/drawable/DrawableContainer.java
+    ${REPO_PATH}/graphics/java/android/graphics/drawable/NinePatchDrawable.java
     ${REPO_PATH}/graphics/java/android/graphics/pdf/PdfDocument.java
+    ${REPO_PATH}/graphics/java/android/graphics/Bitmap.java
+    ${REPO_PATH}/graphics/java/android/graphics/BitmapFactory.java
     ${REPO_PATH}/graphics/java/android/renderscript/Allocation.java
-    ${REPO_PATH}/graphics/java/android/renderscript/AllocationAdapter.java
-    ${REPO_PATH}/graphics/java/android/renderscript/BaseObj.java
     ${REPO_PATH}/graphics/java/android/renderscript/Byte2.java
     ${REPO_PATH}/graphics/java/android/renderscript/Byte3.java
     ${REPO_PATH}/graphics/java/android/renderscript/Byte4.java
@@ -1765,7 +1780,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/graphics/java/android/renderscript/RSRuntimeException.java
     ${REPO_PATH}/graphics/java/android/renderscript/RSSurfaceView.java
     ${REPO_PATH}/graphics/java/android/renderscript/RSTextureView.java
-    ${REPO_PATH}/graphics/java/android/renderscript/RenderScript.java
     ${REPO_PATH}/graphics/java/android/renderscript/RenderScriptGL.java
     ${REPO_PATH}/graphics/java/android/renderscript/Sampler.java
     ${REPO_PATH}/graphics/java/android/renderscript/Script.java
@@ -1785,6 +1799,9 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/graphics/java/android/renderscript/Short3.java
     ${REPO_PATH}/graphics/java/android/renderscript/Short4.java
     ${REPO_PATH}/graphics/java/android/renderscript/Type.java
+    ${REPO_PATH}/graphics/java/android/renderscript/AllocationAdapter.java
+    ${REPO_PATH}/graphics/java/android/renderscript/BaseObj.java
+    ${REPO_PATH}/graphics/java/android/renderscript/RenderScript.java
     ${REPO_PATH}/location/java/android/location/Address.java
     ${REPO_PATH}/location/java/android/location/Country.java
     ${REPO_PATH}/location/java/android/location/CountryDetector.java
@@ -1811,7 +1828,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/media/java/android/media/AudioManager.java
     ${REPO_PATH}/media/java/android/media/AudioRecord.java
     ${REPO_PATH}/media/java/android/media/AudioRoutesInfo.java
-    ${REPO_PATH}/media/java/android/media/AudioService.java
     ${REPO_PATH}/media/java/android/media/AudioSystem.java
     ${REPO_PATH}/media/java/android/media/AudioTimestamp.java
     ${REPO_PATH}/media/java/android/media/AudioTrack.java
@@ -1821,7 +1837,6 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/media/java/android/media/DecoderCapabilities.java
     ${REPO_PATH}/media/java/android/media/DeniedByServerException.java
     ${REPO_PATH}/media/java/android/media/EncoderCapabilities.java
-    ${REPO_PATH}/media/java/android/media/ExifInterface.java
     ${REPO_PATH}/media/java/android/media/FaceDetector.java
     ${REPO_PATH}/media/java/android/media/FocusRequester.java
     ${REPO_PATH}/media/java/android/media/Image.java
@@ -1837,15 +1852,12 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/media/java/android/media/MediaDrmException.java
     ${REPO_PATH}/media/java/android/media/MediaExtractor.java
     ${REPO_PATH}/media/java/android/media/MediaFile.java
-    ${REPO_PATH}/media/java/android/media/MediaFocusControl.java
     ${REPO_PATH}/media/java/android/media/MediaFormat.java
     ${REPO_PATH}/media/java/android/media/MediaInserter.java
     ${REPO_PATH}/media/java/android/media/MediaMetadataEditor.java
     ${REPO_PATH}/media/java/android/media/MediaMetadataRetriever.java
     ${REPO_PATH}/media/java/android/media/MediaMuxer.java
-    ${REPO_PATH}/media/java/android/media/MediaPlayer.java
     ${REPO_PATH}/media/java/android/media/MediaRecorder.java
-    ${REPO_PATH}/media/java/android/media/MediaRouter.java
     ${REPO_PATH}/media/java/android/media/MediaScanner.java
     ${REPO_PATH}/media/java/android/media/MediaScannerClient.java
     ${REPO_PATH}/media/java/android/media/MediaScannerConnection.java
@@ -1856,7 +1868,7 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/media/java/android/media/NotProvisionedException.java
     ${REPO_PATH}/media/java/android/media/Rating.java
     ${REPO_PATH}/media/java/android/media/RemoteControlClient.java
-    ${REPO_PATH}/media/java/android/media/RemoteController.java
+    ${REPO_PATH}/media/java/android/media/RemoteDisplayState.java
     ${REPO_PATH}/media/java/android/media/RemoteDisplay.java
     ${REPO_PATH}/media/java/android/media/ResampleInputStream.java
     ${REPO_PATH}/media/java/android/media/ResourceBusyException.java
@@ -1905,6 +1917,13 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/media/java/android/media/videoeditor/VideoEditorImpl.java
     ${REPO_PATH}/media/java/android/media/videoeditor/VideoEditorProfile.java
     ${REPO_PATH}/media/java/android/media/videoeditor/WaveformData.java
+    ${REPO_PATH}/media/java/android/media/AudioService.java
+    ${REPO_PATH}/media/java/android/media/ExifInterface.java
+    ${REPO_PATH}/media/java/android/media/MediaFocusControl.java
+    ${REPO_PATH}/media/java/android/media/MediaPlayer.java
+    ${REPO_PATH}/media/java/android/media/MediaRouter.java
+    ${REPO_PATH}/media/java/android/media/MediaRouterClientState.java
+    ${REPO_PATH}/media/java/android/media/RemoteController.java
     ${REPO_PATH}/media/java/android/mtp/MtpConstants.java
     ${REPO_PATH}/media/java/android/mtp/MtpDatabase.java
     ${REPO_PATH}/media/java/android/mtp/MtpDevice.java
@@ -2179,28 +2198,29 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/telephony/java/android/telephony/JapanesePhoneNumberFormatter.java
     ${REPO_PATH}/telephony/java/android/telephony/NeighboringCellInfo.java
     ${REPO_PATH}/telephony/java/android/telephony/PhoneNumberFormattingTextWatcher.java
-    ${REPO_PATH}/telephony/java/android/telephony/PhoneNumberUtils.java
     ${REPO_PATH}/telephony/java/android/telephony/PhoneStateListener.java
     ${REPO_PATH}/telephony/java/android/telephony/Rlog.java
-    ${REPO_PATH}/telephony/java/android/telephony/ServiceState.java
     ${REPO_PATH}/telephony/java/android/telephony/SignalStrength.java
-    ${REPO_PATH}/telephony/java/android/telephony/TelephonyManager.java
     ${REPO_PATH}/telephony/java/android/telephony/cdma/CdmaCellLocation.java
     ${REPO_PATH}/telephony/java/android/telephony/cdma/CdmaSmsCbProgramData.java
     ${REPO_PATH}/telephony/java/android/telephony/cdma/CdmaSmsCbProgramResults.java
     ${REPO_PATH}/telephony/java/android/telephony/gsm/GsmCellLocation.java
+    ${REPO_PATH}/telephony/java/android/telephony/CallStateListener.java
+    ${REPO_PATH}/telephony/java/android/telephony/PhoneNumberUtils.java
+    ${REPO_PATH}/telephony/java/android/telephony/ServiceState.java
+    ${REPO_PATH}/telephony/java/android/telephony/TelephonyManager.java
     ${REPO_PATH}/telephony/java/com/android/internal/telephony/CallerInfo.java
     ${REPO_PATH}/telephony/java/com/android/internal/telephony/CallerInfoAsyncQuery.java
     ${REPO_PATH}/telephony/java/com/android/internal/telephony/DctConstants.java
     ${REPO_PATH}/telephony/java/com/android/internal/telephony/EncodeException.java
     ${REPO_PATH}/telephony/java/com/android/internal/telephony/GsmAlphabet.java
     ${REPO_PATH}/telephony/java/com/android/internal/telephony/IccCardConstants.java
-    ${REPO_PATH}/telephony/java/com/android/internal/telephony/PhoneConstants.java
     ${REPO_PATH}/telephony/java/com/android/internal/telephony/RILConstants.java
     ${REPO_PATH}/telephony/java/com/android/internal/telephony/SmsConstants.java
     ${REPO_PATH}/telephony/java/com/android/internal/telephony/SmsRawData.java
     ${REPO_PATH}/telephony/java/com/android/internal/telephony/TelephonyIntents.java
     ${REPO_PATH}/telephony/java/com/android/internal/telephony/TelephonyProperties.java
+    ${REPO_PATH}/telephony/java/com/android/internal/telephony/PhoneConstants.java
     ${REPO_PATH}/wifi/java/android/net/wifi/BatchedScanResult.java
     ${REPO_PATH}/wifi/java/android/net/wifi/BatchedScanSettings.java
     ${REPO_PATH}/wifi/java/android/net/wifi/NetworkUpdateResult.java
@@ -2208,17 +2228,13 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/wifi/java/android/net/wifi/ScanResult.java
     ${REPO_PATH}/wifi/java/android/net/wifi/StateChangeResult.java
     ${REPO_PATH}/wifi/java/android/net/wifi/SupplicantState.java
-    ${REPO_PATH}/wifi/java/android/net/wifi/SupplicantStateTracker.java
     ${REPO_PATH}/wifi/java/android/net/wifi/WifiApConfigStore.java
     ${REPO_PATH}/wifi/java/android/net/wifi/WifiConfigStore.java
     ${REPO_PATH}/wifi/java/android/net/wifi/WifiConfiguration.java
     ${REPO_PATH}/wifi/java/android/net/wifi/WifiEnterpriseConfig.java
     ${REPO_PATH}/wifi/java/android/net/wifi/WifiInfo.java
-    ${REPO_PATH}/wifi/java/android/net/wifi/WifiManager.java
     ${REPO_PATH}/wifi/java/android/net/wifi/WifiMonitor.java
-    ${REPO_PATH}/wifi/java/android/net/wifi/WifiNative.java
     ${REPO_PATH}/wifi/java/android/net/wifi/WifiSsid.java
-    ${REPO_PATH}/wifi/java/android/net/wifi/WifiStateMachine.java
     ${REPO_PATH}/wifi/java/android/net/wifi/WifiStateTracker.java
     ${REPO_PATH}/wifi/java/android/net/wifi/WifiWatchdogStateMachine.java
     ${REPO_PATH}/wifi/java/android/net/wifi/WpsInfo.java
@@ -2242,6 +2258,10 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/wifi/java/android/net/wifi/p2p/nsd/WifiP2pUpnpServiceInfo.java
     ${REPO_PATH}/wifi/java/android/net/wifi/p2p/nsd/WifiP2pUpnpServiceRequest.java
     ${REPO_PATH}/wifi/java/android/net/wifi/p2p/nsd/WifiP2pUpnpServiceResponse.java
+    ${REPO_PATH}/wifi/java/android/net/wifi/SupplicantStateTracker.java
+    ${REPO_PATH}/wifi/java/android/net/wifi/WifiManager.java
+    ${REPO_PATH}/wifi/java/android/net/wifi/WifiNative.java
+    ${REPO_PATH}/wifi/java/android/net/wifi/WifiStateMachine.java
     ${REPO_PATH}/keystore/java/android/security/AndroidKeyPairGenerator.java
     ${REPO_PATH}/keystore/java/android/security/AndroidKeyStore.java
     ${REPO_PATH}/keystore/java/android/security/AndroidKeyStoreProvider.java
@@ -2253,6 +2273,300 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/keystore/java/android/security/KeyStore.java
     ${REPO_PATH}/keystore/java/android/security/KeyStoreParameter.java
     ${REPO_PATH}/keystore/java/android/security/SystemKeyStore.java
+
+)
+
+# find -L frameworks-base/telephony/java -name "*.java" > javafiles-for-corestuffthing
+# find -L frameworks-base/policy/src -name "*.java" >> javafiles-for-corestuffthing
+set(javalibrary_framework2_SRCS
+    ${REPO_PATH}/services/java/com/android/server/AppOpsService.java
+    ${REPO_PATH}/services/java/com/android/server/AppWidgetService.java
+    ${REPO_PATH}/services/java/com/android/server/AppWidgetServiceImpl.java
+    ${REPO_PATH}/services/java/com/android/server/AssetAtlasService.java
+    ${REPO_PATH}/services/java/com/android/server/AttributeCache.java
+    ${REPO_PATH}/services/java/com/android/server/BatteryService.java
+    ${REPO_PATH}/services/java/com/android/server/BluetoothManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/BootReceiver.java
+    ${REPO_PATH}/services/java/com/android/server/BrickReceiver.java
+    ${REPO_PATH}/services/java/com/android/server/CertBlacklister.java
+    ${REPO_PATH}/services/java/com/android/server/ClipboardService.java
+    ${REPO_PATH}/services/java/com/android/server/CommonTimeManagementService.java
+    ${REPO_PATH}/services/java/com/android/server/ConsumerIrService.java
+    ${REPO_PATH}/services/java/com/android/server/CountryDetectorService.java
+    ${REPO_PATH}/services/java/com/android/server/NotificationManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/DeviceStorageMonitorService.java
+    ${REPO_PATH}/services/java/com/android/server/DiskStatsService.java
+    ${REPO_PATH}/services/java/com/android/server/DockObserver.java
+    ${REPO_PATH}/services/java/com/android/server/DropBoxManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/EntropyMixer.java
+    ${REPO_PATH}/services/java/com/android/server/FgThread.java
+    ${REPO_PATH}/services/java/com/android/server/INativeDaemonConnectorCallbacks.java
+    ${REPO_PATH}/services/java/com/android/server/IdleMaintenanceService.java
+    ${REPO_PATH}/services/java/com/android/server/SystemServer.java
+    ${REPO_PATH}/services/java/com/android/server/IntentResolver.java
+    ${REPO_PATH}/services/java/com/android/server/IoThread.java
+    ${REPO_PATH}/services/java/com/android/server/LightsService.java
+    ${REPO_PATH}/services/java/com/android/server/MountService.java
+    ${REPO_PATH}/services/java/com/android/server/WallpaperManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/MasterClearReceiver.java
+    ${REPO_PATH}/services/java/com/android/server/NativeDaemonConnector.java
+    ${REPO_PATH}/services/java/com/android/server/NativeDaemonConnectorException.java
+    ${REPO_PATH}/services/java/com/android/server/NativeDaemonEvent.java
+    ${REPO_PATH}/services/java/com/android/server/media/MediaRouterService.java
+    ${REPO_PATH}/services/java/com/android/server/media/RemoteDisplayProviderProxy.java
+    ${REPO_PATH}/services/java/com/android/server/media/RemoteDisplayProviderWatcher.java
+    ${REPO_PATH}/services/java/com/android/server/NetworkTimeUpdateService.java
+    ${REPO_PATH}/services/java/com/android/server/NsdService.java
+    ${REPO_PATH}/services/java/com/android/server/PackageManagerBackupAgent.java
+    ${REPO_PATH}/services/java/com/android/server/PreferredComponent.java
+    ${REPO_PATH}/services/java/com/android/server/RandomBlock.java
+    ${REPO_PATH}/services/java/com/android/server/RecognitionManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/SamplingProfilerService.java
+    ${REPO_PATH}/services/java/com/android/server/SerialService.java
+    ${REPO_PATH}/services/java/com/android/server/ServiceWatcher.java
+    ${REPO_PATH}/services/java/com/android/server/ShutdownActivity.java
+    ${REPO_PATH}/services/java/com/android/server/StatusBarManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/SystemBackupAgent.java
+    ${REPO_PATH}/services/java/com/android/server/TelephonyRegistry.java
+    ${REPO_PATH}/services/java/com/android/server/TextServicesManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/TwilightCalculator.java
+    ${REPO_PATH}/services/java/com/android/server/TwilightService.java
+    ${REPO_PATH}/services/java/com/android/server/UiModeManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/UiThread.java
+    ${REPO_PATH}/services/java/com/android/server/UpdateLockService.java
+    ${REPO_PATH}/services/java/com/android/server/VibratorService.java
+    ${REPO_PATH}/services/java/com/android/server/Watchdog.java
+    ${REPO_PATH}/services/java/com/android/server/WiredAccessoryManager.java
+    ${REPO_PATH}/services/java/com/android/server/accessibility/AccessibilityInputFilter.java
+    ${REPO_PATH}/services/java/com/android/server/accessibility/AccessibilityManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/accessibility/EventStreamTransformation.java
+    ${REPO_PATH}/services/java/com/android/server/accessibility/GestureUtils.java
+    ${REPO_PATH}/services/java/com/android/server/accessibility/ScreenMagnifier.java
+    ${REPO_PATH}/services/java/com/android/server/accessibility/TouchExplorer.java
+    ${REPO_PATH}/services/java/com/android/server/accounts/AccountAuthenticatorCache.java
+    ${REPO_PATH}/services/java/com/android/server/accounts/IAccountAuthenticatorCache.java
+    ${REPO_PATH}/services/java/com/android/server/accounts/AccountManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/am/ActivityResult.java
+    ${REPO_PATH}/services/java/com/android/server/am/AppBindRecord.java
+    ${REPO_PATH}/services/java/com/android/server/am/AppErrorDialog.java
+    ${REPO_PATH}/services/java/com/android/server/am/AppErrorResult.java
+    ${REPO_PATH}/services/java/com/android/server/am/AppNotRespondingDialog.java
+    ${REPO_PATH}/services/java/com/android/server/am/AppWaitingForDebuggerDialog.java
+    ${REPO_PATH}/services/java/com/android/server/am/BackupRecord.java
+    ${REPO_PATH}/services/java/com/android/server/am/BaseErrorDialog.java
+    ${REPO_PATH}/services/java/com/android/server/am/BroadcastFilter.java
+    ${REPO_PATH}/services/java/com/android/server/am/BroadcastRecord.java
+    ${REPO_PATH}/services/java/com/android/server/am/CompatModeDialog.java
+    ${REPO_PATH}/services/java/com/android/server/am/CompatModePackages.java
+    ${REPO_PATH}/services/java/com/android/server/am/ContentProviderConnection.java
+    ${REPO_PATH}/services/java/com/android/server/am/ContentProviderRecord.java
+    ${REPO_PATH}/services/java/com/android/server/am/CoreSettingsObserver.java
+    ${REPO_PATH}/services/java/com/android/server/am/FactoryErrorDialog.java
+    ${REPO_PATH}/services/java/com/android/server/am/IntentBindRecord.java
+    ${REPO_PATH}/services/java/com/android/server/am/LaunchWarningWindow.java
+    ${REPO_PATH}/services/java/com/android/server/am/NativeCrashListener.java
+    ${REPO_PATH}/services/java/com/android/server/am/PendingIntentRecord.java
+    ${REPO_PATH}/services/java/com/android/server/am/PendingThumbnailsRecord.java
+    ${REPO_PATH}/services/java/com/android/server/am/ProcessList.java
+    ${REPO_PATH}/services/java/com/android/server/am/ProcessMemInfo.java
+    ${REPO_PATH}/services/java/com/android/server/am/ProviderMap.java
+    ${REPO_PATH}/services/java/com/android/server/am/ReceiverList.java
+    ${REPO_PATH}/services/java/com/android/server/am/StrictModeViolationDialog.java
+    ${REPO_PATH}/services/java/com/android/server/am/TaskAccessInfo.java
+    ${REPO_PATH}/services/java/com/android/server/am/ThumbnailHolder.java
+    ${REPO_PATH}/services/java/com/android/server/am/UriPermission.java
+    ${REPO_PATH}/services/java/com/android/server/am/UriPermissionOwner.java
+    ${REPO_PATH}/services/java/com/android/server/am/UsageStatsService.java
+    ${REPO_PATH}/services/java/com/android/server/am/UserStartedState.java
+    ${REPO_PATH}/services/java/com/android/server/am/ActiveServices.java
+    ${REPO_PATH}/services/java/com/android/server/am/ActivityManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/am/ActivityRecord.java
+    ${REPO_PATH}/services/java/com/android/server/am/ActivityStack.java
+    ${REPO_PATH}/services/java/com/android/server/am/ActivityStackSupervisor.java
+    ${REPO_PATH}/services/java/com/android/server/am/BatteryStatsService.java
+    ${REPO_PATH}/services/java/com/android/server/am/BroadcastQueue.java
+    ${REPO_PATH}/services/java/com/android/server/am/ConnectionRecord.java
+    ${REPO_PATH}/services/java/com/android/server/am/ProcessRecord.java
+    ${REPO_PATH}/services/java/com/android/server/am/ProcessStatsService.java
+    ${REPO_PATH}/services/java/com/android/server/am/ServiceRecord.java
+    ${REPO_PATH}/services/java/com/android/server/am/TaskRecord.java
+    ${REPO_PATH}/services/java/com/android/server/connectivity/DataConnectionStats.java
+    ${REPO_PATH}/services/java/com/android/server/connectivity/Nat464Xlat.java
+    ${REPO_PATH}/services/java/com/android/server/connectivity/PacManager.java
+    ${REPO_PATH}/services/java/com/android/server/connectivity/Tethering.java
+    ${REPO_PATH}/services/java/com/android/server/connectivity/Vpn.java
+    ${REPO_PATH}/services/java/com/android/server/content/ContentService.java
+    ${REPO_PATH}/services/java/com/android/server/content/SyncManager.java
+    ${REPO_PATH}/services/java/com/android/server/content/SyncOperation.java
+    ${REPO_PATH}/services/java/com/android/server/content/SyncQueue.java
+    ${REPO_PATH}/services/java/com/android/server/content/SyncStorageEngine.java
+    ${REPO_PATH}/services/java/com/android/server/display/DisplayAdapter.java
+    ${REPO_PATH}/services/java/com/android/server/display/DisplayDevice.java
+    ${REPO_PATH}/services/java/com/android/server/display/DisplayDeviceInfo.java
+    ${REPO_PATH}/services/java/com/android/server/display/DisplayTransactionListener.java
+    ${REPO_PATH}/services/java/com/android/server/display/DisplayViewport.java
+    ${REPO_PATH}/services/java/com/android/server/display/HeadlessDisplayAdapter.java
+    ${REPO_PATH}/services/java/com/android/server/display/LocalDisplayAdapter.java
+    ${REPO_PATH}/services/java/com/android/server/display/LogicalDisplay.java
+    ${REPO_PATH}/services/java/com/android/server/display/OverlayDisplayAdapter.java
+    ${REPO_PATH}/services/java/com/android/server/display/OverlayDisplayWindow.java
+    ${REPO_PATH}/services/java/com/android/server/display/PersistentDataStore.java
+    ${REPO_PATH}/services/java/com/android/server/display/VirtualDisplayAdapter.java
+    ${REPO_PATH}/services/java/com/android/server/display/DisplayManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/display/WifiDisplayAdapter.java
+    ${REPO_PATH}/services/java/com/android/server/display/WifiDisplayController.java
+    ${REPO_PATH}/services/java/com/android/server/dreams/DreamController.java
+    ${REPO_PATH}/services/java/com/android/server/dreams/DreamManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/firewall/AndFilter.java
+    ${REPO_PATH}/services/java/com/android/server/firewall/CategoryFilter.java
+    ${REPO_PATH}/services/java/com/android/server/firewall/Filter.java
+    ${REPO_PATH}/services/java/com/android/server/firewall/FilterFactory.java
+    ${REPO_PATH}/services/java/com/android/server/firewall/FilterList.java
+    ${REPO_PATH}/services/java/com/android/server/firewall/IntentFirewall.java
+    ${REPO_PATH}/services/java/com/android/server/firewall/NotFilter.java
+    ${REPO_PATH}/services/java/com/android/server/firewall/OrFilter.java
+    ${REPO_PATH}/services/java/com/android/server/firewall/PortFilter.java
+    ${REPO_PATH}/services/java/com/android/server/firewall/SenderFilter.java
+    ${REPO_PATH}/services/java/com/android/server/firewall/SenderPermissionFilter.java
+    ${REPO_PATH}/services/java/com/android/server/firewall/StringFilter.java
+    ${REPO_PATH}/services/java/com/android/server/input/InputApplicationHandle.java
+    ${REPO_PATH}/services/java/com/android/server/input/InputWindowHandle.java
+    ${REPO_PATH}/services/java/com/android/server/input/PersistentDataStore.java
+    ${REPO_PATH}/services/java/com/android/server/input/InputManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/location/ComprehensiveCountryDetector.java
+    ${REPO_PATH}/services/java/com/android/server/location/CountryDetectorBase.java
+    ${REPO_PATH}/services/java/com/android/server/location/FlpHardwareProvider.java
+    ${REPO_PATH}/services/java/com/android/server/location/FusedLocationHardwareSecure.java
+    ${REPO_PATH}/services/java/com/android/server/location/FusedProxy.java
+    ${REPO_PATH}/services/java/com/android/server/location/GeocoderProxy.java
+    ${REPO_PATH}/services/java/com/android/server/location/GeofenceManager.java
+    ${REPO_PATH}/services/java/com/android/server/location/GeofenceProxy.java
+    ${REPO_PATH}/services/java/com/android/server/location/GeofenceState.java
+    ${REPO_PATH}/services/java/com/android/server/location/GpsLocationProvider.java
+    ${REPO_PATH}/services/java/com/android/server/location/GpsXtraDownloader.java
+    ${REPO_PATH}/services/java/com/android/server/location/LocationBasedCountryDetector.java
+    ${REPO_PATH}/services/java/com/android/server/location/LocationBlacklist.java
+    ${REPO_PATH}/services/java/com/android/server/location/LocationFudger.java
+    ${REPO_PATH}/services/java/com/android/server/location/LocationProviderInterface.java
+    ${REPO_PATH}/services/java/com/android/server/location/LocationProviderProxy.java
+    ${REPO_PATH}/services/java/com/android/server/location/MockProvider.java
+    ${REPO_PATH}/services/java/com/android/server/location/PassiveProvider.java
+    ${REPO_PATH}/services/java/com/android/server/net/LockdownVpnTracker.java
+    ${REPO_PATH}/services/java/com/android/server/net/NetworkIdentitySet.java
+    ${REPO_PATH}/services/java/com/android/server/net/NetworkPolicyManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/net/NetworkStatsCollection.java
+    ${REPO_PATH}/services/java/com/android/server/net/NetworkStatsRecorder.java
+    ${REPO_PATH}/services/java/com/android/server/net/NetworkStatsService.java
+    ${REPO_PATH}/services/java/com/android/server/os/SchedulingPolicyService.java
+    ${REPO_PATH}/services/java/com/android/server/pm/BasePermission.java
+    ${REPO_PATH}/services/java/com/android/server/pm/GrantedPermissions.java
+    ${REPO_PATH}/services/java/com/android/server/pm/Installer.java
+    ${REPO_PATH}/services/java/com/android/server/pm/KeySetManager.java
+    ${REPO_PATH}/services/java/com/android/server/pm/PackageKeySetData.java
+    ${REPO_PATH}/services/java/com/android/server/pm/PackageSetting.java
+    ${REPO_PATH}/services/java/com/android/server/pm/PackageSettingBase.java
+    ${REPO_PATH}/services/java/com/android/server/pm/PackageSignatures.java
+    ${REPO_PATH}/services/java/com/android/server/pm/PackageVerificationResponse.java
+    ${REPO_PATH}/services/java/com/android/server/pm/PackageVerificationState.java
+    ${REPO_PATH}/services/java/com/android/server/pm/PendingPackage.java
+    ${REPO_PATH}/services/java/com/android/server/pm/PreferredActivity.java
+    ${REPO_PATH}/services/java/com/android/server/pm/PreferredIntentResolver.java
+    ${REPO_PATH}/services/java/com/android/server/pm/SELinuxMMAC.java
+    ${REPO_PATH}/services/java/com/android/server/pm/SharedUserSetting.java
+    ${REPO_PATH}/services/java/com/android/server/pm/UserManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/pm/PackageManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/pm/Settings.java
+    ${REPO_PATH}/services/java/com/android/server/power/DisplayBlanker.java
+    ${REPO_PATH}/services/java/com/android/server/power/DisplayPowerRequest.java
+    ${REPO_PATH}/services/java/com/android/server/power/ElectronBeam.java
+    ${REPO_PATH}/services/java/com/android/server/power/Notifier.java
+    ${REPO_PATH}/services/java/com/android/server/power/RampAnimator.java
+    ${REPO_PATH}/services/java/com/android/server/power/ScreenOnBlocker.java
+    ${REPO_PATH}/services/java/com/android/server/power/ShutdownThread.java
+    ${REPO_PATH}/services/java/com/android/server/power/SuspendBlocker.java
+    ${REPO_PATH}/services/java/com/android/server/power/WirelessChargerDetector.java
+    ${REPO_PATH}/services/java/com/android/server/power/DisplayPowerController.java
+    ${REPO_PATH}/services/java/com/android/server/power/DisplayPowerState.java
+    ${REPO_PATH}/services/java/com/android/server/power/PowerManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/print/RemotePrintService.java
+    ${REPO_PATH}/services/java/com/android/server/print/RemotePrintSpooler.java
+    ${REPO_PATH}/services/java/com/android/server/print/PrintManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/print/UserState.java
+    ${REPO_PATH}/services/java/com/android/server/search/SearchManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/search/Searchables.java
+    ${REPO_PATH}/services/java/com/android/server/updates/CarrierProvisioningUrlsInstallReceiver.java
+    ${REPO_PATH}/services/java/com/android/server/updates/CertPinInstallReceiver.java
+    ${REPO_PATH}/services/java/com/android/server/updates/ConfigUpdateInstallReceiver.java
+    ${REPO_PATH}/services/java/com/android/server/updates/IntentFirewallInstallReceiver.java
+    ${REPO_PATH}/services/java/com/android/server/updates/SELinuxPolicyInstallReceiver.java
+    ${REPO_PATH}/services/java/com/android/server/updates/SmsShortCodesInstallReceiver.java
+    ${REPO_PATH}/services/java/com/android/server/updates/TZInfoInstallReceiver.java
+    ${REPO_PATH}/services/java/com/android/server/usb/UsbDebuggingManager.java
+    ${REPO_PATH}/services/java/com/android/server/usb/UsbHostManager.java
+    ${REPO_PATH}/services/java/com/android/server/usb/UsbService.java
+    ${REPO_PATH}/services/java/com/android/server/usb/UsbSettingsManager.java
+    ${REPO_PATH}/services/java/com/android/server/usb/UsbDeviceManager.java
+    ${REPO_PATH}/services/java/com/android/server/wifi/WifiNotificationController.java
+    ${REPO_PATH}/services/java/com/android/server/wifi/WifiSettingsStore.java
+    ${REPO_PATH}/services/java/com/android/server/wifi/WifiTrafficPoller.java
+    ${REPO_PATH}/services/java/com/android/server/wifi/WifiController.java
+    ${REPO_PATH}/services/java/com/android/server/wifi/WifiService.java
+    ${REPO_PATH}/services/java/com/android/server/wm/AppTransition.java
+    ${REPO_PATH}/services/java/com/android/server/wm/AppWindowAnimator.java
+    ${REPO_PATH}/services/java/com/android/server/wm/BlackFrame.java
+    ${REPO_PATH}/services/java/com/android/server/wm/DimLayer.java
+    ${REPO_PATH}/services/java/com/android/server/wm/DisplayMagnifier.java
+    ${REPO_PATH}/services/java/com/android/server/wm/DisplaySettings.java
+    ${REPO_PATH}/services/java/com/android/server/wm/DragState.java
+    ${REPO_PATH}/services/java/com/android/server/wm/FakeWindowImpl.java
+    ${REPO_PATH}/services/java/com/android/server/wm/FocusedStackFrame.java
+    ${REPO_PATH}/services/java/com/android/server/wm/InputMonitor.java
+    ${REPO_PATH}/services/java/com/android/server/wm/KeyguardDisableHandler.java
+    ${REPO_PATH}/services/java/com/android/server/wm/PointerEventDispatcher.java
+    ${REPO_PATH}/services/java/com/android/server/wm/ScreenRotationAnimation.java
+    ${REPO_PATH}/services/java/com/android/server/wm/Session.java
+    ${REPO_PATH}/services/java/com/android/server/wm/StackTapPointerEventListener.java
+    ${REPO_PATH}/services/java/com/android/server/wm/StartingData.java
+    ${REPO_PATH}/services/java/com/android/server/wm/StrictModeFlash.java
+    ${REPO_PATH}/services/java/com/android/server/wm/TaskGroup.java
+    ${REPO_PATH}/services/java/com/android/server/wm/ViewServer.java
+    ${REPO_PATH}/services/java/com/android/server/wm/Watermark.java
+    ${REPO_PATH}/services/java/com/android/server/wm/WindowToken.java
+    ${REPO_PATH}/services/java/com/android/server/wm/AppWindowToken.java
+    ${REPO_PATH}/services/java/com/android/server/wm/DisplayContent.java
+    ${REPO_PATH}/services/java/com/android/server/wm/StackBox.java
+    ${REPO_PATH}/services/java/com/android/server/wm/Task.java
+    ${REPO_PATH}/services/java/com/android/server/wm/TaskStack.java
+    ${REPO_PATH}/services/java/com/android/server/wm/WindowAnimator.java
+    ${REPO_PATH}/services/java/com/android/server/wm/WindowManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/wm/WindowState.java
+    ${REPO_PATH}/services/java/com/android/server/wm/WindowStateAnimator.java
+    ${REPO_PATH}/services/java/com/android/server/AlarmManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/BackupManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/ConnectivityService.java
+    ${REPO_PATH}/services/java/com/android/server/DevicePolicyManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/InputMethodManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/LocationManagerService.java
+    ${REPO_PATH}/services/java/com/android/server/LockSettingsService.java
+    ${REPO_PATH}/services/java/com/android/server/NetworkManagementService.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/EnableAccessibilityController.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/GlobalActions.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/GlobalKeyManager.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/IconUtilities.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/PhoneFallbackEventHandler.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/PhoneLayoutInflater.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/Policy.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/RecentApplicationsBackground.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/RecentApplicationsDialog.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/ShortcutManager.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/SystemGesturesPointerEventListener.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/WindowOrientationListener.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/keyguard/KeyguardServiceWrapper.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/keyguard/KeyguardServiceDelegate.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/BarController.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/ImmersiveModeConfirmation.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/PhoneWindow.java
+    ${REPO_PATH}/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
 )
 
 foreach(_fileNameAndPathWithoutExtension ${aidl_entries_to_handle})
@@ -2305,4 +2619,6 @@ set_source_files_properties(${framework_R_SRCS} PROPERTIES GENERATED TRUE)
 set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
 find_jar(JUNIT_JAR NAMES junit)
 add_jar(framework SOURCES ${eventlogtags_SRCS} ${framework_R_SRCS} ${javalibrary_frameworks_SRCS} ${javalibrary_frameworks_interface_SRCS} INCLUDE_JARS core conscrypt ext okhttp bouncycastle ${JUNIT_JAR})
+add_jar(framework2 SOURCES ${eventlogtags2_SRCS} ${javalibrary_framework2_SRCS} INCLUDE_JARS core conscrypt ext okhttp bouncycastle framework telephony-common ${CMAKE_BINARY_DIR}/src/deps/javalibrary-telephony/telephony-common.jar ${JUNIT_JAR})
 install_jar(framework ${LIB_INSTALL_DIR}/android)
+install_jar(framework2 ${LIB_INSTALL_DIR}/android)
