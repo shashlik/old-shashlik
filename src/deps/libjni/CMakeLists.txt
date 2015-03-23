@@ -83,7 +83,7 @@ set(libjni_SRCS
     ${JNI_SOURCE_DIR}/android_os_MessageQueue.cpp
     ${JNI_SOURCE_DIR}/android_os_Parcel.cpp
 #     ${JNI_SOURCE_DIR}/android_os_SELinux.cpp
-#     ${JNI_SOURCE_DIR}/android_os_SystemClock.cpp
+    ${JNI_SOURCE_DIR}/android_os_SystemClock.cpp
     ${JNI_SOURCE_DIR}/android_os_SystemProperties.cpp
     ${JNI_SOURCE_DIR}/android_os_Trace.cpp
 #     ${JNI_SOURCE_DIR}/android_os_UEventObserver.cpp
