@@ -59,7 +59,8 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(EGL PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(EGL
-    GLES_trace GLES_android
+    GLES_trace
+#     GLES_android
 )
 target_include_directories(EGL
     PRIVATE
@@ -91,6 +92,7 @@ target_compile_definitions(GLES_trace
     PRIVATE
     -DLOG_TAG="libGLES_trace"
     -DGOOGLE_PROTOBUF_NO_RTTI
+    -DEGL_TRACE=1
     -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
 )
 target_include_directories(GLES_trace
