@@ -16,6 +16,7 @@ include_directories(${REPO_PATH}
 include_directories(SYSTEM ${CMAKE_INSTALL_PREFIX}/include)
 
 add_definitions(
+    -DHAVE_ANDROID_PTHREAD_SETNAME_NP=1
     -DANDROID_SMP=1
     -fstrict-aliasing -Wstrict-aliasing=2
     -Wall -Wextra -Wno-unused-parameter
