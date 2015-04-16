@@ -37,6 +37,13 @@ find_package(FFI REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(OpenGL REQUIRED)
 
+find_package(BISON)
+find_package(FLEX)
+
+find_package(LLVM)
+set(LLVM_RUNTIME_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/bin)
+set(LLVM_LIBRARY_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/lib)
+include(AddLLVM)
 
 find_package(Java 1.6 REQUIRED)
 include(UseJava)
@@ -51,6 +58,14 @@ include(JarjarModule)
 
 include(TestBigEndian)
 TEST_BIG_ENDIAN(SystemIsBigEndian)
+
+include(FindPkgConfig)
+pkg_check_modules(DRM REQUIRED libdrm)
+IF(DRM_FOUND)
+    MESSAGE(STATUS "Looking for DRM - found at ${DRM_PREFIX}")
+ELSE(DRM_FOUND)
+    MESSAGE(STATUS "Looking for DRM - not found")
+ENDIF(DRM_FOUND)
 
 # ----------------------------------------------------------------
 # System settings
@@ -137,12 +152,16 @@ set(SKIA_INCLUDES ${SKIA_PATH}/include/c ${SKIA_PATH}/include/config ${SKIA_PATH
 
 # Tier2 libraries
 
+set(LIBHARDWARE_INCLUDES ${GENERAL_SOURCE_PATH}/libhardware/include)
+
 # Dalvik
 set(LIBDEX_INCLUDES ${DALVIK_PATH})
 
 # frameworks/native
+set(LIBUI_INCLUDES ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include)
 set(LIBBINDER_INCLUDES ${CMAKE_SOURCE_DIR}/src/libs/libbinder
                        ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
+                       ${CMAKE_SOURCE_DIR}/src/deps/libbinder
                        ${CMAKE_INSTALL_PREFIX}/include    # FIXME: Remove when the build works without tier1/2
                        #${LIBXXX_INCLUDS}/include
 )
