@@ -24,6 +24,8 @@ add_subdirectory(liblzf)          # very fast compression library
 add_subdirectory(libmemtrack)     # memory tracker
 add_subdirectory(libnetutils)     # networking utility functions
 add_subdirectory(libprotobuf)     # Google's protocol buffers library
+# add_subdirectory(libbcc)          # LLVM bitcode execution engine
+# add_subdirectory(librs)           # renderscript
 
 add_subdirectory(libandroidfw)    # frameworks-base
 
@@ -66,3 +68,10 @@ add_subdirectory(libjavacore)
 
 
 add_subdirectory(libbinder)
+add_subdirectory(libandroid_servers)
+add_subdirectory(servicemanager) # The application which takes care of starting and stopping services
+# TODO hook into KDE's service management infrastructure for this
+add_subdirectory(surfaceflinger)
+
+# Intel hardware libraries
+# add_subdirectory(libwsbm)
