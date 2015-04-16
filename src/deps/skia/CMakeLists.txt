@@ -49,6 +49,8 @@ add_definitions(
     # Skia does not enforce this usage pattern so we disable it here to avoid
     # unecessary log spew when building
     -Wno-unused-parameter
+    # be less debuggy
+    -DNDEBUG
     )
 
 # This is not the best thing in the world. It does, however, ensure that we can compile
@@ -561,7 +563,7 @@ set(skia_gr_SRCS
 #     ${SKIA_SRC_PATH}/gpu/gl/unix/SkNativeGLContext_unix.cpp
     )
 
-add_library(skia SHARED ${skia_SRCS} ${skia_skgr_SRCS} ${skia_nulldbg_gpu_SRCS} ${skia_gr_SRCS})
+add_library(skia SHARED ${skia_SRCS} ${skia_skgr_SRCS} ${skia_nulldbg_gpu_SRCS} ${skia_gr_SRCS} gif-hacks.cpp)
 target_compile_definitions(skia
     PUBLIC
     -DANDROID_LARGE_MEMORY_DEVICE
