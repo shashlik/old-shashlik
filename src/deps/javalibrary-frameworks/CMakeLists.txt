@@ -2622,3 +2622,4 @@ add_jar(framework SOURCES ${eventlogtags_SRCS} ${framework_R_SRCS} ${javalibrary
 add_jar(framework2 SOURCES ${eventlogtags2_SRCS} ${javalibrary_framework2_SRCS} INCLUDE_JARS core conscrypt ext okhttp bouncycastle framework telephony-common ${CMAKE_BINARY_DIR}/src/deps/javalibrary-telephony/telephony-common.jar ${JUNIT_JAR})
 install_jar(framework ${LIB_INSTALL_DIR}/android)
 install_jar(framework2 ${LIB_INSTALL_DIR}/android)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk DESTINATION ${LIB_INSTALL_DIR}/android/system/framework RENAME framework-res.apk)
