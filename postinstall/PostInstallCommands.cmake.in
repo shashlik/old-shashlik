@@ -2,6 +2,7 @@ set(CMAKE_INSTALL_PREFIX @CMAKE_INSTALL_PREFIX@)
 set(LIB_INSTALL_DIR @LIB_INSTALL_DIR@)
 set(ANDROID_ROOT @ANDROID_ROOT@)
 set(ANDROID_BIN_DIR @ANDROID_BIN_DIR@)
+set(ANDROID_FRAMEWORKS_BASE @ANDROID_FRAMEWORKS_BASE@)
 
 find_package(Java 1.6 REQUIRED)
 include(UseJava)
@@ -66,6 +67,8 @@ endfunction()
 function(process_installed_android_jar _TARGET_NAME _INSTALLED_FILE _WORK_DIR _SYSTEM_FRAMEWORK_DIR)
     set(LOCAL_WORK_DIR ${_WORK_DIR}/${_TARGET_NAME}-intermediates)
 
+    message(STATUS "** Post-processing the jar for target ${_TARGET_NAME} **")
+
     message(STATUS "Creating local work dir ${LOCAL_WORK_DIR}")
     # make an intermediary work directory inside the given work dir _WORK_DIR/intermediates
     file(MAKE_DIRECTORY ${LOCAL_WORK_DIR})
@@ -94,6 +97,10 @@ function(process_installed_android_jar _TARGET_NAME _INSTALLED_FILE _WORK_DIR _S
         message(STATUS "Adding classes.dex to the new jar")
         execute_process(COMMAND zip -qj ${LOCAL_WORK_DIR}/javalib.jar ${LOCAL_WORK_DIR}/classes.dex)
 
+        if(_TARGET_NAME MATCHES "framework")
+            message(STATUS "Adding preloaded-classes to the new jar for target framework only")
+            execute_process(COMMAND zip -qj ${LOCAL_WORK_DIR}/javalib.jar ${ANDROID_FRAMEWORKS_BASE}/preloaded-classes)
+        endif()
 #         if [ -d out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes ] ; then
 #             java_res_jar_flags=$(find out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes -type f -a -not -name "*.class" | sed -e "s?^out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes/? -C out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes ?");
 #             if [ -n "$java_res_jar_flags" ] ; then
@@ -164,6 +171,9 @@ process_installed_android_jar(telephony-common ${ANDROID_ROOT}/telephony-common.
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_ROOT}/system/framework/core.jar:${ANDROID_ROOT}/system/framework/bouncycastle.jar:${ANDROID_ROOT}/system/framework/conscrypt.jar:${ANDROID_ROOT}/system/framework/ext:${ANDROID_ROOT}/system/framework/okhttp.jar:${ANDROID_ROOT}/system/framework/framework.jar:${ANDROID_ROOT}/system/framework/voip-common.jar:${ANDROID_ROOT}/system/framework/telephony-common.jar)
 process_installed_android_jar(framework2 ${ANDROID_ROOT}/framework2.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary system/framework)
+
+set(ENV{BOOTCLASSPATH} ${ANDROID_ROOT}/system/framework/core.jar:${ANDROID_ROOT}/system/framework/bouncycastle.jar:${ANDROID_ROOT}/system/framework/conscrypt.jar:${ANDROID_ROOT}/system/framework/ext:${ANDROID_ROOT}/system/framework/okhttp.jar:${ANDROID_ROOT}/system/framework/framework.jar:${ANDROID_ROOT}/system/framework/voip-common.jar:${ANDROID_ROOT}/system/framework/telephony-common.jar)
+process_installed_android_jar(launch ${ANDROID_ROOT}/launch.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary system/framework)
 
 # message(STATUS "Copying: core classes-full-debug.jar to classes-jarjar.jar")
 # out/host/linux-x86/bin/acp -fp out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes-full-debug.jar out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes-jarjar.jar

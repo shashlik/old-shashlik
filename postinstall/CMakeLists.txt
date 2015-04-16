@@ -9,6 +9,7 @@ export ANDROID_DATA=\"${ANDROID_ROOT}/data\"
 export ANDROID_STORAGE=\"${ANDROID_ROOT}/storage\"
 export ASEC_MOUNTPOINT=\"${ANDROID_ROOT}/mnt/asec\"
 export LOOP_MOUNTPOINT=\"${ANDROID_ROOT}/mnt/obb\"
+export EXTERNAL_STORAGE=\"/mnt\"
 export BOOTCLASSPATH=\"${ANDROID_ROOT}/system/framework/core.jar:${ANDROID_ROOT}/system/framework/conscrypt.jar:${ANDROID_ROOT}/system/framework/bouncycastle.jar:${ANDROID_ROOT}/system/framework/okhttp.jar:${ANDROID_ROOT}/system/framework/ext.jar:${ANDROID_ROOT}/system/framework/framework.jar:${ANDROID_ROOT}/system/framework/telephony-common.jar:${ANDROID_ROOT}/system/framework/voip-common.jar:${ANDROID_ROOT}/system/framework/framework2.jar\"
 exec $@
 ")
