@@ -202,10 +202,10 @@ int register_android_media_ToneGenerator(JNIEnv *env)
 }
 // 
 // 
-int register_android_util_FloatMath(JNIEnv* env)
-{
-    return 0;
-}
+// int register_android_util_FloatMath(JNIEnv* env)
+// {
+//     return 0;
+// }
 // 
 // 
 // // ----------------------------------------------------------------
@@ -221,10 +221,10 @@ int register_android_debug_JNITest(_JNIEnv*)
     return 0;
 }
 
-int register_android_os_SystemClock(_JNIEnv*)
-{
-    return 0;
-}
+// int register_android_os_SystemClock(_JNIEnv*)
+// {
+//     return 0;
+// }
 // 
 // int register_android_util_EventLog(_JNIEnv*)
 // {
@@ -271,15 +271,15 @@ int register_android_emoji_EmojiFactory(_JNIEnv*)
 //     return 0;
 // }
 // 
-int register_android_view_InputDevice(_JNIEnv*)
-{
-    return 0;
-}
-
-int register_android_view_KeyCharacterMap(_JNIEnv*)
-{
-    return 0;
-}
+// int register_android_view_InputDevice(_JNIEnv*)
+// {
+//     return 0;
+// }
+// 
+// int register_android_view_KeyCharacterMap(_JNIEnv*)
+// {
+//     return 0;
+// }
 // 
 // int register_android_os_SystemProperties(_JNIEnv*)
 // {
@@ -290,11 +290,11 @@ int register_android_view_KeyCharacterMap(_JNIEnv*)
 // {
 //     return 0;
 // }
-
-int register_android_view_DisplayEventReceiver(_JNIEnv*)
-{
-    return 0;
-}
+// 
+// int register_android_view_DisplayEventReceiver(_JNIEnv*)
+// {
+//     return 0;
+// }
 
 int register_android_nio_utils(_JNIEnv*)
 {
@@ -490,11 +490,11 @@ int register_android_net_wifi_WifiNative(_JNIEnv*)
 // {
 //     return 0;
 // }
-
-int register_com_android_internal_os_ZygoteInit(_JNIEnv*)
-{
-    return 0;
-}
+// 
+// int register_com_android_internal_os_ZygoteInit(_JNIEnv*)
+// {
+//     return 0;
+// }
 
 int register_android_media_RemoteDisplay(_JNIEnv*)
 {
