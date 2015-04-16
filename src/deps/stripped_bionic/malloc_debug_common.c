@@ -1,5 +1,10 @@
 // taken from malloc_debug_common.cpp
 
+/*
+ * In a VM process, this is set to 1 after fork()ing out of zygote
+ */
+int gMallocLeakZygoteChild = 0;
+
 #include <stdint.h>
 #include <malloc.h>
 

@@ -12,10 +12,22 @@ set(stripped_bionic_SRCS
     ${BIONIC_LIBC_SRC_DIR}/string/strlcat.c
     ${BIONIC_LIBC_SRC_DIR}/string/strlcpy.c
     ${CMAKE_CURRENT_SOURCE_DIR}/malloc_debug_common.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/mmap.c
 )
 
-add_library(stripped_bionic SHARED ${stripped_bionic_SRCS})
+enable_language(ASM)
+set(assembler_SRCS
+    ${BIONIC_LIBC_SRC_DIR}/arch-x86/syscalls/__mmap2.S
+)
+set_property(SOURCE ${assembler_SRCS} PROPERTY LANGUAGE ASM)
+
+add_library(stripped_bionic SHARED ${stripped_bionic_SRCS} ${assembler_SRCS})
 if(FORCE_32BIT_BUILD)
     set_target_properties(stripped_bionic PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
+target_include_directories(stripped_bionic
+    PRIVATE
+    ${BIONIC_LIBC_SRC_DIR}/arch-x86/include/
+)
+
 install(TARGETS stripped_bionic DESTINATION ${ANDROID_LIB_DIR})
