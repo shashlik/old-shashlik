@@ -26,12 +26,22 @@ include_directories(${LIBBINDER_INCLUDES}
 set(shashlik_launcher_SRCS
     main.cpp
     AppRuntime.cpp
+    init_util.c
 #     ProcessGlobals.cpp
 )
 
 set(shashlik_jni_SRCS
     runtime/Stubs.cpp
 )
+
+set(launch_SRCS
+    Launch.java
+)
+
+set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
+add_jar(launch SOURCES ${launch_SRCS} INCLUDE_JARS core framework)
+install_jar(launch ${LIB_INSTALL_DIR}/android)
+install(PROGRAMS launch.sh DESTINATION ${BIN_INSTALL_DIR})
 
 link_directories(${CMAKE_INSTALL_PREFIX}/lib)   # NOTE: This must be before add_executable :/
 
