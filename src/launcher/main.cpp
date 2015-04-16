@@ -15,12 +15,12 @@
 //#include <unistd.h>
 
 //#include <cutils/properties.h>
-//#include <binder/IPCThreadState.h>
-#if 0 // See note in ProcessGlobals.cpp
-//#include <binder/ProcessState.h>
-#else
-#include "ProcessGlobals.h"
-#endif
+#include <binder/IPCThreadState.h>
+#include <binder/ProcessState.h>
+// #if 0 // See note in ProcessGlobals.cpp
+// #else
+// #include "ProcessGlobals.h"
+// #endif
 //#include <utils/Log.h>
 #include <cutils/process_name.h>
 //#include <cutils/memory.h>
@@ -30,6 +30,7 @@
 
 #include "shashlikversion.h"
 #include "AppRuntime.h"
+#include "init_util.h"
 
 
 #define PROGRAM_NAME "shashlik-launcher"
@@ -89,14 +90,14 @@ int main(int argc, char* const argv[])
 #endif
 
     // These are global variables in ProcessState.cpp
-    mArgC = argc;
-    mArgV = argv;
+//     mArgC = argc;
+//     mArgV = argv;
 
-    mArgLen = 0;
-    for (int i=0; i<argc; i++) {
-        mArgLen += strlen(argv[i]) + 1;
-    }
-    mArgLen--;
+//     mArgLen = 0;
+//     for (int i=0; i<argc; i++) {
+//         mArgLen += strlen(argv[i]) + 1;
+//     }
+//     mArgLen--;
 
     AppRuntime runtime;
     const char* argv0 = argv[0];
@@ -142,6 +143,17 @@ int main(int argc, char* const argv[])
     }
 
     runtime.setParentDir(parentDir);
+
+    {
+        int fd = create_socket("zygote", SOCK_STREAM, 666, 0, 0);
+        if(fd < 0)
+            return fd;
+        int size = snprintf(NULL, 0, "%d", fd) + 1;
+        char *ANDROID_SOCKET_zygote = (char *)alloca(size);
+        ANDROID_SOCKET_zygote[size] = '\0';
+        snprintf(ANDROID_SOCKET_zygote, size, "%d", fd);
+        setenv("ANDROID_SOCKET_zygote", ANDROID_SOCKET_zygote, 1);
+    }
 
     if (zygote) {
         runtime.start("com.android.internal.os.ZygoteInit",
