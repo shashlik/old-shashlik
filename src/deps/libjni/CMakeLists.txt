@@ -3,6 +3,7 @@ project(libjni)
 set(JNI_SOURCE_DIR ${ANDROID_FRAMEWORKS_BASE}/core/jni)
 
 #find_package(KF5Archive NO_MODULE)
+find_package(LibCAP REQUIRED) # required for zygote init, that is, sys/capability.h
 
 add_definitions(-DHAVE_ANDROID_OS   # To make cutils/trace work.  FIXME: Check what other consequences this has.
                 -fpermissive  # FIXME: for pointer to int conversion in printf on x86_64
@@ -11,6 +12,7 @@ add_definitions(-DHAVE_ANDROID_OS   # To make cutils/trace work.  FIXME: Check w
                 -DNO_SUPPORT_JS_BINDING -DQT_NO_WHEELEVENT -DKHTML_NO_XBL
                 -U__APPLE__
                 -DPACKED=""
+                -DEGL_TRACE=1
                 -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
                 -DSK_BUILD_FOR_ANDROID # lololo skia internals
 )
@@ -34,6 +36,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${ANDROID_FRAMEWORKS_BASE}/include
 #                     ${GENERAL_SOURCE_PATH}/bionic/libc/private
                     ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified string.h
+                    ${LibCAP_INCLUDE_DIRS}
 )
 
 set(libjni_SRCS
@@ -157,7 +160,7 @@ set(libjni_SRCS
     ${JNI_SOURCE_DIR}/android_server_NetworkManagementSocketTagger.cpp
     ${JNI_SOURCE_DIR}/android_server_Watchdog.cpp
     ${JNI_SOURCE_DIR}/android_ddm_DdmHandleNativeHeap.cpp
-#     ${JNI_SOURCE_DIR}/com_android_internal_os_ZygoteInit.cpp
+    ${JNI_SOURCE_DIR}/com_android_internal_os_ZygoteInit.cpp
     ${JNI_SOURCE_DIR}/android_backup_BackupDataInput.cpp
     ${JNI_SOURCE_DIR}/android_backup_BackupDataOutput.cpp
     ${JNI_SOURCE_DIR}/android_backup_FileBackupHelperBase.cpp
