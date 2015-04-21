@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.8)
 
 
 # General definitions
@@ -19,7 +19,9 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_SOURCE_DI
 # For Qt5 and KF5 stuff, you must set the CMake module path first. See
 # BUILDING for how to do that.
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Core)
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Gui REQUIRED)
+find_package(Qt5Quick REQUIRED)
 
 set(KF5_VERSION "5.0.0") # handled by release scripts
 set(KF5_DEP_VERSION "5.0.0") # handled by release scripts
@@ -32,6 +34,8 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
+
+find_package(KF5I18n)
 
 find_package(FFI REQUIRED)
 find_package(OpenSSL REQUIRED)
