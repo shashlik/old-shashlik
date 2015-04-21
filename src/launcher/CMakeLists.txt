@@ -61,14 +61,11 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(shashlik_launcher PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
-set_target_properties(shashlik_launcher PROPERTIES
-    OUTPUT_NAME shashlik-launcher.bin
-)
-
 target_link_libraries(shashlik_launcher
                       dvm
 )
 
-install(TARGETS shashlik_jni DESTINATION ${LIB_INSTALL_DIR})
-install(TARGETS shashlik_launcher DESTINATION ${BIN_INSTALL_DIR} )
-install(PROGRAMS shashlik-launcher DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS shashlik_jni DESTINATION ${ANDROID_LIB_DIR})
+install(TARGETS shashlik_launcher DESTINATION ${ANDROID_BIN_DIR})
+
+add_subdirectory(controller)
