@@ -3,7 +3,7 @@ project(libhardware)
 set(REPO_PATH ${GENERAL_SOURCE_PATH}/libhardware)
 
 set(libhardware_SRCS
-    ${REPO_PATH}/hardware.c
+    hardware.c
 )
 
 set(MODULES_PATH ${REPO_PATH}/modules)
