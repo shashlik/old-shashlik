@@ -32,7 +32,7 @@ target_link_libraries(shashlikutils
                       ${QT5CORE32_LIBRARIES}
 )
 
-install(TARGETS shashlikutils DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS shashlikutils DESTINATION ${ANDROID_LIB_DIR})
 install(FILES
         ${libshashlikutils_HEADERS}
         DESTINATION include)

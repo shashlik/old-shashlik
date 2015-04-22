@@ -102,7 +102,7 @@ if(FORCE_32BIT_BUILD)
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(cutils pthread resolv)
 
-install(TARGETS cutils DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS cutils DESTINATION ${ANDROID_LIB_DIR})
 install(FILES
         ${cutils_HEADERS}
         DESTINATION include/cutils)

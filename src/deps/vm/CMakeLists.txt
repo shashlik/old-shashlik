@@ -216,7 +216,7 @@ if(FORCE_32BIT_BUILD)
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(dvm dex shashlik_jni ${FFI_LIBRARIES})
 
-install(TARGETS dvm DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS dvm DESTINATION ${ANDROID_LIB_DIR})
 install(FILES
         ${vm_HEADERS}
         DESTINATION include/dex)

@@ -189,7 +189,7 @@ target_link_libraries(jni ffi skia safe-iop androidfw nativehelper sqlite3 strip
 			  #Qt5::Core
 )
 
-install(TARGETS jni DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS jni DESTINATION ${ANDROID_LIB_DIR})
 install(FILES
         ${libjni_HEADERS}
         DESTINATION include/libjni)

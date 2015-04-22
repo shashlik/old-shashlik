@@ -83,7 +83,7 @@ target_link_libraries(binder
                       log utils cutils
                       )
 
-install(TARGETS binder DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS binder DESTINATION ${ANDROID_LIB_DIR})
 install(FILES
         ${binder_LIB_HEADERS}
         DESTINATION include/binder)

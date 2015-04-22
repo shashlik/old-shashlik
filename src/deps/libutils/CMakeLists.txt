@@ -102,7 +102,7 @@ if(FORCE_32BIT_BUILD)
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(utils pthread corkscrew)
 
-install(TARGETS utils DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS utils DESTINATION ${ANDROID_LIB_DIR})
 install(FILES
         ${utils_HEADERS}
         DESTINATION include/utils)

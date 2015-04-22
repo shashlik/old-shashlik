@@ -83,7 +83,7 @@ public:
         env.insert("ANDROID_STORAGE", QString("/storage").prepend(androidRootDir));
         env.insert("ASEC_MOUNTPOINT", QString("/mnt/asec").prepend(androidRootDir));
         env.insert("LOOP_MOUNTPOINT", QString("/mnt/obb").prepend(androidRootDir));
-        env.insert("HAL_LIBRARY_PATH1", QString("/lib64/hw").prepend(libraryRoot));
+        env.insert("HAL_LIBRARY_PATH1", QString("/system/lib/hw").prepend(androidRootDir));
 
         env.insert("ANDROID_BOOTLOGO", "1");
 

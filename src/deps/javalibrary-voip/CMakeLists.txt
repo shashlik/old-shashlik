@@ -34,7 +34,7 @@ set(voip_SRCS
 
 foreach(_fileNameAndPathWithoutExtension ${aidl_entries_to_handle})
     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${_fileNameAndPathWithoutExtension}.java
-        COMMAND aidl -d${CMAKE_CURRENT_BINARY_DIR}/${_fileNameAndPathWithoutExtension}.P -b -I${REPO_PATH} -I${REPO_PATH}/src -I${REPO_PATH}/src/java -I${GENERAL_SOURCE_PATH}/frameworks-base/core/java ${REPO_PATH}/${_fileNameAndPathWithoutExtension}.aidl  ${CMAKE_CURRENT_BINARY_DIR}/${_fileNameAndPathWithoutExtension}.java
+        COMMAND aidl -d${CMAKE_CURRENT_BINARY_DIR}/${_fileNameAndPathWithoutExtension}.P -b -I${REPO_PATH} -I${REPO_PATH}/src -I${REPO_PATH}/src/java -I${ANDROID_FRAMEWORKS_BASE}/core/java ${REPO_PATH}/${_fileNameAndPathWithoutExtension}.aidl  ${CMAKE_CURRENT_BINARY_DIR}/${_fileNameAndPathWithoutExtension}.java
         )
     list(APPEND javalibrary_voip_interface_SRCS "${CMAKE_CURRENT_BINARY_DIR}/${_fileNameAndPathWithoutExtension}.java")
 endforeach()

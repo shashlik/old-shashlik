@@ -61,4 +61,4 @@ target_link_libraries(android_servers
     EGL
     GLESv2
 )
-install(TARGETS android_servers DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS android_servers DESTINATION ${ANDROID_LIB_DIR})

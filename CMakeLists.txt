@@ -89,7 +89,7 @@ add_definitions(-DHAVE_SYS_UIO_H
 # itself, and used by the vm's various bits to load and check things.
 set(ANDROID_ROOT ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/android)
 set(ANDROID_BIN_DIR ${ANDROID_ROOT}/system/bin)
-set(ANDROID_LIB_DIR ${LIB_INSTALL_DIR})
+set(ANDROID_LIB_DIR ${ANDROID_ROOT}/system/lib)
 
 # ----------------------------------------------------------------
 # Various project settings
@@ -125,7 +125,7 @@ set(GENERAL_SOURCE_PATH ${CMAKE_SOURCE_DIR}/..)
 set(ANDROID_CORE_PATH              ${GENERAL_SOURCE_PATH}/android-core)
 set(ANDROID_LIBCORE_PATH           ${GENERAL_SOURCE_PATH}/android-libcore)
 set(ANDROID_FRAMEWORKS_NATIVE_PATH ${GENERAL_SOURCE_PATH}/android-frameworks-native)
-set(ANDROID_FRAMEWORKS_BASE        ${GENERAL_SOURCE_PATH}/frameworks-base)
+set(ANDROID_FRAMEWORKS_BASE        ${GENERAL_SOURCE_PATH}/android-frameworks-base)
 set(DALVIK_PATH                    ${GENERAL_SOURCE_PATH}/dalvik)
 set(NATIVEHELPER_PATH              ${GENERAL_SOURCE_PATH}/libnativehelper)
 set(SAFE_IOP_PATH                  ${GENERAL_SOURCE_PATH}/safe-iop)

@@ -37,7 +37,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(corkscrew PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
-install(TARGETS corkscrew DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS corkscrew DESTINATION ${ANDROID_LIB_DIR})
 #install(FILES
 #        ${corkscrew_HEADERS}
 #        DESTINATION include/corkscrew)
