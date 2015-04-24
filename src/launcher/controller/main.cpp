@@ -21,7 +21,7 @@
 
 #include <stdio.h>
 
-#include <QGuiApplication>
+#include <QApplication>
 #include <QStringList>
 #include <qcommandlineparser.h>
 #include <qtimer.h>
@@ -32,7 +32,7 @@
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
     app.setApplicationName("shashlik-launcher");
     app.setApplicationVersion("0.1");
 
@@ -68,6 +68,15 @@ int main(int argc, char *argv[])
     Controller* controller = new Controller(&app);
     if(parser.isSet(jarArgument)) {
         // do a thing with this thing...
+        if(!controller->zygoteRunning() || !controller->servicemanagerRunning() || !controller->surfaceflingerRunning()) {
+            // if any one of the services above isn't running, restart everything - we must assume something's broken
+            controller->restart();
+        }
+        if(!controller->zygoteRunning() || !controller->servicemanagerRunning() || !controller->surfaceflingerRunning()) {
+            // never mind for now, as these always return false...
+            // If this happens when the check is actually functional, we should be quitting with a useful error
+        }
+        controller->runJar(parser.value(jarArgument));
     }
     else if(parser.isSet(startArgument)) {
         controller->start();

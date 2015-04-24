@@ -31,10 +31,17 @@ public:
     Controller(QObject* parent = 0);
     virtual ~Controller();
 
+    /// TODO this should do real things, like check PIDs and report back.
+    bool zygoteRunning() { return false; }
+    bool surfaceflingerRunning() { return false; }
+    bool servicemanagerRunning() { return false; }
+
 Q_SIGNALS:
     void onError(QString description);
 
 public Q_SLOTS:
+    void runJar(const QString& jarFile);
+
     void startZygote();
     void startSurfaceflinger();
     void startServicemanager();

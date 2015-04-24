@@ -21,10 +21,14 @@
 
 #include "Controller.h"
 
+#include <KLocalizedString>
+
 #include <QCoreApplication>
 #include <QDebug>
+#include <QMessageBox>
 #include <qdir.h>
 #include <qmetaobject.h>
+#include <qtimer.h>
 
 class Controller::Private
 {
@@ -120,7 +124,36 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
     QProcess* proc = qobject_cast<QProcess*>(sender());
     if(proc) {
-        qDebug() << "******\n*" << proc->program() << "has exited\n******";
+        if(proc == d->zygote) {
+            QMessageBox::critical(0, i18n("Shashlik Controller Error"), "Zygote has exited - if zygote exits, everything should be killed!");
+            stop();
+            // grace to allow things to shut down...
+            QTimer::singleShot(1000, qApp, SLOT(quit()));
+        }
+        else if(proc == d->serviceManager) {
+            QMessageBox::critical(0, i18n("Shashlik Controller Error"), "The service manager has exited - if this happens, nothing will work and we should just cut our losses and quit everything else.");
+            stop();
+            // grace to allow things to shut down...
+            QTimer::singleShot(1000, qApp, SLOT(quit()));
+        }
+        else if(proc == d->surfaceflinger) {
+            QMessageBox::critical(0, i18n("Shashlik Controller Error"), "SurfaceFlinger has exited. Normally this would make everything fail, but right now it simply fails because drivers, so we're /not/ going to quit everything. Otherwise it should first be attempted restarted, and then quit if it still fails.");
+        }
+        else {
+            QMessageBox::critical(0, i18n("Shashlik Controller Error"), QString("%1 has exited").arg(proc->program()));
+        }
+    }
+}
+
+void Controller::runJar(const QString& jarFile)
+{
+    if(QFile::exists(jarFile)) {
+        QProcess* process = d->environment(this);
+        QProcessEnvironment env = process->processEnvironment();
+        env.insert("CLASSPATH", d->androidRootDir + "/system/framework/launch.jar");
+        process->setProcessEnvironment(env);
+        qDebug() << "Launching the application contained within" << jarFile;
+        process->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << d->androidRootDir + "/system/bin/" << "com.android.commands.launch.Launch" << jarFile);
     }
 }
 
