@@ -181,7 +181,20 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(jni PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
-target_link_libraries(jni ffi skia safe-iop androidfw nativehelper sqlite3 stripped_bionic usbhost memtrack netutils gui input #KF5::Archive
+target_link_libraries(jni
+ffi
+skia
+safe-iop
+androidfw
+nativehelper
+sqlite3
+stripped_bionic
+usbhost
+memtrack
+netutils
+gui
+input
+#KF5::Archive
     GLESv1_CM
     #GLESv2
 #     icuuc icui18n - these two included via sqlite3

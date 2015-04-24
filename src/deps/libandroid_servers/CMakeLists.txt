@@ -43,14 +43,14 @@ target_include_directories(android_servers
 target_link_libraries(android_servers
 #     android_runtime
     androidfw
-    binder
-    cutils
-    log
-    hardware
+#     binder
+#     cutils
+#     log
+#     hardware
 #     hardware_legacy
     nativehelper
-    utils
-    ui
+#     utils
+#     ui
     input
 #     inputservice
 #     sensorservice
@@ -58,7 +58,7 @@ target_link_libraries(android_servers
     gui
     usbhost
 #     suspend
-    EGL
-    GLESv2
+#     EGL
+#     GLESv2
 )
 install(TARGETS android_servers DESTINATION ${ANDROID_LIB_DIR})

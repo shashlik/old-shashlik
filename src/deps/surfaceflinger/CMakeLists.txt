@@ -55,16 +55,16 @@ target_compile_definitions(libsurfaceflinger
     -DPRESENT_TIME_OFFSET_FROM_VSYNC_NS=0
 )
 target_link_libraries(libsurfaceflinger
-    cutils
-    log
-    dl
-    hardware
-    utils
-    EGL
+#     cutils
+#     log
+#     dl
+#     hardware
+#     utils
+#     EGL
     GLESv1_CM
-    GLESv2
-    binder
-    ui
+#     GLESv2
+#     binder
+#     ui
     gui
 )
 target_include_directories(libsurfaceflinger
@@ -83,10 +83,10 @@ target_compile_definitions(surfaceflinger
 )
 target_link_libraries(surfaceflinger
     libsurfaceflinger
-    cutils
-    log
-    binder
-    utils
+#     cutils
+#     log
+#     binder
+#     utils
 )
 target_include_directories(surfaceflinger
     PRIVATE

@@ -20,7 +20,10 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(input PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(input
-    log cutils utils binder
+#     log
+#     cutils
+#     utils
+    binder
 )
 target_include_directories(input
     PRIVATE
