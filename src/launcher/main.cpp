@@ -160,13 +160,13 @@ int main(int argc, char* const argv[])
                 startSystemServer ? "start-system-server" : "");
     } else if (className) {
         // Remainder of args get passed to startup class main()
-	runtime.setClassName(className);
+        runtime.setClassName(className);
         runtime.setArgcArgv(argc - i, argv + i);
         runtime.start("com.android.internal.os.RuntimeInit",
                 application ? "application" : "tool");
     } else {
-	fprintf(stderr, "%s %s error: no class name or --zygote supplied.\n",
-		PROGRAM_NAME, SHASHLIK_VERSION_STRING);
+        fprintf(stderr, "%s %s error: no class name or --zygote supplied.\n",
+        PROGRAM_NAME, SHASHLIK_VERSION_STRING);
         app_usage();
         LOG_ALWAYS_FATAL("app_process: no class name or --zygote supplied.");
         return 10;
