@@ -41,8 +41,8 @@ int main(int argc, char *argv[])
     QCommandLineOption helpArgument =  parser.addHelpOption();
     QCommandLineOption versionArgument = parser.addVersionOption();
 
-    QCommandLineOption jarArgument("launchjar", i18n("Run the jar passed as an argument. This will install and run the jar, and launch any services required to do so."), "jarfile");
-    parser.addOption(jarArgument);
+    QCommandLineOption apkArgument("launchapk", i18n("Run the apk passed as an argument. This will install and run the apk, and launch any services required to do so."), "apkfile");
+    parser.addOption(apkArgument);
 
     QCommandLineOption guiArgument("ui", i18n("Start the graphical UI. Default behaviour."));
     parser.addOption(guiArgument);
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     parser.process(app);
 
     Controller* controller = new Controller(&app);
-    if(parser.isSet(jarArgument)) {
+    if(parser.isSet(apkArgument)) {
         // do a thing with this thing...
         if(!controller->zygoteRunning() || !controller->servicemanagerRunning() || !controller->surfaceflingerRunning()) {
             // if any one of the services above isn't running, restart everything - we must assume something's broken
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
             // never mind for now, as these always return false...
             // If this happens when the check is actually functional, we should be quitting with a useful error
         }
-        controller->runJar(parser.value(jarArgument));
+        controller->runJar(parser.value(apkArgument));
     }
     else if(parser.isSet(startArgument)) {
         controller->start();
