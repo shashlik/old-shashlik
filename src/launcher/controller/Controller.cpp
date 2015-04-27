@@ -45,10 +45,17 @@ public:
         thisAppDir.cd("lib64/android");
         androidRootDir = thisAppDir.canonicalPath();
     }
+    ~Private()
+    {
+        Q_FOREACH(QProcess* proc, applications) {
+            proc->terminate();
+        }
+    }
 
     QProcess* serviceManager;
     QProcess* surfaceflinger;
     QProcess* zygote;
+    QList<QProcess*> applications;
 
     QString appDir;
     QString libraryRoot;
@@ -97,6 +104,14 @@ public:
         process->setProcessEnvironment(env);
         return process;
     }
+
+    // We may need to ensure that zygote is actually ready to take connections before attempting to do certain things
+    bool waitForZygoteReady() {
+        // show the throbber dialogue
+        // check zygote, keep checking
+        // if zygote takes a long time, tell the user
+        return true;
+    }
 };
 
 Controller::Controller(QObject* parent)
@@ -115,8 +130,22 @@ void Controller::logSomething()
 {
     QProcess* proc = qobject_cast<QProcess*>(sender());
     if(proc) {
-        QString output = proc->readAll();
-        printf(qPrintable(output));
+        QString origin;
+        if(proc == d->zygote) {
+            origin = "Zygote";
+        } else if(proc == d->serviceManager) {
+            origin = "Servicemanager";
+        } else if(proc == d->surfaceflinger) {
+            origin = "SurfaceFlinger";
+        } else if(d->applications.contains(proc)) {
+            origin = proc->objectName();
+        } else {
+            origin = QString("Unknown Process (%1)").arg(QString::number(proc->processId()));
+        }
+        while(proc->canReadLine()) {
+            QString output = QString("%1: %2").arg(origin).arg(QString(proc->readLine()));
+            printf(qPrintable(output));
+        }
     }
 }
 
@@ -139,6 +168,16 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
         else if(proc == d->surfaceflinger) {
             QMessageBox::critical(0, i18n("Shashlik Controller Error"), "SurfaceFlinger has exited. Normally this would make everything fail, but right now it simply fails because drivers, so we're /not/ going to quit everything. Otherwise it should first be attempted restarted, and then quit if it still fails.");
         }
+        else if(d->applications.contains(proc)) {
+            if(proc->exitCode() == QProcess::CrashExit) {
+                QMessageBox::critical(0, i18n("Shashlik Controller Error"), QString("The application %1 has quit unexpectedly. Something gone done blown up.").arg(proc->objectName()));
+            }
+            else {
+                // This is not always true - the launcher will exit cleanly, even if the vm died for some reason or another. This needs fixing.
+                printf("Normal exit from application %s\n", proc->objectName().toLocal8Bit().data());
+            }
+            QTimer::singleShot(1000, qApp, SLOT(quit()));
+        }
         else {
             QMessageBox::critical(0, i18n("Shashlik Controller Error"), QString("%1 has exited").arg(proc->program()));
         }
@@ -147,13 +186,19 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
 
 void Controller::runJar(const QString& jarFile)
 {
-    if(QFile::exists(jarFile)) {
+    if(QFile::exists(jarFile) && d->waitForZygoteReady()) {
         QProcess* process = d->environment(this);
+        d->applications.append(process);
+        connect(process, SIGNAL(readyRead()), this, SLOT(logSomething()));
+        connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
+        process->setProcessChannelMode(QProcess::MergedChannels);
         QProcessEnvironment env = process->processEnvironment();
         env.insert("CLASSPATH", d->androidRootDir + "/system/framework/launch.jar");
         process->setProcessEnvironment(env);
         qDebug() << "Launching the application contained within" << jarFile;
         process->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << d->androidRootDir + "/system/bin/" << "com.android.commands.launch.Launch" << jarFile);
+        process->setObjectName(jarFile.split("/").last());
+        process->waitForStarted();
     }
 }
 

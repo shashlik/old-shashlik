@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
         // do a thing with this thing...
         if(!controller->zygoteRunning() || !controller->servicemanagerRunning() || !controller->surfaceflingerRunning()) {
             // if any one of the services above isn't running, restart everything - we must assume something's broken
-            controller->restart();
+//             controller->start();
         }
         if(!controller->zygoteRunning() || !controller->servicemanagerRunning() || !controller->surfaceflingerRunning()) {
             // never mind for now, as these always return false...
