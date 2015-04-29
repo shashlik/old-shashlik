@@ -4,8 +4,46 @@ file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/dev)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/proc)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/sys)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/system)
+
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/misc)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/adb)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/bluedroid)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/bluetooth)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/keystore)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/keychain)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/radio)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/sms)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/zoneinfo)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/vpn)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/systemkeys)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/misc/wifi)
+    # give system access to wpa_supplicant.conf for backup and restore
+#     chmod 0660 /data/misc/wifi/wpa_supplicant.conf
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/local)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/misc/media)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/dalvik-cache)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/data)
+
+# For security reasons, /data/local/tmp should always be empty.
+# Do not place files or directories in /data/local/tmp
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/local/tmp)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/data)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/app-private)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/app)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/property)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/ssh)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/ssh/empty)
+
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/dalvik-cache)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/resource-cache)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/lost+found)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/drm)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/mediadrm)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/bugreports)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/data/com.android.shell/files/bugreports)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/security)
+
 install(DIRECTORY ${PROJECT_BINARY_DIR}/android DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR})
 
 set(PostInstallCommands ${PROJECT_BINARY_DIR}/PostInstallCommands.cmake)
