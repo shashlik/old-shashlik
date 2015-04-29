@@ -34,6 +34,7 @@ add_subdirectory(libsync)
 add_subdirectory(libui)
 add_subdirectory(libinput)
 add_subdirectory(opengl-libs)     # frameworks-native
+add_subdirectory(installd)
 
 # ----------------------------------------------------------------
 #                             Dalvik
@@ -57,7 +58,10 @@ add_subdirectory(javalibrary-voip)
 add_subdirectory(javalibrary-telephony)
 add_subdirectory(libjavacore)
 
+add_subdirectory(javalibrary-shashlik)
+
 #java tools
+add_subdirectory(javalibrary-am)
 #add_subdirectory(dexgen)
 #add_subdirectory(hit)
 #add_subdirectory(tools/dexdeps)
