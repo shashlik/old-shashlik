@@ -41,13 +41,15 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void runJar(const QString& jarFile);
+    void runAM(const QString& arguments);
 
     void startZygote();
     void startSurfaceflinger();
     void startServicemanager();
+    void startInstalld();
 
     void stop();
-    void start() { startServicemanager(); startSurfaceflinger(); startZygote(); };
+    void start() { startServicemanager(); startInstalld(); startSurfaceflinger(); startZygote(); };
     void restart() { stop(); start(); }
 
     void logSomething();

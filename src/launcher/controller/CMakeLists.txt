@@ -3,6 +3,7 @@ project(shashlik-controller)
 set(controller_SRCS
     main.cpp
     Controller.cpp
+    init_util.c
 )
 
 add_executable(shashlik-controller ${controller_SRCS})

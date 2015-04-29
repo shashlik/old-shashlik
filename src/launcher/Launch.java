@@ -71,43 +71,50 @@ public class Launch {
      * @param args The command-line arguments
      */
     public static void main(String[] args) {
-        
         (new Launch()).run(args);
     }
-    private void init(){
-    IPackageManager mPM = IPackageManager.Stub.asInterface(ServiceManager.getService("package"));
-    mAm = ActivityManagerNative.getDefault();
+    private void init() throws AndroidException {
+        IPackageManager mPM = IPackageManager.Stub.asInterface(ServiceManager.getService("package"));
+        mAm = ActivityManagerNative.getDefault();
+        if (mAm == null) {
+            throw new AndroidException("Can't connect to activity manager; is the system running?");
+        }
     }
 
     private void run(String[] args) {
-    init();
+        try {
+            init();
+        }
+        catch(AndroidException e) {
+            log("Activity manager is null - this is not a viable situation when we need to launch activities!");
+            return;
+        }
         if (args.length <1) {
             showUsage();
             return;
         }
 
         String command = args[0];
-    if(args.length == 1){
-        PackageInfo info = getPackageArchiveInfo(command, PackageManager.GET_ACTIVITIES);
-        if(info != null){
-            ApplicationInfo appInfo = info.applicationInfo;
-            String packageName = appInfo.packageName;
-            String className = info.activities[0].name;
-            log("-->packageName=" + packageName);
-            log("-->className=" + className);
-            log("-->all activities:");
-            for(int i = 0; i <info.activities.length; i++){
-                log(info.activities[i]);
+        if(args.length == 1){
+            PackageInfo info = getPackageArchiveInfo(command, PackageManager.GET_ACTIVITIES);
+            if(info != null){
+                ApplicationInfo appInfo = info.applicationInfo;
+                String packageName = appInfo.packageName;
+                String className = info.activities[0].name;
+                log("-->packageName=" + packageName);
+                log("-->className=" + className);
+                log("-->all activities:");
+                for(int i = 0; i <info.activities.length; i++){
+                    log(info.activities[i]);
+                }
+                startApp(packageName, className);
+                //String execCmd= "am start -n " + packageName + "/" + className;
+                //log(execCmd);
+                //runLinuxCmd(execCmd);
             }
-        
-            startApp(packageName, className);
-            //String execCmd= "am start -n " + packageName + "/" + className;
-            //log(execCmd);
-            //runLinuxCmd(execCmd);
+            return ;
         }
-        return ;
-    }
-    System.err.println("Error: Invalid arguments for command: " + command);
+        System.err.println("Error: Invalid arguments for command: " + command);
         showUsage();
     }
 
@@ -139,14 +146,20 @@ public class Launch {
         }
         return process;
     }
+
     private void startApp(String packageName, String className){
+        log("Creating intent...");
         Intent intent = new Intent();
+        log("Adding new task activity flag");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        log("Creating component for this package and class: " + packageName + " " + className);
         ComponentName comp = new ComponentName(packageName, className);
+        log("Setting component for the intent");
         intent.setComponent(comp);
         try{
             //mAm.startActivityAndWait(null, null, intent, mimeType,
             //                    null, null, 0, mStartFlags, mProfileFile, fd, null, mUserId);
+            log("Attempt to start the activity for this package using activity manager " + mAm);
             mAm.startActivityAndWait(null, null, intent, "",
                                 null, null, 0, 0, "", null, null, 0);
         }catch(RemoteException e){
@@ -158,6 +171,7 @@ public class Launch {
         System.err.println("usage: input ...");
         System.err.println("       launch <path of apk>");
     }
+
     private void log(Object o){
         System.err.println("" + o);
     }

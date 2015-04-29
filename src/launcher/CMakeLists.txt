@@ -26,7 +26,6 @@ include_directories(${LIBBINDER_INCLUDES}
 set(shashlik_launcher_SRCS
     main.cpp
     AppRuntime.cpp
-    init_util.c
 #     ProcessGlobals.cpp
 )
 

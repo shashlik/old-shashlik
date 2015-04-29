@@ -34,7 +34,8 @@ class Controller::Private
 {
 public:
     Private()
-        : serviceManager(0)
+        : installd(0)
+        , serviceManager(0)
         , surfaceflinger(0)
         , zygote(0)
     {
@@ -52,6 +53,7 @@ public:
         }
     }
 
+    QProcess* installd;
     QProcess* serviceManager;
     QProcess* surfaceflinger;
     QProcess* zygote;
@@ -84,7 +86,7 @@ public:
         env.insert("LD_LIBRARY_PATH", ldpath.join(QLatin1String(":")));
 
         QString jarPath = QString("/system/framework").prepend(androidRootDir);
-        QStringList bootclasspath = QStringList() << "JARPATH/core.jar" << "JARPATH/conscrypt.jar" << "JARPATH/bouncycastle.jar" << "JARPATH/okhttp.jar" << "JARPATH/ext.jar" << "JARPATH/framework.jar" << "JARPATH/telephony-common.jar" << "JARPATH/voip-common.jar" << "JARPATH/framework2.jar";
+        QStringList bootclasspath = QStringList() << "JARPATH/core.jar" << "JARPATH/conscrypt.jar" << "JARPATH/bouncycastle.jar" << "JARPATH/okhttp.jar" << "JARPATH/ext.jar" << "JARPATH/framework.jar" << "JARPATH/telephony-common.jar" << "JARPATH/voip-common.jar" << "JARPATH/framework2.jar" << "JARPATH/shashlik.jar";
         bootclasspath.replaceInStrings("JARPATH", jarPath);
         env.insert("BOOTCLASSPATH", bootclasspath.join(QLatin1String(":")));
 
@@ -137,6 +139,8 @@ void Controller::logSomething()
             origin = "Servicemanager";
         } else if(proc == d->surfaceflinger) {
             origin = "SurfaceFlinger";
+        } else if(proc == d->installd) {
+            origin = "Installer Daemon";
         } else if(d->applications.contains(proc)) {
             origin = proc->objectName();
         } else {
@@ -166,7 +170,10 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
             QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->surfaceflinger) {
-            QMessageBox::critical(0, i18n("Shashlik Controller Error"), "SurfaceFlinger has exited. Normally this would make everything fail, but right now it simply fails because drivers, so we're /not/ going to quit everything. Otherwise it should first be attempted restarted, and then quit if it still fails.");
+            QMessageBox::information(0, i18n("Shashlik Controller Error"), "SurfaceFlinger has exited. Normally this would make everything fail, but right now it simply fails because drivers, so we're /not/ going to quit everything. Otherwise it should first be attempted restarted, and then quit if it still fails.");
+        }
+        else if(proc == d->installd) {
+            QMessageBox::information(0, i18n("Shashlik Controller Error"), "The Installer daemon has exited. We'll just let that slide.");
         }
         else if(d->applications.contains(proc)) {
             if(proc->exitCode() == QProcess::CrashExit) {
@@ -202,6 +209,24 @@ void Controller::runJar(const QString& jarFile)
     }
 }
 
+void Controller::runAM(const QString& arguments)
+{
+    if(d->waitForZygoteReady()) {
+        QProcess* process = d->environment(this);
+        d->applications.append(process);
+        connect(process, SIGNAL(readyRead()), this, SLOT(logSomething()));
+        connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
+        process->setProcessChannelMode(QProcess::MergedChannels);
+        QProcessEnvironment env = process->processEnvironment();
+        env.insert("CLASSPATH", d->androidRootDir + "/system/framework/am.jar");
+        process->setProcessEnvironment(env);
+        qDebug() << "Launching the activity manager with the arguents" << arguments;
+        process->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << d->androidRootDir + "/system/bin/" << "com.android.commands.am.Am" << arguments);
+        process->setObjectName("ActivityManager");
+        process->waitForStarted();
+    }
+}
+
 void Controller::startZygote()
 {
     d->zygote = d->environment(this);
@@ -226,7 +251,6 @@ void Controller::startSurfaceflinger()
     // get process ID now
 }
 
-
 void Controller::startServicemanager()
 {
     d->serviceManager = d->environment(this);
@@ -239,10 +263,23 @@ void Controller::startServicemanager()
     // get process ID now
 }
 
+void Controller::startInstalld()
+{
+    d->installd = d->environment(this);
+    connect(d->installd, SIGNAL(readyRead()), this, SLOT(logSomething()));
+    connect(d->installd, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
+    d->installd->setProcessChannelMode(QProcess::MergedChannels);
+    qDebug() << "Attempting to start the installer daemon...";
+    d->installd->start(d->androidRootDir + "/system/bin/installd");
+    d->installd->waitForStarted();
+    // get process ID now
+}
+
 void Controller::stop()
 {
     // TODO this should be done on PID... for now, we simply kill all instances of the applications in question, because there really should be only the one
     QProcess::startDetached("killall surfaceflinger");
+    QProcess::startDetached("killall installd");
     QProcess::startDetached("killall servicemanager");
     QProcess::startDetached("killall shashlik_launcher");
 }
