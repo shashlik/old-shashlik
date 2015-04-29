@@ -31,3 +31,5 @@ target_include_directories(stripped_bionic
 )
 
 install(TARGETS stripped_bionic DESTINATION ${ANDROID_LIB_DIR})
+
+install(FILES ${BIONIC_LIBC_SRC_DIR}/zoneinfo/tzdata DESTINATION ${ANDROID_ROOT}/system/usr/share/zoneinfo)
