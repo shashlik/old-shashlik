@@ -48,6 +48,10 @@ public:
     }
     ~Private()
     {
+        if(zygote) zygote->terminate();
+        if(serviceManager) serviceManager->terminate();
+        if(surfaceflinger) surfaceflinger->terminate();
+        if(installd) installd->terminate();
         Q_FOREACH(QProcess* proc, applications) {
             proc->terminate();
         }
@@ -170,7 +174,9 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
             QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->surfaceflinger) {
-            QMessageBox::information(0, i18n("Shashlik Controller Error"), "SurfaceFlinger has exited. Normally this would make everything fail, but right now it simply fails because drivers, so we're /not/ going to quit everything. Otherwise it should first be attempted restarted, and then quit if it still fails.");
+            QMessageBox::information(0, i18n("Shashlik Controller Error"), QString("SurfaceFlinger has exited. This is a terrible thing! We should try and restart it and see if that helps (and then quit if it still doesn't). Exit code %1 and exit status %2").arg(QString::number(exitCode)).arg(QString::number(exitStatus)));
+            // grace to allow things to shut down...
+            QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->installd) {
             QMessageBox::information(0, i18n("Shashlik Controller Error"), "The Installer daemon has exited. We'll just let that slide.");
