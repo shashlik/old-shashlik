@@ -22,6 +22,7 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_SOURCE_DI
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
 find_package(Qt5Quick REQUIRED)
+find_package(Qt5Network REQUIRED)
 
 set(KF5_VERSION "5.0.0") # handled by release scripts
 set(KF5_DEP_VERSION "5.0.0") # handled by release scripts
@@ -127,7 +128,7 @@ set(ANDROID_LIBCORE_PATH           ${GENERAL_SOURCE_PATH}/android-libcore)
 set(ANDROID_FRAMEWORKS_NATIVE_PATH ${GENERAL_SOURCE_PATH}/android-frameworks-native)
 set(ANDROID_FRAMEWORKS_BASE        ${GENERAL_SOURCE_PATH}/android-frameworks-base)
 set(DALVIK_PATH                    ${GENERAL_SOURCE_PATH}/dalvik)
-set(NATIVEHELPER_PATH              ${GENERAL_SOURCE_PATH}/libnativehelper)
+set(NATIVEHELPER_PATH              ${GENERAL_SOURCE_PATH}/android-libnativehelper)
 set(SAFE_IOP_PATH                  ${GENERAL_SOURCE_PATH}/safe-iop)
 set(SKIA_PATH                      ${GENERAL_SOURCE_PATH}/skia)
 
