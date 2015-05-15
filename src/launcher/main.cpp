@@ -30,8 +30,6 @@
 
 #include "shashlikversion.h"
 #include "AppRuntime.h"
-#include "init_util.h"
-
 
 #define PROGRAM_NAME "shashlik-launcher"
 
