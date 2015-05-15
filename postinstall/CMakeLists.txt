@@ -4,6 +4,8 @@ file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/dev)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/proc)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/sys)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/system)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/system)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/system/inputmethod)
 
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/misc)
