@@ -41,7 +41,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 
 set(libjni_SRCS
     ${JNI_SOURCE_DIR}/AndroidRuntime.cpp
-#     ${JNI_SOURCE_DIR}/Time.cpp
+    ${JNI_SOURCE_DIR}/Time.cpp
     ${JNI_SOURCE_DIR}/com_android_internal_content_NativeLibraryHelper.cpp
     ${JNI_SOURCE_DIR}/com_google_android_gles_jni_EGLImpl.cpp
     ${JNI_SOURCE_DIR}/com_google_android_gles_jni_GLImpl.cpp
@@ -89,13 +89,13 @@ set(libjni_SRCS
     ${JNI_SOURCE_DIR}/android_os_SystemClock.cpp
     ${JNI_SOURCE_DIR}/android_os_SystemProperties.cpp
     ${JNI_SOURCE_DIR}/android_os_Trace.cpp
-#     ${JNI_SOURCE_DIR}/android_os_UEventObserver.cpp
+    ${JNI_SOURCE_DIR}/android_os_UEventObserver.cpp
     ${JNI_SOURCE_DIR}/android_net_LocalSocketImpl.cpp
     ${JNI_SOURCE_DIR}/android_net_NetUtils.cpp
     ${JNI_SOURCE_DIR}/android_net_TrafficStats.cpp
 #     ${JNI_SOURCE_DIR}/android_net_wifi_WifiNative.cpp
     ${JNI_SOURCE_DIR}/android_nio_utils.cpp
-#     ${JNI_SOURCE_DIR}/android_text_format_Time.cpp
+    ${JNI_SOURCE_DIR}/android_text_format_Time.cpp
     ${JNI_SOURCE_DIR}/android_util_AssetManager.cpp
     ${JNI_SOURCE_DIR}/android_util_Binder.cpp
     ${JNI_SOURCE_DIR}/android_util_EventLog.cpp
