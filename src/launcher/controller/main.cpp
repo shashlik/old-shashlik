@@ -25,6 +25,7 @@
 #include <QStringList>
 #include <qcommandlineparser.h>
 #include <qtimer.h>
+#include <QFile>
 
 #include <klocalizedstring.h>
 
@@ -33,7 +34,10 @@
 
 int main(int argc, char *argv[])
 {
-    {
+    // If the socket file already exists, assume it was created for us, and just needs to be opened...
+    if(QFile::exists(QString("%1/ANDROID_SOCKET_installd").arg(ANDROID_SOCKET_DIR))) {
+    }
+    else {
         int fd = create_socket("installd", SOCK_STREAM, 0666, getuid(), getgid());
         if(fd < 0)
             return fd;
