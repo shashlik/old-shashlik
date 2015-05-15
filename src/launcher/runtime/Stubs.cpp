@@ -236,10 +236,10 @@ int register_android_debug_JNITest(_JNIEnv*)
 //     return 0;
 // }
 // 
-int register_android_text_format_Time(_JNIEnv*)
-{
-    return 0;
-}
+// int register_android_text_format_Time(_JNIEnv*)
+// {
+//     return 0;
+// }
 // 
 // int register_android_content_AssetManager(_JNIEnv*)
 // {
@@ -460,11 +460,11 @@ int register_android_os_SELinux(_JNIEnv*)
 // {
 //     return 0;
 // }
-
-int register_android_os_UEventObserver(_JNIEnv*)
-{
-    return 0;
-}
+// 
+// int register_android_os_UEventObserver(_JNIEnv*)
+// {
+//     return 0;
+// }
 // 
 // int register_android_net_LocalSocketImpl(_JNIEnv*)
 // {
