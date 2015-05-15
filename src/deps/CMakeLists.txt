@@ -36,6 +36,9 @@ add_subdirectory(libinput)
 add_subdirectory(opengl-libs)     # frameworks-native
 add_subdirectory(installd)
 
+add_subdirectory(libbase)
+add_subdirectory(libziparchive)
+
 # ----------------------------------------------------------------
 #                             Dalvik
 
@@ -72,6 +75,7 @@ add_subdirectory(javalibrary-am)
 
 
 add_subdirectory(libbinder)
+add_subdirectory(libinputservice)
 add_subdirectory(libandroid_servers)
 add_subdirectory(servicemanager) # The application which takes care of starting and stopping services
 # TODO hook into KDE's service management infrastructure for this
