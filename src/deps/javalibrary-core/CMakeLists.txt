@@ -1188,18 +1188,18 @@ set(javalibrary_SRCS
     ${REPO_PATH}/luni/src/main/java/libcore/io/Posix.java
     ${REPO_PATH}/luni/src/main/java/libcore/io/SizeOf.java
     ${REPO_PATH}/luni/src/main/java/libcore/io/Streams.java
-    ${REPO_PATH}/luni/src/main/java/libcore/io/StrictLineReader.java
-    ${REPO_PATH}/luni/src/main/java/libcore/io/StructAddrinfo.java
-    ${REPO_PATH}/luni/src/main/java/libcore/io/StructFlock.java
-    ${REPO_PATH}/luni/src/main/java/libcore/io/StructGroupReq.java
-    ${REPO_PATH}/luni/src/main/java/libcore/io/StructLinger.java
-    ${REPO_PATH}/luni/src/main/java/libcore/io/StructPasswd.java
-    ${REPO_PATH}/luni/src/main/java/libcore/io/StructPollfd.java
-    ${REPO_PATH}/luni/src/main/java/libcore/io/StructStat.java
-    ${REPO_PATH}/luni/src/main/java/libcore/io/StructStatVfs.java
-    ${REPO_PATH}/luni/src/main/java/libcore/io/StructTimeval.java
-    ${REPO_PATH}/luni/src/main/java/libcore/io/StructUcred.java
-    ${REPO_PATH}/luni/src/main/java/libcore/io/StructUtsname.java
+#     ${REPO_PATH}/luni/src/main/java/libcore/io/StrictLineReader.java
+#     ${REPO_PATH}/luni/src/main/java/libcore/io/StructAddrinfo.java
+#     ${REPO_PATH}/luni/src/main/java/libcore/io/StructFlock.java
+#     ${REPO_PATH}/luni/src/main/java/libcore/io/StructGroupReq.java
+#     ${REPO_PATH}/luni/src/main/java/libcore/io/StructLinger.java
+#     ${REPO_PATH}/luni/src/main/java/libcore/io/StructPasswd.java
+#     ${REPO_PATH}/luni/src/main/java/libcore/io/StructPollfd.java
+#     ${REPO_PATH}/luni/src/main/java/libcore/io/StructStat.java
+#     ${REPO_PATH}/luni/src/main/java/libcore/io/StructStatVfs.java
+#     ${REPO_PATH}/luni/src/main/java/libcore/io/StructTimeval.java
+#     ${REPO_PATH}/luni/src/main/java/libcore/io/StructUcred.java
+#     ${REPO_PATH}/luni/src/main/java/libcore/io/StructUtsname.java
     ${REPO_PATH}/luni/src/main/java/libcore/math/MathUtils.java
     ${REPO_PATH}/luni/src/main/java/libcore/net/MimeUtils.java
     ${REPO_PATH}/luni/src/main/java/libcore/net/RawSocket.java
@@ -1494,6 +1494,33 @@ set(javalibrary_SRCS
     ${REPO_PATH}/libdvm/src/main/java/java/lang/reflect/Proxy.java
     ${REPO_PATH}/libdvm/src/main/java/org/apache/harmony/kernel/vm/StringUtils.java
     ${REPO_PATH}/libdvm/src/main/java/sun/misc/Unsafe.java
+
+#     ${REPO_PATH}/luni/src/main/java/android/system/ErrnoException.java
+#     ${REPO_PATH}/luni/src/main/java/android/system/GaiException.java
+    ${REPO_PATH}/luni/src/main/java/android/system/NetlinkSocketAddress.java
+#     ${REPO_PATH}/luni/src/main/java/android/system/Os.java
+#     ${REPO_PATH}/luni/src/main/java/android/system/OsConstants.java
+    ${REPO_PATH}/luni/src/main/java/android/system/PacketSocketAddress.java
+    ${REPO_PATH}/luni/src/main/java/android/system/StructAddrinfo.java
+    ${REPO_PATH}/luni/src/main/java/android/system/StructFlock.java
+    ${REPO_PATH}/luni/src/main/java/android/system/StructGroupReq.java
+    ${REPO_PATH}/luni/src/main/java/android/system/StructGroupSourceReq.java
+    ${REPO_PATH}/luni/src/main/java/android/system/StructLinger.java
+    ${REPO_PATH}/luni/src/main/java/android/system/StructPasswd.java
+    ${REPO_PATH}/luni/src/main/java/android/system/StructPollfd.java
+    ${REPO_PATH}/luni/src/main/java/android/system/StructStat.java
+    ${REPO_PATH}/luni/src/main/java/android/system/StructStatVfs.java
+    ${REPO_PATH}/luni/src/main/java/android/system/StructTimeval.java
+    ${REPO_PATH}/luni/src/main/java/android/system/StructUcred.java
+    ${REPO_PATH}/luni/src/main/java/android/system/StructUtsname.java
+#     ${REPO_PATH}/luni/src/main/java/android/util/MutableBoolean.java
+#     ${REPO_PATH}/luni/src/main/java/android/util/MutableByte.java
+#     ${REPO_PATH}/luni/src/main/java/android/util/MutableChar.java
+#     ${REPO_PATH}/luni/src/main/java/android/util/MutableDouble.java
+#     ${REPO_PATH}/luni/src/main/java/android/util/MutableFloat.java
+#     ${REPO_PATH}/luni/src/main/java/android/util/MutableInt.java
+#     ${REPO_PATH}/luni/src/main/java/android/util/MutableLong.java
+#     ${REPO_PATH}/luni/src/main/java/android/util/MutableShort.java
 )
 
 set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${PROJECT_BINARY_DIR}/core.jar -extdirs \"\")

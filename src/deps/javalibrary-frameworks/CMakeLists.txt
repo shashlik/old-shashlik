@@ -810,6 +810,7 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/os/AsyncResult.java
     ${REPO_PATH}/core/java/android/os/AsyncTask.java
     ${REPO_PATH}/core/java/android/os/BadParcelableException.java
+    ${REPO_PATH}/core/java/android/os/BaseBundle.java
     ${REPO_PATH}/core/java/android/os/BatteryManager.java
     ${REPO_PATH}/core/java/android/os/BatteryProperties.java
     ${REPO_PATH}/core/java/android/os/Binder.java
@@ -889,6 +890,7 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/os/MessageQueue.java
     ${REPO_PATH}/core/java/android/os/Parcel.java
     ${REPO_PATH}/core/java/android/os/ParcelFileDescriptor.java
+    ${REPO_PATH}/core/java/android/os/PersistableBundle.java
     ${REPO_PATH}/core/java/android/preference/CheckBoxPreference.java
     ${REPO_PATH}/core/java/android/preference/DialogPreference.java
     ${REPO_PATH}/core/java/android/preference/EditTextPreference.java
@@ -1172,6 +1174,8 @@ set(javalibrary_frameworks_SRCS
     ${REPO_PATH}/core/java/android/util/Property.java
     ${REPO_PATH}/core/java/android/util/ReflectiveProperty.java
     ${REPO_PATH}/core/java/android/util/Singleton.java
+    ${REPO_PATH}/core/java/android/util/Size.java
+    ${REPO_PATH}/core/java/android/util/SizeF.java
     ${REPO_PATH}/core/java/android/util/Slog.java
     ${REPO_PATH}/core/java/android/util/SparseArray.java
     ${REPO_PATH}/core/java/android/util/SparseBooleanArray.java
@@ -2623,3 +2627,4 @@ add_jar(framework2 SOURCES ${eventlogtags2_SRCS} ${javalibrary_framework2_SRCS} 
 install_jar(framework ${LIB_INSTALL_DIR}/android)
 install_jar(framework2 ${LIB_INSTALL_DIR}/android)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk DESTINATION ${LIB_INSTALL_DIR}/android/system/framework RENAME framework-res.apk)
+install(FILES ${REPO_PATH}/data/etc/platform.xml DESTINATION ${LIB_INSTALL_DIR}/android/system/etc/permissions)
