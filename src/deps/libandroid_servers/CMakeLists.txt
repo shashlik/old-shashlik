@@ -3,19 +3,19 @@ project(libandroid_servers)
 set(REPO_PATH ${ANDROID_FRAMEWORKS_BASE}/services/jni)
 
 set(android_servers_SRCS
-#     ${REPO_PATH}/com_android_server_AlarmManagerService.cpp
+    ${REPO_PATH}/com_android_server_AlarmManagerService.cpp
     ${REPO_PATH}/com_android_server_AssetAtlasService.cpp
     ${REPO_PATH}/com_android_server_ConsumerIrService.cpp
-#     ${REPO_PATH}/com_android_server_input_InputApplicationHandle.cpp
-#     ${REPO_PATH}/com_android_server_input_InputManagerService.cpp
-#     ${REPO_PATH}/com_android_server_input_InputWindowHandle.cpp
-#     ${REPO_PATH}/com_android_server_LightsService.cpp
+    ${REPO_PATH}/com_android_server_input_InputApplicationHandle.cpp
+    ${REPO_PATH}/com_android_server_input_InputManagerService.cpp
+    ${REPO_PATH}/com_android_server_input_InputWindowHandle.cpp
+    ${REPO_PATH}/com_android_server_LightsService.cpp
     ${REPO_PATH}/com_android_server_power_PowerManagerService.cpp
 #     ${REPO_PATH}/com_android_server_SerialService.cpp
     ${REPO_PATH}/com_android_server_SystemServer.cpp
 #     ${REPO_PATH}/com_android_server_UsbDeviceManager.cpp
 #     ${REPO_PATH}/com_android_server_UsbHostManager.cpp
-#     ${REPO_PATH}/com_android_server_VibratorService.cpp
+    ${REPO_PATH}/com_android_server_VibratorService.cpp
 #     ${REPO_PATH}/com_android_server_location_GpsLocationProvider.cpp
 #     ${REPO_PATH}/com_android_server_location_FlpHardwareProvider.cpp
 #     ${REPO_PATH}/com_android_server_connectivity_Vpn.cpp
@@ -52,7 +52,7 @@ target_link_libraries(android_servers
 #     utils
 #     ui
     input
-#     inputservice
+    inputservice
 #     sensorservice
     skia
     gui
