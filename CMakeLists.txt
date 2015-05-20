@@ -45,19 +45,8 @@ find_package(OpenGL REQUIRED)
 find_package(BISON)
 find_package(FLEX)
 
-find_package(LLVM)
-set(LLVM_RUNTIME_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/bin)
-set(LLVM_LIBRARY_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/lib)
-include(AddLLVM)
-
 find_package(Java 1.6 REQUIRED)
 include(UseJava)
-
-if(${Java_VERSION} VERSION_LESS "1.6")
-    message(FATAL_ERROR "Your Java SDK is ${Java_VERSION}, which is too low. Shashlik is based on KitKat, which explicitly requires Java 6 to compile successfully.")
-elseif(${Java_VERSION} VERSION_EQUAL "1.7" OR ${Java_VERSION} VERSION_GREATER "1.7")
-    message(FATAL_ERROR "Your Java SDK is ${Java_VERSION}, which is too high. Shashlik is based on KitKat, which explicitly requires Java 6 to compile successfully.")
-endif()
 
 include(JarjarModule)
 
