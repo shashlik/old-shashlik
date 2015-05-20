@@ -2620,7 +2620,7 @@ set(framework_R_SRCS
 )
 set_source_files_properties(${framework_R_SRCS} PROPERTIES GENERATED TRUE)
 
-set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
+set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -source 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
 find_jar(JUNIT_JAR NAMES junit)
 add_jar(framework SOURCES ${eventlogtags_SRCS} ${framework_R_SRCS} ${javalibrary_frameworks_SRCS} ${javalibrary_frameworks_interface_SRCS} INCLUDE_JARS core conscrypt ext okhttp bouncycastle ${JUNIT_JAR})
 add_jar(framework2 SOURCES ${eventlogtags2_SRCS} ${javalibrary_framework2_SRCS} INCLUDE_JARS core conscrypt ext okhttp bouncycastle framework telephony-common ${CMAKE_BINARY_DIR}/src/deps/javalibrary-telephony/telephony-common.jar ${JUNIT_JAR})

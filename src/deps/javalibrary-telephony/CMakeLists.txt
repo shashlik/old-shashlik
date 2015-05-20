@@ -225,6 +225,6 @@ foreach(_fileNameAndPathWithoutExtension ${aidl_entries_to_handle})
 endforeach()
 
 
-set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
+set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -source 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
 add_jar(telephony-common SOURCES ${eventlogtags_SRCS} ${telephony_SRCS} ${javalibrary_telephony_interface_SRCS} INCLUDE_JARS core framework voip-common)
 install_jar(telephony-common ${LIB_INSTALL_DIR}/android)
