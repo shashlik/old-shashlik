@@ -26,6 +26,7 @@
 #include <qcommandlineparser.h>
 #include <qtimer.h>
 #include <QFile>
+#include <qdir.h>
 
 #include <klocalizedstring.h>
 
@@ -34,6 +35,10 @@
 
 int main(int argc, char *argv[])
 {
+    QLatin1String socketDir(ANDROID_SOCKET_DIR);
+    if(!QDir::root().exists(socketDir)) {
+        QDir::root().mkdir(socketDir);
+    }
     // If the socket file already exists, assume it was created for us, and just needs to be opened...
     if(QFile::exists(QString("%1/ANDROID_SOCKET_installd").arg(ANDROID_SOCKET_DIR))) {
     }
