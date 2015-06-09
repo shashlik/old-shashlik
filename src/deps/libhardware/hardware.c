@@ -183,6 +183,11 @@ int hw_get_module_by_class(const char *class_id, const char *inst,
         }
     }
 
+    /* Nothing device related found, try the shashlik one */
+    if (hw_module_exists(path, sizeof(path), name, "shashlik") == 0) {
+        goto found;
+    }
+
     /* Nothing found, try the default */
     if (hw_module_exists(path, sizeof(path), name, "default") == 0) {
         goto found;
