@@ -141,7 +141,7 @@ add_definitions(-Wall -Wextra -Werror)
 add_library(javacrypto SHARED ${conscrypt_lib_SRCS})
 add_custom_command(TARGET javacrypto POST_BUILD
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    COMMAND rm libconscrypt_jni.so
+    COMMAND rm -f libconscrypt_jni.so
     COMMAND ln -s libjavacrypto.so libconscrypt_jni.so
 )
 target_link_libraries(javacrypto crypto ssl)
