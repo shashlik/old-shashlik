@@ -1,6 +1,6 @@
 project(javalibrary-telephony)
 
-set(REPO_PATH ${GENERAL_SOURCE_PATH}/telephony)
+set(REPO_PATH ${GENERAL_SOURCE_PATH}/android-telephony)
 
 set(eventlogtags_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/eventlogtags/com/android/internal/telephony/EventLogTags.java
