@@ -119,7 +119,7 @@ set(ANDROID_FRAMEWORKS_BASE        ${GENERAL_SOURCE_PATH}/android-frameworks-bas
 set(DALVIK_PATH                    ${GENERAL_SOURCE_PATH}/dalvik)
 set(NATIVEHELPER_PATH              ${GENERAL_SOURCE_PATH}/android-libnativehelper)
 set(SAFE_IOP_PATH                  ${GENERAL_SOURCE_PATH}/safe-iop)
-set(SKIA_PATH                      ${GENERAL_SOURCE_PATH}/skia)
+set(SKIA_PATH                      ${GENERAL_SOURCE_PATH}/android-skia)
 
 
 # Tier 1 libraries
