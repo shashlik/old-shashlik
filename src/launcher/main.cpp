@@ -15,12 +15,12 @@
 //#include <unistd.h>
 
 //#include <cutils/properties.h>
-//#include <binder/IPCThreadState.h>
-#if 0 // See note in ProcessGlobals.cpp
-//#include <binder/ProcessState.h>
-#else
-#include "ProcessGlobals.h"
-#endif
+#include <binder/IPCThreadState.h>
+#include <binder/ProcessState.h>
+// #if 0 // See note in ProcessGlobals.cpp
+// #else
+// #include "ProcessGlobals.h"
+// #endif
 //#include <utils/Log.h>
 #include <cutils/process_name.h>
 //#include <cutils/memory.h>
@@ -30,7 +30,6 @@
 
 #include "shashlikversion.h"
 #include "AppRuntime.h"
-
 
 #define PROGRAM_NAME "shashlik-launcher"
 
@@ -43,8 +42,8 @@ void app_usage()
 }
 
 
-using namespace shashlik;
-//using namespace android;
+// using namespace shashlik;
+using namespace android;
 
 
 /*
@@ -89,14 +88,14 @@ int main(int argc, char* const argv[])
 #endif
 
     // These are global variables in ProcessState.cpp
-    mArgC = argc;
-    mArgV = argv;
+//     mArgC = argc;
+//     mArgV = argv;
 
-    mArgLen = 0;
-    for (int i=0; i<argc; i++) {
-        mArgLen += strlen(argv[i]) + 1;
-    }
-    mArgLen--;
+//     mArgLen = 0;
+//     for (int i=0; i<argc; i++) {
+//         mArgLen += strlen(argv[i]) + 1;
+//     }
+//     mArgLen--;
 
     AppRuntime runtime;
     const char* argv0 = argv[0];
@@ -148,13 +147,13 @@ int main(int argc, char* const argv[])
                 startSystemServer ? "start-system-server" : "");
     } else if (className) {
         // Remainder of args get passed to startup class main()
-	runtime.setClassName(className);
+        runtime.setClassName(className);
         runtime.setArgcArgv(argc - i, argv + i);
         runtime.start("com.android.internal.os.RuntimeInit",
                 application ? "application" : "tool");
     } else {
-	fprintf(stderr, "%s %s error: no class name or --zygote supplied.\n",
-		PROGRAM_NAME, SHASHLIK_VERSION_STRING);
+        fprintf(stderr, "%s %s error: no class name or --zygote supplied.\n",
+        PROGRAM_NAME, SHASHLIK_VERSION_STRING);
         app_usage();
         LOG_ALWAYS_FATAL("app_process: no class name or --zygote supplied.");
         return 10;

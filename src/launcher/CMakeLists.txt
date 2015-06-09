@@ -26,12 +26,20 @@ include_directories(${LIBBINDER_INCLUDES}
 set(shashlik_launcher_SRCS
     main.cpp
     AppRuntime.cpp
-    ProcessGlobals.cpp
+#     ProcessGlobals.cpp
 )
 
 set(shashlik_jni_SRCS
     runtime/Stubs.cpp
 )
+
+set(launch_SRCS
+    Launch.java
+)
+
+set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -source 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
+add_jar(launch SOURCES ${launch_SRCS} INCLUDE_JARS core framework)
+install_jar(launch ${LIB_INSTALL_DIR}/android)
 
 link_directories(${CMAKE_INSTALL_PREFIX}/lib)   # NOTE: This must be before add_executable :/
 
@@ -42,7 +50,6 @@ endif(FORCE_32BIT_BUILD)
 
 target_link_libraries(shashlik_jni
                       shashlikutils
-                      jni
                       javacrypto
                       javacore
 )
@@ -52,14 +59,11 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(shashlik_launcher PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
-set_target_properties(shashlik_launcher PROPERTIES
-    OUTPUT_NAME shashlik-launcher.bin
-)
-
 target_link_libraries(shashlik_launcher
-                      shashlik_jni
+                      dvm
 )
 
-install(TARGETS shashlik_jni DESTINATION ${LIB_INSTALL_DIR})
-install(TARGETS shashlik_launcher DESTINATION ${BIN_INSTALL_DIR} )
-install(PROGRAMS shashlik-launcher DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS shashlik_jni DESTINATION ${ANDROID_LIB_DIR})
+install(TARGETS shashlik_launcher DESTINATION ${ANDROID_BIN_DIR})
+
+add_subdirectory(controller)

@@ -1,27 +1,51 @@
-# Create a file containing the shashlik environment
-file(WRITE ${PROJECT_BINARY_DIR}/shashlik_env_wrapper.sh
-"export PATH=\"$PATH:${ANDROID_ROOT}/sbin:${ANDROID_ROOT}/vendor/bin:${ANDROID_ROOT}/system/sbin:${ANDROID_ROOT}/system/bin:${ANDROID_ROOT}/system/xbin\"
-export LD_LIBRARY_PATH=\"${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}:${ANDROID_ROOT}/vendor/lib:${ANDROID_ROOT}/system/lib\"
-export ANDROID_BOOTLOGO=\"1\"
-export ANDROID_ROOT=\"${ANDROID_ROOT}/system\"
-export ANDROID_ASSETS=\"${ANDROID_ROOT}/system/app\"
-export ANDROID_DATA=\"${ANDROID_ROOT}/data\"
-export ANDROID_STORAGE=\"${ANDROID_ROOT}/storage\"
-export ASEC_MOUNTPOINT=\"${ANDROID_ROOT}/mnt/asec\"
-export LOOP_MOUNTPOINT=\"${ANDROID_ROOT}/mnt/obb\"
-export BOOTCLASSPATH=\"${ANDROID_ROOT}/system/framework/core.jar:${ANDROID_ROOT}/system/framework/framework.jar:${ANDROID_ROOT}/system/framework/conscrypt.jar:${ANDROID_ROOT}/system/framework/bouncycastle.jar:${ANDROID_ROOT}/system/framework/okhttp.jar:${ANDROID_ROOT}/system/framework/ext.jar\"
-exec $@
-")
-install(PROGRAMS ${PROJECT_BINARY_DIR}/shashlik_env_wrapper.sh DESTINATION ${CMAKE_INSTALL_PREFIX}/${BIN_INSTALL_DIR})
-
 # Create the android directory structure locally, before installing it
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/sbin)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/dev)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/proc)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/sys)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/system)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/system)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/system/inputmethod)
+
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/misc)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/adb)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/bluedroid)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/bluetooth)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/keystore)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/keychain)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/radio)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/sms)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/zoneinfo)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/vpn)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/systemkeys)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/misc/wifi)
+    # give system access to wpa_supplicant.conf for backup and restore
+#     chmod 0660 /data/misc/wifi/wpa_supplicant.conf
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/local)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/misc/media)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/dalvik-cache)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/data)
+
+# For security reasons, /data/local/tmp should always be empty.
+# Do not place files or directories in /data/local/tmp
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/local/tmp)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/data)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/app-private)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/app)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/property)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/ssh)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/ssh/empty)
+
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/dalvik-cache)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/resource-cache)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/lost+found)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/drm)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/mediadrm)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/bugreports)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/data/com.android.shell/files/bugreports)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/security)
+
 install(DIRECTORY ${PROJECT_BINARY_DIR}/android DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR})
 
 set(PostInstallCommands ${PROJECT_BINARY_DIR}/PostInstallCommands.cmake)

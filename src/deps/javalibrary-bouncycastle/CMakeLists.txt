@@ -586,7 +586,7 @@ set(bcprov_SRCS
     ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/x509/X509V3CertificateGenerator.java
 )
 
-set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
+set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -source 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
 add_jar(bouncycastle SOURCES ${bcprov_SRCS} INCLUDE_JARS core conscrypt)
 jarjar_process(bouncycastle "${REPO_PATH}/jarjar-rules.txt" "${CMAKE_CURRENT_BINARY_DIR}/bouncycastle.jar" "${CMAKE_CURRENT_BINARY_DIR}/bouncycastle-nojarjar.jar")
 install_jar(bouncycastle ${LIB_INSTALL_DIR}/android)

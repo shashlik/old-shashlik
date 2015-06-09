@@ -30,7 +30,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(log PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
-install(TARGETS log DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS log DESTINATION ${ANDROID_LIB_DIR})
 #install(FILES
 #        ${log_HEADERS}
 #        DESTINATION include/log)

@@ -45,7 +45,7 @@ target_include_directories(aapt
     ${PNG_INCLUDE_DIRS}
 )
 target_link_libraries(aapt 
-    androidfw
+    androidfw log
     # system libraries
     ${EXPAT_LIBRARIES} ${PNG_LIBRARIES} rt dl)
 install(TARGETS aapt DESTINATION ${ANDROID_BIN_DIR})

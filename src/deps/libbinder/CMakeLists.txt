@@ -3,33 +3,36 @@ project(binder)
 set(REPO_PATH ${ANDROID_FRAMEWORKS_NATIVE_PATH})
 set(MODULE_PATH ${REPO_PATH}/libs/binder)
 set(INCLUDE_PATH ${REPO_PATH}/include/binder)
-include_directories(${LIBBINDER_INCLUDES}
+include_directories(
+                    ${CMAKE_CURRENT_SOURCE_DIR}
+#                    ${REPO_PATH}/include
+                    ${LIBBINDER_INCLUDES}
                     ${LIBUTILS_INCLUDES}
                     ${LIBCUTILS_INCLUDES}
 )
-message("INC DIRS ARE ${LIBBINDER_INCLUDES}")
+#message("INC DIRS ARE ${LIBBINDER_INCLUDES}")
 
 add_definitions(-fpermissive                # for redeclaration of  char32_t
 )
 
 set(binder_LIB_SRCS
-    #    ${MODULE_PATH}/AppOpsManager.cpp
+    ${MODULE_PATH}/AppOpsManager.cpp
     ${MODULE_PATH}/Binder.cpp
     ${MODULE_PATH}/BpBinder.cpp
     ${MODULE_PATH}/BufferedTextOutput.cpp
     ${MODULE_PATH}/Debug.cpp
-    #    ${MODULE_PATH}/IAppOpsCallback.cpp
-    #    ${MODULE_PATH}/IAppOpsService.cpp
-    #    ${MODULE_PATH}/IInterface.cpp
-    #    ${MODULE_PATH}/IMemory.cpp
+    ${MODULE_PATH}/IAppOpsCallback.cpp
+    ${MODULE_PATH}/IAppOpsService.cpp
+    ${MODULE_PATH}/IInterface.cpp
+    ${MODULE_PATH}/IMemory.cpp
     ${MODULE_PATH}/IPCThreadState.cpp
-    #    ${MODULE_PATH}/IPermissionController.cpp
-    #    ${MODULE_PATH}/IServiceManager.cpp
-    #    ${MODULE_PATH}/MemoryBase.cpp
-    #    ${MODULE_PATH}/MemoryDealer.cpp
-    #    ${MODULE_PATH}/MemoryHeapBase.cpp
+    ${MODULE_PATH}/IPermissionController.cpp
+    ${MODULE_PATH}/IServiceManager.cpp
+    ${MODULE_PATH}/MemoryBase.cpp
+    ${MODULE_PATH}/MemoryDealer.cpp
+    ${MODULE_PATH}/MemoryHeapBase.cpp
     ${MODULE_PATH}/Parcel.cpp
-    #    ${MODULE_PATH}/PermissionCache.cpp
+    ${MODULE_PATH}/PermissionCache.cpp
     ${MODULE_PATH}/ProcessState.cpp
     ${MODULE_PATH}/Static.cpp
     ${MODULE_PATH}/TextOutput.cpp
@@ -71,11 +74,16 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(binder PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
-target_link_libraries(binder LINK_INTERFACE_LIBRARIES
-                             log utils cutils
+target_compile_definitions(binder
+    PUBLIC
+#    -DBINDER_IPC_32BIT
+    -DHAVE_ANDROID_OS
+)
+target_link_libraries(binder
+                      log utils cutils
                       )
 
-install(TARGETS binder DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS binder DESTINATION ${ANDROID_LIB_DIR})
 install(FILES
         ${binder_LIB_HEADERS}
         DESTINATION include/binder)

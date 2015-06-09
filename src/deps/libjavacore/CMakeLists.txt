@@ -79,11 +79,12 @@ include_directories(
 # From AndroidConfig.h
 add_definitions(
     -DOS_SHARED_LIB_FORMAT_STR="lib%s.so"
+    -D__ANDROID__
 )
 
 add_library(javacore SHARED ${libjavacore_dalvik_SRCS} ${libjavacore_luni_SRCS})
 if(FORCE_32BIT_BUILD)
-    set_target_properties(javacore PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+    set_target_properties(javacore PROPERTIES COMPILE_FLAGS "-m32 -std=c++11" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(javacore jni ${ICU_LIBRARIES} ${OPENSSL_LIBRARIES} ${EXPAT_LIBRARIES})
 install(TARGETS javacore DESTINATION ${ANDROID_LIB_DIR})

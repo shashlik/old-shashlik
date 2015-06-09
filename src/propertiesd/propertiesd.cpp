@@ -153,6 +153,7 @@ void Propertiesd::initProperties()
         return;
     }
 
+    writeProperty(QString::fromLatin1("ro.build.version.sdk"), QString::fromLatin1("19"));
     writeProperty(QString::fromLatin1("ro.kernel.qemu"), QString::fromLatin1("1"));
     writeProperty(QString::fromLatin1("ro.secure"), QString::fromLatin1("0"));
     writeProperty(QString::fromLatin1("ro.debuggable"), QString::fromLatin1("0"));

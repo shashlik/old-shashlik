@@ -36,7 +36,7 @@ if(FORCE_32BIT_BUILD)
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(nativehelper dl)
 
-install(TARGETS nativehelper DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS nativehelper DESTINATION ${ANDROID_LIB_DIR})
 install(FILES
         ${nativehelper_HEADERS}
         DESTINATION ${CMAKE_INSTALL_PREFIX}/include/nativehelper)

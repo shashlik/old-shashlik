@@ -24,7 +24,7 @@
 //#include <sys/personality.h>
 
 
-namespace shashlik {
+namespace android {
 
 
 AppRuntime::AppRuntime()
