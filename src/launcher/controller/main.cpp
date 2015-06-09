@@ -39,28 +39,6 @@ int main(int argc, char *argv[])
     if(!QDir::root().exists(socketDir)) {
         QDir::root().mkdir(socketDir);
     }
-    // If the socket file already exists, assume it was created for us, and just needs to be opened...
-    if(QFile::exists(QString("%1/ANDROID_SOCKET_installd").arg(ANDROID_SOCKET_DIR))) {
-    }
-    else {
-        int fd = create_socket("installd", SOCK_STREAM, 0666, getuid(), getgid());
-        if(fd < 0)
-            return fd;
-        int size = snprintf(NULL, 0, "%d", fd) + 1;
-        char *ANDROID_SOCKET_installd = (char *)alloca(size);
-        ANDROID_SOCKET_installd[size] = '\0';
-        snprintf(ANDROID_SOCKET_installd, size, "%d", fd);
-        setenv("ANDROID_SOCKET_installd", ANDROID_SOCKET_installd, 1);
-
-        fd = create_socket("zygote", SOCK_STREAM, 0666, getuid(), getgid());
-        if(fd < 0)
-            return fd;
-        size = snprintf(NULL, 0, "%d", fd) + 1;
-        char *ANDROID_SOCKET_zygote = (char *)alloca(size);
-        ANDROID_SOCKET_zygote[size] = '\0';
-        snprintf(ANDROID_SOCKET_zygote, size, "%d", fd);
-        setenv("ANDROID_SOCKET_zygote", ANDROID_SOCKET_zygote, 1);
-    }
 
     QApplication app(argc, argv);
     app.setApplicationName("shashlik-launcher");
@@ -100,6 +78,30 @@ int main(int argc, char *argv[])
     parser.addOption(restartArgument);
 
     parser.process(app);
+
+
+    // If the socket file already exists, assume it was created for us, and just needs to be opened...
+    if(QFile::exists(QString("%1/ANDROID_SOCKET_installd").arg(ANDROID_SOCKET_DIR)) || parser.isSet(stopArgument)) {
+    }
+    else {
+        int fd = create_socket("installd", SOCK_STREAM, 0666, getuid(), getgid());
+        if(fd < 0)
+            return fd;
+        int size = snprintf(NULL, 0, "%d", fd) + 1;
+        char *ANDROID_SOCKET_installd = (char *)alloca(size);
+        ANDROID_SOCKET_installd[size] = '\0';
+        snprintf(ANDROID_SOCKET_installd, size, "%d", fd);
+        setenv("ANDROID_SOCKET_installd", ANDROID_SOCKET_installd, 1);
+
+        fd = create_socket("zygote", SOCK_STREAM, 0666, getuid(), getgid());
+        if(fd < 0)
+            return fd;
+        size = snprintf(NULL, 0, "%d", fd) + 1;
+        char *ANDROID_SOCKET_zygote = (char *)alloca(size);
+        ANDROID_SOCKET_zygote[size] = '\0';
+        snprintf(ANDROID_SOCKET_zygote, size, "%d", fd);
+        setenv("ANDROID_SOCKET_zygote", ANDROID_SOCKET_zygote, 1);
+    }
 
     Controller* controller = new Controller(&app);
     if(parser.isSet(apkArgument)) {
