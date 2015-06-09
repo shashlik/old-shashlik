@@ -26,8 +26,7 @@ set(aidl_L_SRCS
 )
 
 # we explicitly ask for .h here, otherwise a .hpp is generated, and that's not what the aidl sources expect
-# and apparently this becomes default at some point. In case you end up with a hpp file, comment in below and report
-BISON_TARGET(aidl_language_y ${aidl_Y_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/aidl_language_y.cpp)# COMPILE_FLAGS "--defines=${CMAKE_CURRENT_BINARY_DIR}/aidl_language_y.h")
+BISON_TARGET(aidl_language_y ${aidl_Y_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/aidl_language_y.cpp COMPILE_FLAGS "--defines=${CMAKE_CURRENT_BINARY_DIR}/aidl_language_y.h")
 FLEX_TARGET(aidl_language_l ${aidl_L_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/aidl_language_l.cpp)
 ADD_FLEX_BISON_DEPENDENCY(aidl_language_l aidl_language_y)
 
