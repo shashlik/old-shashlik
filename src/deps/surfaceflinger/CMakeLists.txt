@@ -1,8 +1,13 @@
 project(surfaceflinger)
 
+find_package(Qt5Core) # Yes, this is a hack. We need the 32bit libraries
+find_package(Qt5Gui) # Yes, this is a hack. We need the 32bit libraries
+find_package(Qt5Widgets) # Yes, this is a hack. We need the 32bit libraries
+find_package(Qt5X11Extras) # Yes, this is a hack. We need the 32bit libraries
+
 set(REPO_PATH ${ANDROID_FRAMEWORKS_NATIVE_PATH}/services/surfaceflinger)
 
-add_definitions(-fvisibility=hidden -fpermissive)
+add_definitions(-fvisibility=hidden -fpermissive -fPIC)
 
 set(libsurfaceflinger_SRCS
     ${REPO_PATH}/Client.cpp
@@ -66,6 +71,9 @@ target_link_libraries(libsurfaceflinger
 #     binder
 #     ui
     gui
+    ${QT5CORE32_LIBRARIES}
+    ${QT5WIDGETS32_LIBRARIES}
+    ${QT5X11EXTRAS32_LIBRARIES}
 )
 target_include_directories(libsurfaceflinger
     PRIVATE
@@ -74,6 +82,9 @@ target_include_directories(libsurfaceflinger
     ${LIBHARDWARE_INCLUDES}
     ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
     ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include
+    ${QT5CORE32_INCLUDE_DIRS}
+    ${QT5WIDGETS32_INCLUDE_DIRS}
+    ${QT5X11EXTRAS32_INCLUDE_DIRS}
 )
 
 add_executable(surfaceflinger ${surfaceflinger_SRCS})
@@ -87,12 +98,14 @@ target_link_libraries(surfaceflinger
 #     log
 #     binder
 #     utils
+    ${QT5GUI32_LIBRARIES}
 )
 target_include_directories(surfaceflinger
     PRIVATE
     ${LIBCUTILS_INCLUDES}
     ${LIBBINDER_INCLUDES}
     ${LIBHARDWARE_INCLUDES}
+    ${QT5GUI32_INCLUDE_DIRS}
 )
 
 if(FORCE_32BIT_BUILD)
