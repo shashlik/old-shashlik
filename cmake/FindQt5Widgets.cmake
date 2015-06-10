@@ -9,6 +9,7 @@ endif (QT5WIDGETS32_INCLUDE_DIRS AND QT5WIDGETS32_LIBRARIES)
 
 find_path(QT5WIDGETS32_INCLUDE_DIR NAMES QtWidgetsVersion
     PATHS
+    /usr/include/i386-linux-gnu/qt5/QtWidgets
     ${CMAKE_INSTALL_PREFIX}/include
     ${KDE4_INCLUDE_DIR}
     /usr/include
@@ -17,12 +18,13 @@ find_path(QT5WIDGETS32_INCLUDE_DIR NAMES QtWidgetsVersion
     )
 find_path(QT5WIDGETS32_BASE_INCLUDE_DIR NAMES QtWidgets/QtWidgetsVersion
     PATHS
+    /usr/include/i386-linux-gnu/qt5
     ${CMAKE_INSTALL_PREFIX}/include
     ${KDE4_INCLUDE_DIR}
     /usr/include
     /usr/include/qt5
     )
-find_library(QT5WIDGETS32_LIBRARIES NAMES Qt5Widgets libQt5Widgets PATHS /usr/lib)
+find_library(QT5WIDGETS32_LIBRARIES NAMES Qt5Widgets libQt5Widgets PATHS /usr/lib /usr/lib/i386-linux-gnu/)
 SET(QT5WIDGETS32_INCLUDE_DIRS "${QT5WIDGETS32_INCLUDE_DIR};${QT5WIDGETS32_BASE_INCLUDE_DIR}")
 
 

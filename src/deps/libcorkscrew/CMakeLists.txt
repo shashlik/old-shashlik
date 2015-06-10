@@ -33,6 +33,9 @@ set(corkscrew_HEADERS
 )
 
 add_library(corkscrew SHARED ${corkscrew_SRCS})
+target_link_libraries(corkscrew
+    dl
+)
 if(FORCE_32BIT_BUILD)
     set_target_properties(corkscrew PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)

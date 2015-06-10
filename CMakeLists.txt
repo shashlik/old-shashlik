@@ -75,6 +75,11 @@ add_definitions(-DHAVE_SYS_UIO_H
                 -DHAVE_POSIX_CLOCKS
 )
 
+# In case this file exists, we need to set this to look for certain files in the right place
+if(EXISTS "/usr/include/i386-linux-gnu")
+    add_definitions(-DHAS_SPECIAL_INCLUDE_DIRS=1)
+endif()
+
 # The android root directory is the installation location for the android system
 # itself, and used by the vm's various bits to load and check things.
 set(ANDROID_ROOT ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/android)

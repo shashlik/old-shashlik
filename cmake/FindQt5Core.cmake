@@ -9,6 +9,7 @@ endif (QT5CORE32_INCLUDE_DIRS AND QT5CORE32_LIBRARIES)
 
 find_path(QT5CORE32_INCLUDE_DIR NAMES qglobal.h
     PATHS
+    /usr/include/i386-linux-gnu/qt5/QtCore
     ${CMAKE_INSTALL_PREFIX}/include
     ${KDE4_INCLUDE_DIR}
     /usr/include
@@ -17,12 +18,13 @@ find_path(QT5CORE32_INCLUDE_DIR NAMES qglobal.h
     )
 find_path(QT5CORE32_BASE_INCLUDE_DIR NAMES QtCore/qglobal.h
     PATHS
+    /usr/include/i386-linux-gnu/qt5
     ${CMAKE_INSTALL_PREFIX}/include
     ${KDE4_INCLUDE_DIR}
     /usr/include
     /usr/include/qt5
     )
-find_library(QT5CORE32_LIBRARIES NAMES Qt5Core libQt5Core PATHS /usr/lib)
+find_library(QT5CORE32_LIBRARIES NAMES Qt5Core libQt5Core PATHS /usr/lib /usr/lib/i386-linux-gnu/)
 SET(QT5CORE32_INCLUDE_DIRS "${QT5CORE32_INCLUDE_DIR};${QT5CORE32_BASE_INCLUDE_DIR}")
 
 

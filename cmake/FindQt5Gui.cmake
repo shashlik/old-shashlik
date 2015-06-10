@@ -9,6 +9,7 @@ endif (QT5GUI32_INCLUDE_DIRS AND QT5GUI32_LIBRARIES)
 
 find_path(QT5GUI32_INCLUDE_DIR NAMES QtGuiVersion
     PATHS
+    /usr/include/i386-linux-gnu/qt5/QtGui
     ${CMAKE_INSTALL_PREFIX}/include
     ${KDE4_INCLUDE_DIR}
     /usr/include
@@ -17,12 +18,13 @@ find_path(QT5GUI32_INCLUDE_DIR NAMES QtGuiVersion
     )
 find_path(QT5GUI32_BASE_INCLUDE_DIR NAMES QtGui/QtGuiVersion
     PATHS
+    /usr/include/i386-linux-gnu/qt5
     ${CMAKE_INSTALL_PREFIX}/include
     ${KDE4_INCLUDE_DIR}
     /usr/include
     /usr/include/qt5
     )
-find_library(QT5GUI32_LIBRARIES NAMES Qt5Gui libQt5Gui PATHS /usr/lib)
+find_library(QT5GUI32_LIBRARIES NAMES Qt5Gui libQt5Gui PATHS /usr/lib /usr/lib/i386-linux-gnu/)
 SET(QT5GUI32_INCLUDE_DIRS "${QT5GUI32_INCLUDE_DIR};${QT5GUI32_BASE_INCLUDE_DIR}")
 
 
