@@ -65,5 +65,3 @@ target_link_libraries(shashlik_launcher
 
 install(TARGETS shashlik_jni DESTINATION ${ANDROID_LIB_DIR})
 install(TARGETS shashlik_launcher DESTINATION ${ANDROID_BIN_DIR})
-
-add_subdirectory(controller)
