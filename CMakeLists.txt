@@ -85,6 +85,7 @@ endif()
 set(ANDROID_ROOT ${CMAKE_INSTALL_PREFIX}/android)
 set(ANDROID_BIN_DIR ${ANDROID_ROOT}/system/bin)
 set(ANDROID_LIB_DIR ${ANDROID_ROOT}/system/lib)
+set(ANDROID_JAR_DIR ${ANDROID_ROOT}/system/framework)
 
 # ----------------------------------------------------------------
 # Various project settings
