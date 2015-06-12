@@ -43,7 +43,7 @@ public:
         QDir thisAppDir(appDir);
         thisAppDir.cdUp();
         libraryRoot = thisAppDir.canonicalPath();
-        thisAppDir.cd("lib64/android");
+        thisAppDir.cd("android");
         androidRootDir = thisAppDir.canonicalPath();
     }
     ~Private()

@@ -8,5 +8,5 @@ set(am_SRCS
 
 set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -source 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
 add_jar(am SOURCES ${am_SRCS} INCLUDE_JARS core framework)
-install_jar(am ${LIB_INSTALL_DIR}/android)
+install_jar(am ${ANDROID_ROOT})
 install(PROGRAMS ${REPO_PATH}/am DESTINATION ${ANDROID_BIN_DIR})

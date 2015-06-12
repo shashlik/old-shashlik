@@ -157,5 +157,5 @@ set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -source 1.5 -encoding UTF-8
 add_jar(conscrypt ${javalibrary_SRCS} INCLUDE_JARS core)
 add_jar(conscrypt-nojarjarthing ${javalibrary_SRCS} INCLUDE_JARS core)
 jarjar_process(conscrypt "${REPO_PATH}/crypto/jarjar-rules.txt" "${CMAKE_CURRENT_BINARY_DIR}/conscrypt.jar" "${CMAKE_CURRENT_BINARY_DIR}/conscrypt-nojarjar.jar")
-#install_jar(conscrypt ${LIB_INSTALL_DIR}/android)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/conscrypt-nojarjarthing.jar DESTINATION ${LIB_INSTALL_DIR}/android RENAME conscrypt.jar)
+#install_jar(conscrypt ${ANDROID_ROOT})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/conscrypt-nojarjarthing.jar DESTINATION ${ANDROID_ROOT} RENAME conscrypt.jar)
