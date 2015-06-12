@@ -82,7 +82,7 @@ endif()
 
 # The android root directory is the installation location for the android system
 # itself, and used by the vm's various bits to load and check things.
-set(ANDROID_ROOT ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/android)
+set(ANDROID_ROOT ${CMAKE_INSTALL_PREFIX}/android)
 set(ANDROID_BIN_DIR ${ANDROID_ROOT}/system/bin)
 set(ANDROID_LIB_DIR ${ANDROID_ROOT}/system/lib)
 

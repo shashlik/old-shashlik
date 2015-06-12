@@ -46,7 +46,7 @@ file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/bugreports)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/data/com.android.shell/files/bugreports)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/security)
 
-install(DIRECTORY ${PROJECT_BINARY_DIR}/android DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR})
+install(DIRECTORY ${PROJECT_BINARY_DIR}/android DESTINATION ${CMAKE_INSTALL_PREFIX} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE)
 
 set(PostInstallCommands ${PROJECT_BINARY_DIR}/PostInstallCommands.cmake)
 configure_file("PostInstallCommands.cmake.in" ${PostInstallCommands} @ONLY)
