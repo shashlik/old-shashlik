@@ -25,7 +25,7 @@
 #include <QFile>
 #include <QLocalSocket>
 
-K_PLUGIN_FACTORY(PropertiesdFactory, registerPlugin<Propertiesd>();)
+K_PLUGIN_FACTORY_WITH_JSON(PropertiesdFactory, "kded_shashlik_propertiesd.json", registerPlugin<Propertiesd>();)
 
 // key/value size maximums
 #include "sys/system_properties.h"
