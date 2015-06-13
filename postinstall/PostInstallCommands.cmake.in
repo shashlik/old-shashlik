@@ -76,7 +76,8 @@ function(process_installed_android_jar _TARGET_NAME _INSTALLED_FILE _WORK_DIR)
 
     message(STATUS "Moving jar file ${_INSTALLED_FILE} into the working directory")
     # move installed file to intermediates/classes.jar
-    file(RENAME ${_INSTALLED_FILE} ${LOCAL_WORK_DIR}/classes.jar)
+    file(COPY ${_INSTALLED_FILE} DESTINATION ${LOCAL_WORK_DIR})
+    file(RENAME ${LOCAL_WORK_DIR}/${_TARGET_NAME}.jar ${LOCAL_WORK_DIR}/classes.jar)
 
     # dex classes.jar
     message(STATUS "Dexing classes.jar for target ${_TARGET_NAME}")
@@ -150,41 +151,43 @@ set(ENV{LD_LIBRARY_PATH} ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}:${CMAKE_INST
 set(ENV{ANDROID_DATA} ${ANDROID_ROOT}/data)
 set(ENV{ANDROID_ROOT} ${ANDROID_ROOT})
 
+set(JAVALIB_DIR ${CMAKE_BINARY_DIR}/src/deps/javalibrary-)
+
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar)
-process_installed_android_jar(core ${ANDROID_JAR_DIR}/core.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+process_installed_android_jar(core ${JAVALIB_DIR}core/core.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar)
-process_installed_android_jar(bouncycastle ${ANDROID_JAR_DIR}/bouncycastle.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+process_installed_android_jar(bouncycastle ${JAVALIB_DIR}bouncycastle/bouncycastle.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar)
-process_installed_android_jar(ext ${ANDROID_JAR_DIR}/ext.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+process_installed_android_jar(ext ${JAVALIB_DIR}ext/ext.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar)
-process_installed_android_jar(conscrypt ${ANDROID_JAR_DIR}/conscrypt.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+process_installed_android_jar(conscrypt ${JAVALIB_DIR}conscrypt/conscrypt-nojarjarthing.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar)
-process_installed_android_jar(okhttp ${ANDROID_JAR_DIR}/okhttp.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+process_installed_android_jar(okhttp ${JAVALIB_DIR}okhttp/okhttp.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar)
-process_installed_android_jar(framework ${ANDROID_JAR_DIR}/framework.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+process_installed_android_jar(framework ${JAVALIB_DIR}frameworks/framework.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar)
-process_installed_android_jar(voip-common ${ANDROID_JAR_DIR}/voip-common.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+process_installed_android_jar(voip-common ${JAVALIB_DIR}voip/voip-common.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar)
-process_installed_android_jar(telephony-common ${ANDROID_JAR_DIR}/telephony-common.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+process_installed_android_jar(telephony-common ${JAVALIB_DIR}telephony/telephony-common.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar)
-process_installed_android_jar(framework2 ${ANDROID_JAR_DIR}/framework2.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+process_installed_android_jar(framework2 ${JAVALIB_DIR}frameworks/framework2.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar)
-process_installed_android_jar(launch ${ANDROID_JAR_DIR}/launch.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+process_installed_android_jar(launch ${CMAKE_BINARY_DIR}/src/launcher/launch.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar)
-process_installed_android_jar(shashlik ${ANDROID_JAR_DIR}/shashlik.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+process_installed_android_jar(shashlik ${JAVALIB_DIR}shashlik/shashlik.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar)
-process_installed_android_jar(am ${ANDROID_JAR_DIR}/am.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+process_installed_android_jar(am ${JAVALIB_DIR}am/am.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 # message(STATUS "Copying: core classes-full-debug.jar to classes-jarjar.jar")
 # out/host/linux-x86/bin/acp -fp out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes-full-debug.jar out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes-jarjar.jar
