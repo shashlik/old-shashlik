@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 X-KDE-ServiceTypes=KDEDModule
-X-KDE-Library=kf5/kded/shashlik_propertiesd
+X-KDE-Library=shashlik_propertiesd
 X-KDE-DBus-ModuleName=shashlik_propertiesd
 X-KDE-Kded-autoload=true
 X-KDE-Kded-load-on-demand=false
