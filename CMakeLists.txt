@@ -112,7 +112,7 @@ set(JIT_VM true)
 
 # This sets whether or not to build the various development helper tools which are
 # not required for the normal operation of the launcher itself.
-set(BUILD_TOOLS true)
+set(BUILD_TOOLS false)
 
 # It is assumed that the various repos are checked out next to this one
 # This is described in the file BUILDING.
