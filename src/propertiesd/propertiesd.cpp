@@ -24,6 +24,7 @@
 
 #include <QFile>
 #include <QLocalSocket>
+#include <QDebug>
 
 K_PLUGIN_FACTORY_WITH_JSON(PropertiesdFactory, "kded_shashlik_propertiesd.json", registerPlugin<Propertiesd>();)
 
@@ -70,39 +71,51 @@ void Propertiesd::readRequest()
 {
     QIODevice *dev = qobject_cast<QIODevice *>(sender());
     if (!dev) {
+        qDebug() << "Sender was not a QIODevice!";
         return;
     }
 
-    QByteArray data = dev->read(PROP_NAME_MAX);
+    QByteArray data = dev->read(PROP_NAME_MAX + PROP_VALUE_MAX + 1);
     if (data.size() < 2) {
+        qDebug() << "data is too small!" << data;
         return;
     }
 
-    if (data[0] == (char)kSystemPropertyGet) {
+    if (data[0] == (char)kSystemPropertyUnknown) {
+        qDebug() << "OK, so something is wrong, and the property command is unknown...";
+    } else if (data[0] == (char)kSystemPropertyGet) {
         // Read a property
         const QString key = QString::fromLatin1(data.right(data.size() - 1));
         QByteArray rv = readProperty(key).toLatin1();
-        if (rv.size() < 1) {
-            rv.append((char)0);
-        } else {
-            rv.prepend((char)1);
-        }
-        dev->write(rv);
+        qDebug() << "Read  property:" << key << "as far as we know with the value" << rv;
+        char resp[PROP_VALUE_MAX + 1];
+        if(rv.size() < 1)
+            resp[0] = (char)0;
+        else
+            resp[0] = (char)1;
+        strcpy(&resp[1], rv.constData());
+        resp[rv.size() + 2] = '\0';
+        dev->write(resp, PROP_VALUE_MAX + 1);
     } else if (data[0] == (char)kSystemPropertySet) {
         // Write a property
         // the offsets used can be found in android-core/libcutils/properties.c
         // let's hope they never change
         const QString key = QString::fromLatin1(data.mid(1, PROPERTY_KEY_MAX));
-        const QString value = QString::fromLatin1(data.right(data.size() - 1 - PROPERTY_KEY_MAX));
+        const QString value = QString::fromLatin1(data.mid(PROPERTY_KEY_MAX + 1));
+        qDebug() << "Writing property" << key << "and setting it to value" << value << "from" << data;
         writeProperty(key, value);
         char rv[1];
         rv[0] = 1;
         dev->write(rv);
     } else if (data[0] == (char)kSystemPropertyList) {
+        qDebug() << "List properties...?!";
         // List a property .. doesn't actually do anything
         // since this doesn't seem to be actually USED in the
         // Android code base?
         // the property_list function is actually a does-nothing stub in libcutils!
+    }
+    else {
+        qDebug() << "OK, so something is terribly wrong here... Command is not only unknown but out of bounds. Command value is" << (int)data[0];
     }
 }
 
@@ -154,9 +167,52 @@ void Propertiesd::initProperties()
     }
 
     writeProperty(QString::fromLatin1("ro.build.version.sdk"), QString::fromLatin1("19"));
-    writeProperty(QString::fromLatin1("ro.kernel.qemu"), QString::fromLatin1("1"));
+    writeProperty(QString::fromLatin1("ro.kernel.qemu"), QString::fromLatin1("0"));
     writeProperty(QString::fromLatin1("ro.secure"), QString::fromLatin1("0"));
     writeProperty(QString::fromLatin1("ro.debuggable"), QString::fromLatin1("0"));
+    writeProperty(QString::fromLatin1("ro.config.low_ram"), QString::fromLatin1("0"));
+
+    writeProperty(QString::fromLatin1("debug.egl.trace"), QString::fromLatin1("error"));
+//     writeProperty(QString::fromLatin1("debug.egl.callstack"), QString::fromLatin1("0"));
+
+//     writeProperty(QString::fromLatin1("debug.sf.showupdates"), QString::fromLatin1("0"));
+//     writeProperty(QString::fromLatin1("debug.sf.ddms"), QString::fromLatin1("0"));
+//     writeProperty(QString::fromLatin1("debug.sf.no_hw_vsync"), QString::fromLatin1("0"));
+
+    writeProperty(QString::fromLatin1("ro.bq.gpu_to_cpu_unsupported"), QString::fromLatin1("0"));
+//     writeProperty(QString::fromLatin1("ro.hardware.gralloc"), QString::fromLatin1("0"));
+//     writeProperty(QString::fromLatin1("ro.hardware"), QString::fromLatin1("0"));
+//     writeProperty(QString::fromLatin1("ro.product.board"), QString::fromLatin1("0"));
+//     writeProperty(QString::fromLatin1("ro.board.platform"), QString::fromLatin1("0"));
+//     writeProperty(QString::fromLatin1("ro.arch"), QString::fromLatin1("0"));
+    writeProperty(QString::fromLatin1("ro.hardware.hwcomposer"), QString::fromLatin1("shashlik"));
+//     writeProperty(QString::fromLatin1("ro.hardware"), QString::fromLatin1("0"));
+//     writeProperty(QString::fromLatin1("ro.product.board"), QString::fromLatin1("0"));
+//     writeProperty(QString::fromLatin1("ro.board.platform"), QString::fromLatin1("0"));
+//     writeProperty(QString::fromLatin1("ro.arch"), QString::fromLatin1("0"));
+
+    writeProperty(QString::fromLatin1("log.redirect-stdio"), QString::fromLatin1("false"));
+    writeProperty(QString::fromLatin1("dalvik.vm.checkjni"), QString::fromLatin1("false"));
+    writeProperty(QString::fromLatin1("dalvik.vm.execution-mode"), QString::fromLatin1("int:jit"));
+    writeProperty(QString::fromLatin1("dalvik.vm.stack-trace-file"), QString::fromLatin1(""));
+    writeProperty(QString::fromLatin1("dalvik.vm.check-dex-sum"), QString::fromLatin1("false"));
+    writeProperty(QString::fromLatin1("dalvik.vm.enableassertions"), QString::fromLatin1("false"));
+    writeProperty(QString::fromLatin1("dalvik.vm.jniopts"), QString::fromLatin1(""));
+    writeProperty(QString::fromLatin1("dalvik.vm.heapstartsize"), QString::fromLatin1("4m"));
+    writeProperty(QString::fromLatin1("dalvik.vm.heapsize"), QString::fromLatin1("16m"));
+    writeProperty(QString::fromLatin1("dalvik.vm.heapgrowthlimit"), QString::fromLatin1(""));
+    writeProperty(QString::fromLatin1("dalvik.vm.heapminfree"), QString::fromLatin1(""));
+    writeProperty(QString::fromLatin1("dalvik.vm.heapmaxfree"), QString::fromLatin1(""));
+    writeProperty(QString::fromLatin1("dalvik.vm.heaptargetutilization"), QString::fromLatin1(""));
+    writeProperty(QString::fromLatin1("dalvik.vm.dexopt-flags"), QString::fromLatin1(""));
+    writeProperty(QString::fromLatin1("dalvik.vm.lockprof.threshold"), QString::fromLatin1(""));
+    writeProperty(QString::fromLatin1("dalvik.vm.extra-opts"), QString::fromLatin1(""));
+    writeProperty(QString::fromLatin1("dalvik.vm.jit.codecachesize"), QString::fromLatin1(""));
+    writeProperty(QString::fromLatin1("dalvik.vm.jit.op"), QString::fromLatin1(""));
+    writeProperty(QString::fromLatin1("dalvik.vm.jit.method"), QString::fromLatin1(""));
+
+    writeProperty(QString::fromLatin1("persist.sys.language"), QString::fromLatin1(""));
+    writeProperty(QString::fromLatin1("persist.sys.country"), QString::fromLatin1(""));
 }
 
 #include "propertiesd.moc"

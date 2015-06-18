@@ -2,8 +2,6 @@ find_package(KF5CoreAddons NO_MODULE)
 find_package(KF5DBusAddons NO_MODULE)
 find_package(Qt5Network ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
 
-add_definitions(-DHAVE_SYSTEM_PROPERTY_SERVER)
-
 include_directories(${CMAKE_INSTALL_PREFIX}/include 
                     ${LIBCUTILS_INCLUDES}
 )
