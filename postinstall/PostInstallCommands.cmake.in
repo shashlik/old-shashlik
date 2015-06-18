@@ -54,10 +54,10 @@ function(dex_preopt INPUT_JAR OUTPUT_ODEX)
     endif ()
 
     if (ALLOK)
-        execute_process(RESULT_VARIABLE dexoptresult COMMAND ${ANDROID_BIN_DIR}/dexopt --preopt ${INPUT_JAR} ${OUTPUT_ODEX} ${OPTIMIZE_OPTIONS})
+        execute_process(RESULT_VARIABLE dexoptresult COMMAND gdbserver localhost:1234 ${ANDROID_BIN_DIR}/dexopt --preopt ${INPUT_JAR} ${OUTPUT_ODEX} ${OPTIMIZE_OPTIONS})
         if(dexoptresult)
-            #message(SEND_ERROR "Preoptimization failed!")
-            #message(FATAL_ERROR "${ANDROID_BIN_DIR}/dexopt --preopt ${INPUT_JAR} ${OUTPUT_ODEX} ${OPTIMIZE_OPTIONS} reports: ${dexoptresult}")
+            message(STATUS "Preoptimization failed!")
+            message(FATAL_ERROR "${ANDROID_BIN_DIR}/dexopt --preopt ${INPUT_JAR} ${OUTPUT_ODEX} ${OPTIMIZE_OPTIONS} reports: ${dexoptresult}")
         endif()
     else()
         message(WARNING "Could not preoptimize!")
@@ -80,8 +80,8 @@ function(process_installed_android_jar _TARGET_NAME _INSTALLED_FILE _WORK_DIR)
     file(RENAME ${LOCAL_WORK_DIR}/${_TARGET_NAME}.jar ${LOCAL_WORK_DIR}/classes.jar)
 
     # dex classes.jar
-    message(STATUS "Dexing classes.jar for target ${_TARGET_NAME}")
-    execute_process(COMMAND ${ANDROID_BIN_DIR}/dx -JXms16M -JXmx2048M --dex --output=${LOCAL_WORK_DIR}/classes.dex --core-library ${LOCAL_WORK_DIR}/classes.jar)
+    message(STATUS "Dexing classes.jar for target ${_TARGET_NAME} (this will take a while)")
+    execute_process(RESULT_VARIABLE dxresult COMMAND ${ANDROID_BIN_DIR}/dx -JXms16M -JXmx2048M --dex --output=${LOCAL_WORK_DIR}/classes.dex --core-library ${LOCAL_WORK_DIR}/classes.jar)
 
     # create new _TARGET_NAME.jar from classes.jar and classes.dex
     message(STATUS "Creating new jar for target ${_TARGET_NAME}")
@@ -138,12 +138,13 @@ function(process_installed_android_jar _TARGET_NAME _INSTALLED_FILE _WORK_DIR)
 #             --uniprocessor
 #             ${LOCAL_WORK_DIR}/core.jar
 #             ${LOCAL_WORK_DIR}/core.odex
-        dex_preopt(${LOCAL_WORK_DIR}/./${_TARGET_NAME}.jar ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex)
+#         dex_preopt(${LOCAL_WORK_DIR}/./${_TARGET_NAME}.jar ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex)
 
         # install the newly created odex and jar
         message(STATUS "Installing new files for target ${_TARGET_NAME}")
         set(PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex DESTINATION ${ANDROID_JAR_DIR})
-        file(INSTALL ${LOCAL_WORK_DIR}/${_TARGET_NAME}.jar ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex DESTINATION ${ANDROID_JAR_DIR})
+        file(INSTALL ${LOCAL_WORK_DIR}/${_TARGET_NAME}.jar DESTINATION ${ANDROID_JAR_DIR})
+#         file(INSTALL ${LOCAL_WORK_DIR}/${_TARGET_NAME}.odex DESTINATION ${ANDROID_JAR_DIR})
     endif()
 endfunction()
 
