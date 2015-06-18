@@ -75,6 +75,7 @@ target_compile_definitions(EGL
     PRIVATE
     -DLOG_TAG="libEGL"
     -DHAVE_ANDROID_OS
+    -DANDROID
     PUBLIC
     -DEGL_TRACE=1
     -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
@@ -94,6 +95,7 @@ target_compile_definitions(GLES_trace
     -DGOOGLE_PROTOBUF_NO_RTTI
     -DEGL_TRACE=1
     -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
+    -DANDROID
 )
 target_include_directories(GLES_trace
     PRIVATE
