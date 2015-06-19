@@ -22,6 +22,7 @@
 #include <stdio.h>
 
 #include <QApplication>
+#include <QMessageBox>
 #include <QStringList>
 #include <qcommandlineparser.h>
 #include <qtimer.h>
@@ -49,8 +50,8 @@ int main(int argc, char *argv[])
     QCommandLineOption helpArgument =  parser.addHelpOption();
     QCommandLineOption versionArgument = parser.addVersionOption();
 
-    QCommandLineOption apkArgument("launchapk", i18n("Run the apk passed as an argument. This will install and run the apk, and launch any services required to do so."), "apkfile");
-    parser.addOption(apkArgument);
+    //QCommandLineOption apkArgument("apk", i18n("Run the apk passed as an argument. This will install and run the apk, and launch any services required to do so. Optional."), "[apkfile]");
+    parser.addPositionalArgument("apkfile", i18n("Run the apk passed as an argument. This will install and run the apk, and launch any services required to do so. When passing an APK, don't pass any other options. Optional."), "[apkfile]");
 
     QCommandLineOption amArgument("launcham", i18n("Launch the activity manager application, with the arguments passed as amargs"), "amargs");
     parser.addOption(amArgument);
@@ -78,7 +79,7 @@ int main(int argc, char *argv[])
     parser.addOption(restartArgument);
 
     parser.process(app);
-
+    QStringList apkfile = parser.positionalArguments();
 
     // If the socket file already exists, assume it was created for us, and just needs to be opened...
     if(QFile::exists(QString("%1/ANDROID_SOCKET_installd").arg(ANDROID_SOCKET_DIR)) || parser.isSet(stopArgument)) {
@@ -104,7 +105,7 @@ int main(int argc, char *argv[])
     }
 
     Controller* controller = new Controller(&app);
-    if(parser.isSet(apkArgument)) {
+    if(apkfile.length() > 0) {
         // do a thing with this thing...
         if(!controller->zygoteRunning() || !controller->servicemanagerRunning() || !controller->surfaceflingerRunning()) {
             // if any one of the services above isn't running, restart everything - we must assume something's broken
@@ -114,7 +115,7 @@ int main(int argc, char *argv[])
             // never mind for now, as these always return false...
             // If this happens when the check is actually functional, we should be quitting with a useful error
         }
-        controller->runJar(parser.value(apkArgument));
+        controller->runJar(apkfile.at(0));
     }
     else if(parser.isSet(amArgument)) {
         controller->runAM(parser.value(amArgument));
@@ -143,7 +144,8 @@ int main(int argc, char *argv[])
     }
     else {
         // no need to check for guiArgument - that is what we will have left, or no arguments, which is the same thing
-        printf("Do the thing!\n");
+        QMessageBox::information(0, i18n("Shashlik Controller"), i18n("Sorry, we don't have a UI yet. Select a .apk from your file manager, or run shashlik-controller from the command line."));
+        QTimer::singleShot(0, &app, SLOT(quit()));
     }
 
     return app.exec();
