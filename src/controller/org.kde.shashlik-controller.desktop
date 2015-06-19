@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Terminal=false
+TryExec=shashlik-controller
+Exec=shashlik-controller %u
+Name=Shashlik Controller
+GenericName=Android Runtime Controller
+Description=Control and launcher application for the Android application runtime
+Comment=Android Runtime Controller
+Icon=shashlik-controller
+Mimetype=application/vnd.android.package-archive
+Category=System
