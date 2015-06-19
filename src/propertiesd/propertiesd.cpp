@@ -166,7 +166,24 @@ void Propertiesd::initProperties()
         return;
     }
 
+    writeProperty(QString::fromLatin1("ro.build.display.id"), QString::fromLatin1("Shashlik"));
+    writeProperty(QString::fromLatin1("ro.build.version.incremental"), QString::fromLatin1("1234567"));
     writeProperty(QString::fromLatin1("ro.build.version.sdk"), QString::fromLatin1("19"));
+    writeProperty(QString::fromLatin1("ro.build.version.codename"), QString::fromLatin1("REL"));
+    writeProperty(QString::fromLatin1("ro.build.version.release"), QString::fromLatin1("4.4.2"));
+    writeProperty(QString::fromLatin1("ro.build.version.sdk"), QString::fromLatin1("Thu Jun 18 17:49:04 PDT 2015"));
+    writeProperty(QString::fromLatin1("ro.build.type"), QString::fromLatin1("eng"));
+    writeProperty(QString::fromLatin1("ro.build.tags"), QString::fromLatin1("test-keys"));
+    writeProperty(QString::fromLatin1("ro.product.model"), QString::fromLatin1("sdk"));
+    writeProperty(QString::fromLatin1("ro.product.name"), QString::fromLatin1("sdk"));
+
+    writeProperty(QString::fromLatin1("ro.build.user"), QString::fromLatin1("generic"));
+    writeProperty(QString::fromLatin1("ro.build.host"), QString::fromLatin1("generic"));
+    writeProperty(QString::fromLatin1("ro.product.brand"), QString::fromLatin1("generic"));
+    writeProperty(QString::fromLatin1("ro.product.manufacturer"), QString::fromLatin1("generic"));
+    writeProperty(QString::fromLatin1("ro.product.device"), QString::fromLatin1("generic"));
+    writeProperty(QString::fromLatin1("ro.build.product"), QString::fromLatin1("generic"));
+
     writeProperty(QString::fromLatin1("ro.kernel.qemu"), QString::fromLatin1("0"));
     writeProperty(QString::fromLatin1("ro.secure"), QString::fromLatin1("0"));
     writeProperty(QString::fromLatin1("ro.debuggable"), QString::fromLatin1("0"));
@@ -192,7 +209,7 @@ void Propertiesd::initProperties()
 //     writeProperty(QString::fromLatin1("ro.arch"), QString::fromLatin1("0"));
 
     writeProperty(QString::fromLatin1("log.redirect-stdio"), QString::fromLatin1("false"));
-    writeProperty(QString::fromLatin1("dalvik.vm.checkjni"), QString::fromLatin1("false"));
+    writeProperty(QString::fromLatin1("dalvik.vm.checkjni"), QString::fromLatin1("1"));
     writeProperty(QString::fromLatin1("dalvik.vm.execution-mode"), QString::fromLatin1("int:jit"));
     writeProperty(QString::fromLatin1("dalvik.vm.stack-trace-file"), QString::fromLatin1(""));
     writeProperty(QString::fromLatin1("dalvik.vm.check-dex-sum"), QString::fromLatin1("false"));
