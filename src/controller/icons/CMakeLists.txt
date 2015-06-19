@@ -1,0 +1,1 @@
+ecm_install_icons(ICONS sc-apps-shashlik-controller.svgz 128-apps-shashlik-controller.png  16-apps-shashlik-controller.png  22-apps-shashlik-controller.png  32-apps-shashlik-controller.png  48-apps-shashlik-controller.png  64-apps-shashlik-controller.png DESTINATION ${ICON_INSTALL_DIR} THEME hicolor)
