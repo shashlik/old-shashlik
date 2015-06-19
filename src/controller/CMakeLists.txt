@@ -1,5 +1,7 @@
 project(shashlik-controller)
 
+add_subdirectory(icons)
+
 set(controller_SRCS
     main.cpp
     Controller.cpp
@@ -14,4 +16,5 @@ target_include_directories(shashlik-controller
     ${LIBBINDER_INCLUDES}
 )
 
+install(PROGRAMS org.kde.shashlik-controller.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(TARGETS shashlik-controller DESTINATION ${BIN_INSTALL_DIR})
