@@ -35,6 +35,7 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
+include(ECMInstallIcons)
 
 find_package(KF5I18n)
 
