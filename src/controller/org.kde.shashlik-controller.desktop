@@ -11,4 +11,4 @@ Description=Control and launcher application for the Android application runtime
 Comment=Android Runtime Controller
 Icon=shashlik-controller
 Mimetype=application/vnd.android.package-archive
-Category=System
+Categories=System;Emulator;KDE:Qt
