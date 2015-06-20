@@ -85,7 +85,7 @@ function(process_installed_android_jar _TARGET_NAME _INSTALLED_FILE _WORK_DIR)
 
     # dex classes.jar
     message(STATUS "Dexing classes.jar for target ${_TARGET_NAME} (this will take a while)")
-    execute_process(RESULT_VARIABLE dxresult COMMAND ${ANDROID_BIN_DIR}/dx -JXms16M -JXmx2048M --dex --output=${LOCAL_WORK_DIR}/classes.dex --core-library ${LOCAL_WORK_DIR}/classes.jar)
+    execute_process(RESULT_VARIABLE dxresult COMMAND dx -JXms16M -JXmx2048M --dex --output=${LOCAL_WORK_DIR}/classes.dex --core-library ${LOCAL_WORK_DIR}/classes.jar)
 
     # create new _TARGET_NAME.jar from classes.jar and classes.dex
     message(STATUS "Creating new jar for target ${_TARGET_NAME}")
@@ -153,6 +153,7 @@ function(process_installed_android_jar _TARGET_NAME _INSTALLED_FILE _WORK_DIR)
 endfunction()
 
 set(ENV{LD_LIBRARY_PATH} ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}:${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/egl:${ANDROID_ROOT}/system/lib)
+set(ENV{PATH} ${ANDROID_BIN_DIR}:$ENV{PATH})
 set(ENV{ANDROID_DATA} ${ANDROID_ROOT}/data)
 set(ENV{ANDROID_ROOT} ${ANDROID_ROOT})
 
