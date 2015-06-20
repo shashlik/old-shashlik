@@ -51,7 +51,6 @@ endif(FORCE_32BIT_BUILD)
 target_link_libraries(shashlik_jni
                       shashlikutils
                       javacrypto
-                      javacore
 )
 
 add_executable(shashlik_launcher ${shashlik_launcher_SRCS})
