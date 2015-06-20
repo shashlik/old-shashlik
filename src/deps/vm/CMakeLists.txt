@@ -214,7 +214,11 @@ set_target_properties(dvm PROPERTIES COMPILE_FLAGS "-fstrict-aliasing -Wstrict-a
 if(FORCE_32BIT_BUILD)
     set_target_properties(dvm PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
-target_link_libraries(dvm dex shashlik_jni ${FFI_LIBRARIES})
+target_link_libraries(dvm
+    dex
+    shashlik_jni
+    javacore
+    ${FFI_LIBRARIES})
 
 install(TARGETS dvm DESTINATION ${ANDROID_LIB_DIR})
 install(FILES

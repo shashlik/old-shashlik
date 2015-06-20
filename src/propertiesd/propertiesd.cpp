@@ -201,7 +201,7 @@ void Propertiesd::initProperties()
 
     writeProperty(QString::fromLatin1("ro.bq.gpu_to_cpu_unsupported"), QString::fromLatin1("0"));
     writeProperty(QString::fromLatin1("ro.hardware.hwcomposer"), QString::fromLatin1("shashlik"));
-//     writeProperty(QString::fromLatin1("ro.hardware.gralloc"), QString::fromLatin1("0"));
+    writeProperty(QString::fromLatin1("ro.hardware.gralloc"), QString::fromLatin1("drm"));
 //     writeProperty(QString::fromLatin1("ro.hardware"), QString::fromLatin1("0"));
 //     writeProperty(QString::fromLatin1("ro.product.board"), QString::fromLatin1("0"));
 //     writeProperty(QString::fromLatin1("ro.board.platform"), QString::fromLatin1("0"));

@@ -20,6 +20,7 @@ add_subdirectory(skia)            # skia graphics library
 add_subdirectory(openssl)         # openssl secure socket layer library
 add_subdirectory(sqlite)          # single file embedded database library
 add_subdirectory(libhardware)     # hardware abstraction layer
+add_subdirectory(libhardware_legacy) # older hardware layer stuff
 add_subdirectory(liblzf)          # very fast compression library
 add_subdirectory(libmemtrack)     # memory tracker
 add_subdirectory(libnetutils)     # networking utility functions

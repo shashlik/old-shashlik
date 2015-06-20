@@ -194,6 +194,7 @@ memtrack
 netutils
 gui
 input
+shashlik_jni
 #KF5::Archive
     GLESv1_CM
     #GLESv2
