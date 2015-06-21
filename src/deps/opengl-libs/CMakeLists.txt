@@ -100,13 +100,19 @@ set(mesa_SRCS
 set(gralloc_drm_SRCS
     ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc_drm.c
     ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc_drm_kms.c
-#     ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc_drm_intel.c
+    ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc_drm_intel.c
 #     ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc_drm_radeon.c
 #     ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc_drm_nouveau.c
 )
 
 set(grallocdrm_module_SRCS
-    ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc.c
+#     ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc.c
+    ${GENERAL_SOURCE_PATH}/gralloc/alloc_device.cpp
+    ${GENERAL_SOURCE_PATH}/gralloc/gralloc_module.cpp
+)
+
+set(hwcomposer_drm_SRCS
+    ${GENERAL_SOURCE_PATH}/hwcomposer/hwcomposer.cpp
 )
 
 add_library(EGL SHARED ${EGL_SRCS})
@@ -191,16 +197,21 @@ if(FORCE_32BIT_BUILD)
 endif(FORCE_32BIT_BUILD)
 target_compile_definitions(gralloc_drm
     PRIVATE
-#     -DENABLE_INTEL
+    -DENABLE_INTEL
 #     -DENABLE_RADEON
 #     -DENABLE_NOUVEAU
     -DANDROID_VERSION=0x442
 )
 target_include_directories(gralloc_drm
     PRIVATE
+#     /usr/src/linux-4.0.4/drivers/gpu/drm/i915
+#     /usr/src/linux-4.0.4/include/drivers/gpu/drm/i915
+#     /usr/src/linux-4.0.4/include
     ${LIBLOG_INCLUDES}
     ${LIBHARDWARE_INCLUDES}
     ${DRM_INCLUDE_DIRS}
+    ${GENERAL_SOURCE_PATH}/mesa/src/mesa/drivers/dri/i915
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 target_link_libraries(gralloc_drm
     log
@@ -208,7 +219,8 @@ target_link_libraries(gralloc_drm
     hardware_legacy
 
     ${DRM_LIBRARIES}
-#     drm_intel
+    drm_intel
+#     /usr/lib/dri/i915_dri.so
 #     drm_radeon
 #     drm_nouveau
 )
@@ -222,19 +234,41 @@ endif(FORCE_32BIT_BUILD)
 target_compile_definitions(gralloc.drm
     PRIVATE
     -DANDROID_VERSION=0x442
+    -DLOG_TAG="gralloc-drm"
+    -DGRALLOC_32_BITS
+    -DSTANDARD_LINUX_SCREEN
+    -DPLATFORM_SDK_VERSION=19
 )
 target_include_directories(gralloc.drm
     PRIVATE
     ${LIBHARDWARE_INCLUDES}
+    ${LIBLOG_INCLUDES}
+    ${LIBCUTILS_INCLUDES}
     ${DRM_INCLUDE_DIRS}
+    ${GENERAL_SOURCE_PATH}/gralloc
 )
 target_link_libraries(gralloc.drm
-    gralloc_drm
-    log
-
-    GLESv1_CM
     ${DRM_LIBRARIES}
+    hardware
+    log
+    cutils
 )
+# target_compile_definitions(gralloc.drm
+#     PRIVATE
+#     -DANDROID_VERSION=0x442
+# )
+# target_include_directories(gralloc.drm
+#     PRIVATE
+#     ${LIBHARDWARE_INCLUDES}
+#     ${DRM_INCLUDE_DIRS}
+# )
+# target_link_libraries(gralloc.drm
+#     gralloc_drm
+#     log
+# 
+#     GLESv1_CM
+#     ${DRM_LIBRARIES}
+# )
 
 add_library(mesa_loader STATIC ${mesa_loader_SRCS})
 if(FORCE_32BIT_BUILD)
@@ -318,6 +352,35 @@ target_compile_definitions(GLES_mesa
     -DANDROID_VERSION=0x442
 )
 
+add_library(hwcomposer.drm SHARED ${hwcomposer_drm_SRCS})
+set_target_properties(hwcomposer.drm PROPERTIES PREFIX "")
+if(FORCE_32BIT_BUILD)
+    set_target_properties(hwcomposer.drm PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
+target_compile_definitions(hwcomposer.drm
+    PRIVATE
+    -DHAVE_ANDROID_OS
+    -DANDROID
+    -DHAVE_PTHREAD
+    -DANDROID_VERSION=0x442
+    -DLOG_TAG="hwcomposer-drm"
+)
+target_include_directories(hwcomposer.drm
+    PRIVATE
+    ${DRM_INCLUDE_DIRS}
+    ${LIBHARDWARE_INCLUDES}
+    ${GENERAL_SOURCE_PATH}/gralloc
+    ${LIBLOG_INCLUDES}
+    ${ANDROID_CORE_PATH}/include/sync
+    ${GENERAL_SOURCE_PATH}/hwcomposer
+)
+target_link_libraries(hwcomposer.drm
+    ${DRM_LIBRARIES}
+    log
+    hardware
+    sync
+)
+
 add_library(ETC1 STATIC ${ETC1_SRCS})
 if(FORCE_32BIT_BUILD)
     set_target_properties(ETC1 PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
@@ -377,4 +440,4 @@ add_definitions(
 install(TARGETS GLESv2 GLESv1_CM ETC1 GLES_trace EGL gralloc_drm DESTINATION ${ANDROID_LIB_DIR})
 # install(TARGETS GLES_android DESTINATION ${ANDROID_LIB_DIR}/egl)
 install(TARGETS GLES_mesa DESTINATION ${ANDROID_LIB_DIR}/egl)
-install(TARGETS gralloc.drm DESTINATION ${ANDROID_LIB_DIR}/hw)
+install(TARGETS hwcomposer.drm gralloc.drm DESTINATION ${ANDROID_LIB_DIR}/hw)
