@@ -192,15 +192,17 @@ void Propertiesd::initProperties()
     writeProperty(QString::fromLatin1("ro.config.low_ram"), QString::fromLatin1("0"));
     writeProperty(QString::fromLatin1("ro.config.headless"), QString::fromLatin1("0"));
 
+    writeProperty(QString::fromLatin1("ro.zygote.disable_gl_preload"), QString::fromLatin1("true"));
+
     writeProperty(QString::fromLatin1("debug.egl.trace"), QString::fromLatin1("error"));
-//     writeProperty(QString::fromLatin1("debug.egl.callstack"), QString::fromLatin1("0"));
+    writeProperty(QString::fromLatin1("debug.egl.callstack"), QString::fromLatin1("0"));
 
 //     writeProperty(QString::fromLatin1("debug.sf.showupdates"), QString::fromLatin1("0"));
 //     writeProperty(QString::fromLatin1("debug.sf.ddms"), QString::fromLatin1("0"));
 //     writeProperty(QString::fromLatin1("debug.sf.no_hw_vsync"), QString::fromLatin1("0"));
 
     writeProperty(QString::fromLatin1("ro.bq.gpu_to_cpu_unsupported"), QString::fromLatin1("0"));
-    writeProperty(QString::fromLatin1("ro.hardware.hwcomposer"), QString::fromLatin1("shashlik"));
+    writeProperty(QString::fromLatin1("ro.hardware.hwcomposer"), QString::fromLatin1("drm"));
     writeProperty(QString::fromLatin1("ro.hardware.gralloc"), QString::fromLatin1("drm"));
 //     writeProperty(QString::fromLatin1("ro.hardware"), QString::fromLatin1("0"));
 //     writeProperty(QString::fromLatin1("ro.product.board"), QString::fromLatin1("0"));
