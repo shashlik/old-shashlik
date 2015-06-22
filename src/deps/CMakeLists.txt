@@ -46,7 +46,6 @@ add_subdirectory(libziparchive)
 # vm support libraries and tools
 add_subdirectory(libjni)
 add_subdirectory(libdex)
-add_subdirectory(dx)
 add_subdirectory(aidl) # must be before the java libraries, as it is used to create the interfaces
 add_subdirectory(aapt)
 
@@ -65,6 +64,7 @@ add_subdirectory(libjavacore)
 add_subdirectory(javalibrary-shashlik)
 
 #java tools
+add_subdirectory(dx)
 add_subdirectory(javalibrary-am)
 #add_subdirectory(dexgen)
 #add_subdirectory(hit)
