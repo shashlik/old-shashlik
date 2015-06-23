@@ -20,6 +20,7 @@
  */
 
 #include "Controller.h"
+#include "ProcessTracker.h"
 
 #include <KLocalizedString>
 
@@ -35,9 +36,13 @@ class Controller::Private
 public:
     Private()
         : installd(0)
+        , installdTracker(0)
         , serviceManager(0)
+        , serviceManagerTracker(0)
         , surfaceflinger(0)
+        , surfaceflingerTracker(0)
         , zygote(0)
+        , zygoteTracker(0)
     {
         appDir = qApp->applicationDirPath();
         QDir thisAppDir(appDir);
@@ -58,10 +63,16 @@ public:
     }
 
     QProcess* installd;
+    ProcessTracker* installdTracker;
     QProcess* serviceManager;
+    ProcessTracker* serviceManagerTracker;
     QProcess* surfaceflinger;
+    ProcessTracker* surfaceflingerTracker;
     QProcess* zygote;
+    ProcessTracker* zygoteTracker;
+
     QList<QProcess*> applications;
+    QList<ProcessTracker*> applicationTrackers;
 
     QString appDir;
     QString libraryRoot;
@@ -124,7 +135,31 @@ Controller::Controller(QObject* parent)
     : QObject(parent)
     , d(new Private)
 {
-
+    QList<ProcessTracker*> trackers;
+    trackers = ProcessTracker::getTrackers(d->androidRootDir + "/system/bin/servicemanager", this);
+    if(trackers.count() > 0)
+        d->serviceManagerTracker = trackers.at(0);
+    trackers = ProcessTracker::getTrackers(d->androidRootDir + "/system/bin/surfaceflinger", this);
+    if(trackers.count() > 0)
+        d->surfaceflingerTracker = trackers.at(0);
+    trackers = ProcessTracker::getTrackers(d->androidRootDir + "/system/bin/installd", this);
+    if(trackers.count() > 0)
+        d->installdTracker = trackers.at(0);
+    trackers = ProcessTracker::getTrackers(d->androidRootDir + "/system/bin/shashlik_launcher", this);
+    QString zygoteArg("-Xzygote");
+    Q_FOREACH(ProcessTracker* tracker, trackers) {
+        bool isZygote;
+        Q_FOREACH(QString arg, tracker->arguments()) {
+            if(arg == zygoteArg) {
+                isZygote = true;
+                break;
+            }
+        }
+        if(isZygote)
+            d->zygoteTracker = tracker;
+        else
+            d->applicationTrackers.append(tracker);
+    }
 }
 
 Controller::~Controller()
@@ -233,8 +268,15 @@ void Controller::runAM(const QString& arguments)
     }
 }
 
+bool Controller::zygoteRunning()
+{
+    return (d->zygoteTracker != 0);
+}
+
 void Controller::startZygote()
 {
+    if(zygoteRunning())
+        return;
     d->zygote = d->environment(this);
     connect(d->zygote, SIGNAL(readyRead()), this, SLOT(logSomething()));
     connect(d->zygote, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
@@ -242,11 +284,18 @@ void Controller::startZygote()
     qDebug() << "Attempting to start the Zygote...";
     d->zygote->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << "-Xzygote" << d->androidRootDir + "/system/bin/" << "--zygote" << "--start-system-server");
     d->zygote->waitForStarted();
-    // get process ID now
+    d->zygoteTracker = new ProcessTracker(d->zygote->processId(), this);
+}
+
+bool Controller::surfaceflingerRunning()
+{
+    return (d->surfaceflingerTracker != 0);
 }
 
 void Controller::startSurfaceflinger()
 {
+    if(surfaceflingerRunning())
+        return;
     d->surfaceflinger = d->environment(this);
     connect(d->surfaceflinger, SIGNAL(readyRead()), this, SLOT(logSomething()));
     connect(d->surfaceflinger, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
@@ -254,11 +303,20 @@ void Controller::startSurfaceflinger()
     qDebug() << "Attempting to start SurfaceFlinger...";
     d->surfaceflinger->start(d->androidRootDir + "/system/bin/surfaceflinger");
     d->surfaceflinger->waitForStarted();
-    // get process ID now
+    d->surfaceflingerTracker = new ProcessTracker(d->surfaceflinger->processId(), this);
+}
+
+bool Controller::servicemanagerRunning()
+{
+    return (d->serviceManagerTracker != 0);
 }
 
 void Controller::startServicemanager()
 {
+    if(servicemanagerRunning()) {
+        QMessageBox::information(0, "Shashlik Controller", "A service manager is already running. If you believe this to be in error, please stop all Shashlik services and try again.");
+        return;
+    }
     d->serviceManager = d->environment(this);
     connect(d->serviceManager, SIGNAL(readyRead()), this, SLOT(logSomething()));
     connect(d->serviceManager, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
@@ -266,11 +324,18 @@ void Controller::startServicemanager()
     qDebug() << "Attempting to start the Service Manager...";
     d->serviceManager->start(d->androidRootDir + "/system/bin/servicemanager");
     d->serviceManager->waitForStarted();
-    // get process ID now
+    d->serviceManagerTracker = new ProcessTracker(d->serviceManager->processId(), this);
+}
+
+bool Controller::installdRunning()
+{
+    return (d->installdTracker != 0);
 }
 
 void Controller::startInstalld()
 {
+    if(installdRunning())
+        return;
     d->installd = d->environment(this);
     connect(d->installd, SIGNAL(readyRead()), this, SLOT(logSomething()));
     connect(d->installd, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
@@ -278,14 +343,34 @@ void Controller::startInstalld()
     qDebug() << "Attempting to start the installer daemon...";
     d->installd->start(d->androidRootDir + "/system/bin/installd");
     d->installd->waitForStarted();
-    // get process ID now
+    d->installdTracker = new ProcessTracker(d->installd->processId(), this);
 }
 
 void Controller::stop()
 {
-    // TODO this should be done on PID... for now, we simply kill all instances of the applications in question, because there really should be only the one
-    QProcess::startDetached("killall surfaceflinger");
-    QProcess::startDetached("killall installd");
-    QProcess::startDetached("killall servicemanager");
-    QProcess::startDetached("killall shashlik_launcher");
+    if(surfaceflingerRunning()) {
+        bool result = d->surfaceflingerTracker->killProcess();
+        d->surfaceflingerTracker->deleteLater();
+        d->surfaceflingerTracker = 0;
+    }
+    if(installdRunning()) {
+        bool result = d->installdTracker->killProcess();
+        d->installdTracker->deleteLater();
+        d->installdTracker = 0;
+    }
+    if(servicemanagerRunning()) {
+        bool result = d->serviceManagerTracker->killProcess();
+        d->serviceManagerTracker->deleteLater();
+        d->serviceManagerTracker = 0;
+    }
+    if(zygoteRunning()) {
+        bool result = d->zygoteTracker->killProcess();
+        d->zygoteTracker->deleteLater();
+        d->zygoteTracker = 0;
+    }
+    Q_FOREACH(ProcessTracker* tracker, d->applicationTrackers) {
+        bool result = tracker->killProcess();
+        tracker->deleteLater();
+    }
+    d->applicationTrackers.clear();
 }
