@@ -109,11 +109,12 @@ int main(int argc, char *argv[])
         // do a thing with this thing...
         if(!controller->zygoteRunning() || !controller->servicemanagerRunning() || !controller->surfaceflingerRunning()) {
             // if any one of the services above isn't running, restart everything - we must assume something's broken
-//             controller->start();
+            controller->restart();
         }
         if(!controller->zygoteRunning() || !controller->servicemanagerRunning() || !controller->surfaceflingerRunning()) {
-            // never mind for now, as these always return false...
             // If this happens when the check is actually functional, we should be quitting with a useful error
+            QMessageBox::information(0, i18n("Shashlik Controller"), i18n("We are unable to start an Android environment to run your application inside. Please check your installation and try again."));
+            QTimer::singleShot(0, &app, SLOT(quit()));
         }
         controller->runJar(apkfile.at(0));
     }
@@ -144,7 +145,7 @@ int main(int argc, char *argv[])
     }
     else {
         // no need to check for guiArgument - that is what we will have left, or no arguments, which is the same thing
-        QMessageBox::information(0, i18n("Shashlik Controller"), i18n("Sorry, we don't have a UI yet. Select a .apk from your file manager, or run shashlik-controller from the command line."));
+        QMessageBox::information(0, i18n("Shashlik Controller"), i18n("Sorry, we don't have a UI yet. Select a .apk from your file manager, or run shashlik-controller from the command line. Current status of the services is as follows:\n Servicemanager: %1\n Surfaceflinger: %2\n Installer daemon: %3\n Android virtual machine: %4").arg(controller->servicemanagerRunning()).arg(controller->surfaceflingerRunning()).arg(controller->installdRunning()).arg(controller->zygoteRunning()));
         QTimer::singleShot(0, &app, SLOT(quit()));
     }
 
