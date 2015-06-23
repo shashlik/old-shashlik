@@ -5,6 +5,7 @@ add_subdirectory(icons)
 set(controller_SRCS
     main.cpp
     Controller.cpp
+    ProcessTracker.cpp
     init_util.c
 )
 
