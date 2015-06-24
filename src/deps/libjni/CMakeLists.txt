@@ -22,7 +22,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${JNI_SOURCE_DIR}
                     ${JNI_SOURCE_DIR}/android/graphics
                     ${ANDROID_FRAMEWORKS_BASE}/libs/hwui
-                    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include
+                    ${OPENGL_INCLUDES}
                     ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/libs
                     ${GENERAL_SOURCE_PATH}/libhardware/include
                     ${GENERAL_SOURCE_PATH}/libhardware/modules

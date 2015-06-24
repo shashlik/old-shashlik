@@ -47,6 +47,6 @@ target_include_directories(gui
     ${LIBUTILS_INCLUDES}
     ${LIBBINDER_INCLUDES}
     ${GENERAL_SOURCE_PATH}/libhardware/include
-    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include
+    ${OPENGL_INCLUDES}
 )
 install(TARGETS gui DESTINATION ${ANDROID_LIB_DIR})

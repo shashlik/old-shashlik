@@ -39,7 +39,7 @@ include_directories(
     ${FREETYPE_INCLUDE_DIRS}
     ${GIF_INCLUDE_DIR}
     ${JPEG_INCLUDE_DIR}
-    ${OPENGL_INCLUDE_DIR}
+    ${OPENGL_INCLUDES}
     )
 
 
@@ -463,7 +463,7 @@ set(skia_skgr_SRCS
     ${SKIA_SRC_PATH}/gpu/SkGrPixelRef.cpp
     ${SKIA_SRC_PATH}/gpu/SkGrTexturePixelRef.cpp
     ${SKIA_SRC_PATH}/gpu/gl/SkGLContextHelper.cpp
-#     ${SKIA_SRC_PATH}/gpu/gl/android/SkNativeGLContext_android.cpp
+    ${SKIA_SRC_PATH}/gpu/gl/android/SkNativeGLContext_android.cpp
     )
 
 # null and debug gpu interfaces
@@ -559,8 +559,8 @@ set(skia_gr_SRCS
     ${SKIA_SRC_PATH}/gpu/gl/GrGLVertexBuffer.cpp
     ${SKIA_SRC_PATH}/gpu/gl/GrGpuGL.cpp
     ${SKIA_SRC_PATH}/gpu/gl/GrGpuGL_program.cpp
-#     ${SKIA_SRC_PATH}/gpu/gl/android/GrGLCreateNativeInterface_android.cpp
-    ${SKIA_SRC_PATH}/gpu/gl/unix/GrGLCreateNativeInterface_unix.cpp
+    ${SKIA_SRC_PATH}/gpu/gl/android/GrGLCreateNativeInterface_android.cpp
+#     ${SKIA_SRC_PATH}/gpu/gl/unix/GrGLCreateNativeInterface_unix.cpp
 #     ${SKIA_SRC_PATH}/gpu/gl/unix/SkNativeGLContext_unix.cpp
     )
 
@@ -582,5 +582,5 @@ target_compile_definitions(skia
 if(FORCE_32BIT_BUILD)
     set_target_properties(skia PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
-target_link_libraries(skia ${HARFBUZZ_LIBRARIES} ${HARFBUZZ_ICU_LIBRARIES} z ${FONTCONFIG_LIBRARIES} ${FREETYPE_LIBRARIES} ${JPEG_LIBRARIES} ${GIF_LIBRARIES} ${WEBP_LIBRARIES} ${OPENGL_LIBRARIES} skia_hack skia_hack2 ${PNG_LIBRARIES})
+target_link_libraries(skia ${HARFBUZZ_LIBRARIES} ${HARFBUZZ_ICU_LIBRARIES} z ${FONTCONFIG_LIBRARIES} ${FREETYPE_LIBRARIES} ${JPEG_LIBRARIES} ${GIF_LIBRARIES} ${WEBP_LIBRARIES} ${OPENGL_LIBS} skia_hack skia_hack2 ${PNG_LIBRARIES})
 install(TARGETS skia DESTINATION ${ANDROID_LIB_DIR})

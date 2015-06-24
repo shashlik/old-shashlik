@@ -2,6 +2,13 @@ project(opengl-libraries)
 
 set(REPO_PATH ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl)
 
+add_definitions(
+    -DHAVE_ANDROID_OS
+    -DANDROID
+)
+
+add_subdirectory(glapi)
+
 set(GLES_trace_SRCS
     ${REPO_PATH}/libs/GLES_trace/src/gltrace_api.cpp
     ${REPO_PATH}/libs/GLES_trace/src/gltrace_context.cpp
@@ -135,8 +142,6 @@ target_include_directories(EGL
 target_compile_definitions(EGL
     PRIVATE
     -DLOG_TAG="libEGL"
-    -DHAVE_ANDROID_OS
-    -DANDROID
     PUBLIC
     -DEGL_TRACE=1
     -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
@@ -156,7 +161,6 @@ target_compile_definitions(GLES_trace
     -DGOOGLE_PROTOBUF_NO_RTTI
     -DEGL_TRACE=1
     -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
-    -DANDROID
 )
 target_include_directories(GLES_trace
     PRIVATE
@@ -180,7 +184,6 @@ target_compile_definitions(GLES_android
     PRIVATE
     -DLOG_TAG="libagl"
     -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
-    -DANDROID
 )
 target_include_directories(GLES_android
     PRIVATE
@@ -303,6 +306,7 @@ target_compile_definitions(mesa_egl_dri2
 target_include_directories(mesa_egl_dri2
     PRIVATE
     ${DRM_INCLUDE_DIRS}
+    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
     ${GENERAL_SOURCE_PATH}/mesa/include
     ${GENERAL_SOURCE_PATH}/mesa/src/egl/main
     ${GENERAL_SOURCE_PATH}/mesa/src/egl
@@ -329,6 +333,7 @@ target_include_directories(GLES_mesa
 target_link_libraries(GLES_mesa
     mesa_egl_dri2
     mesa_loader
+    glapi
 
     gralloc_drm
     hardware
@@ -337,7 +342,6 @@ target_link_libraries(GLES_mesa
     sync
 
     drm
-    glapi
     dl
 )
 target_compile_definitions(GLES_mesa
@@ -345,8 +349,6 @@ target_compile_definitions(GLES_mesa
     -D_EGL_NATIVE_PLATFORM=_EGL_PLATFORM_ANDROID
     -D_EGL_DRIVER_SEARCH_DIR="${ANDROID_ROOT}/system/lib/egl"
     -D_EGL_OS_UNIX=1
-    -DHAVE_ANDROID_OS
-    -DANDROID
     -D_EGL_BUILT_IN_DRIVER_DRI2
     -DHAVE_PTHREAD
     -DANDROID_VERSION=0x442
@@ -359,8 +361,6 @@ if(FORCE_32BIT_BUILD)
 endif(FORCE_32BIT_BUILD)
 target_compile_definitions(hwcomposer.drm
     PRIVATE
-    -DHAVE_ANDROID_OS
-    -DANDROID
     -DHAVE_PTHREAD
     -DANDROID_VERSION=0x442
     -DLOG_TAG="hwcomposer-drm"
@@ -404,7 +404,6 @@ target_compile_definitions(GLESv1_CM
     PRIVATE
     -DLOG_TAG="libGLESv1_CM"
     -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
-    -DANDROID
 )
 target_include_directories(GLESv1_CM
     PRIVATE
@@ -424,7 +423,6 @@ target_compile_definitions(GLESv2
     PRIVATE
     -DLOG_TAG="libGLESv1_CM"
     -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
-    -DANDROID
 )
 target_include_directories(GLESv2
     PRIVATE
