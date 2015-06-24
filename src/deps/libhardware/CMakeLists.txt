@@ -88,7 +88,7 @@ target_link_libraries(gralloc.default log cutils)
 add_library(hwcomposer.default SHARED ${hwcomposer_SRCS})
 target_compile_definitions(hwcomposer.default PUBLIC -DLOG_TAG=\"hwcomposer\")
 target_link_libraries(hwcomposer.default log EGL)
-target_include_directories(hwcomposer.default PRIVATE ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include)
+target_include_directories(hwcomposer.default PRIVATE ${OPENGL_INCLUDES})
 
 # add_library(hwcomposer.intel SHARED ${hwcomposerIntel_SRCS})
 # target_compile_definitions(hwcomposer.intel PRIVATE -DINTEL_SUPPORT_HDMI_PRIMARY)

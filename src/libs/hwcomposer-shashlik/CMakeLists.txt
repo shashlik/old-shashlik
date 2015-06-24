@@ -23,7 +23,7 @@ target_link_libraries(hwcomposer.shashlik
 )
 target_include_directories(hwcomposer.shashlik
     PRIVATE
-    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include
+    ${OPENGL_INCLUDES}
     ${LIBUTILS_INCLUDES}
     ${LIBHARDWARE_INCLUDES}
     ${QT5CORE32_INCLUDE_DIRS}

@@ -31,10 +31,10 @@ public:
     Controller(QObject* parent = 0);
     virtual ~Controller();
 
-    /// TODO this should do real things, like check PIDs and report back.
-    bool zygoteRunning() { return false; }
-    bool surfaceflingerRunning() { return false; }
-    bool servicemanagerRunning() { return false; }
+    bool zygoteRunning();
+    bool installdRunning();
+    bool surfaceflingerRunning();
+    bool servicemanagerRunning();
 
 Q_SIGNALS:
     void onError(QString description);

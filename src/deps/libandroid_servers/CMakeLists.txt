@@ -33,7 +33,7 @@ target_compile_definitions(android_servers
 target_include_directories(android_servers
     PRIVATE
     ${LIBNATIVEHELPER_INCLUDEDIRS}
-    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include
+    ${OPENGL_INCLUDES}
     ${ANDROID_FRAMEWORKS_BASE}/include
     ${ANDROID_FRAMEWORKS_BASE}/services
     ${ANDROID_FRAMEWORKS_BASE}/core/jni
