@@ -33,6 +33,7 @@ target_compile_definitions(android_servers
 target_include_directories(android_servers
     PRIVATE
     ${LIBNATIVEHELPER_INCLUDEDIRS}
+    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include
     ${ANDROID_FRAMEWORKS_BASE}/include
     ${ANDROID_FRAMEWORKS_BASE}/services
     ${ANDROID_FRAMEWORKS_BASE}/core/jni
@@ -59,6 +60,6 @@ target_link_libraries(android_servers
     usbhost
 #     suspend
 #     EGL
-#     GLESv2
+    GLESv2
 )
 install(TARGETS android_servers DESTINATION ${ANDROID_LIB_DIR})
