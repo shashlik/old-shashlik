@@ -56,9 +56,14 @@ public:
      */
     static QList<ProcessTracker*> getTrackers(QString executableFilePath, QObject* parent);
 
+    Q_SIGNAL void processExited();
+
 private:
     class Private;
     Private *d;
+
+private slots:
+    void fileWatch();
 };
 
 #endif // PROCESSTRACKER_H
