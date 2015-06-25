@@ -81,6 +81,7 @@ add_subdirectory(libandroid_servers)
 add_subdirectory(servicemanager) # The application which takes care of starting and stopping services
 # TODO hook into KDE's service management infrastructure for this
 add_subdirectory(surfaceflinger)
+add_subdirectory(bootanimation)
 
 # Intel hardware libraries
 # add_subdirectory(libwsbm)
