@@ -27,16 +27,30 @@
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(bool zygoteRunning READ zygoteRunning NOTIFY zygoteRunningChanged)
+    Q_PROPERTY(bool installdRunning READ installdRunning NOTIFY installdRunningChanged)
+    Q_PROPERTY(bool surfaceflingerRunning READ surfaceflingerRunning NOTIFY surfaceflingerRunningChanged)
+    Q_PROPERTY(bool servicemanagerRunning READ servicemanagerRunning NOTIFY servicemanagerRunningChanged)
+    Q_PROPERTY(bool quitOnError READ quitOnError WRITE setQuitOnError NOTIFY quitOnErrorChanged)
 public:
     Controller(QObject* parent = 0);
     virtual ~Controller();
 
-    bool zygoteRunning();
-    bool installdRunning();
-    bool surfaceflingerRunning();
-    bool servicemanagerRunning();
+    bool zygoteRunning() const;
+    bool installdRunning() const;
+    bool surfaceflingerRunning() const;
+    bool servicemanagerRunning() const;
+
+    bool quitOnError() const;
+    void setQuitOnError(bool newValue);
 
 Q_SIGNALS:
+    void zygoteRunningChanged();
+    void installdRunningChanged();
+    void surfaceflingerRunningChanged();
+    void servicemanagerRunningChanged();
+    void quitOnErrorChanged();
+
     void onError(QString description);
 
 public Q_SLOTS:
@@ -54,6 +68,7 @@ public Q_SLOTS:
 
     void logSomething();
     void processExited(int exitCode, QProcess::ExitStatus exitStatus);
+    void processExited();
 
 private:
     class Private;

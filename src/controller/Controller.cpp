@@ -35,7 +35,8 @@ class Controller::Private
 {
 public:
     Private()
-        : installd(0)
+        : quitOnError(true)
+        , installd(0)
         , installdTracker(0)
         , serviceManager(0)
         , serviceManagerTracker(0)
@@ -61,6 +62,8 @@ public:
             proc->terminate();
         }
     }
+
+    bool quitOnError;
 
     QProcess* installd;
     ProcessTracker* installdTracker;
@@ -167,6 +170,17 @@ Controller::~Controller()
     delete d;
 }
 
+bool Controller::quitOnError() const
+{
+    return d->quitOnError;
+}
+
+void Controller::setQuitOnError(bool newValue)
+{
+    d->quitOnError = newValue;
+    emit quitOnErrorChanged();
+}
+
 void Controller::logSomething()
 {
     QProcess* proc = qobject_cast<QProcess*>(sender());
@@ -200,18 +214,18 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
             QMessageBox::critical(0, i18n("Shashlik Controller Error"), "Zygote has exited - if zygote exits, everything should be killed!");
             stop();
             // grace to allow things to shut down...
-            QTimer::singleShot(1000, qApp, SLOT(quit()));
+            if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->serviceManager) {
             QMessageBox::critical(0, i18n("Shashlik Controller Error"), "The service manager has exited - if this happens, nothing will work and we should just cut our losses and quit everything else.");
             stop();
             // grace to allow things to shut down...
-            QTimer::singleShot(1000, qApp, SLOT(quit()));
+            if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->surfaceflinger) {
             QMessageBox::information(0, i18n("Shashlik Controller Error"), QString("SurfaceFlinger has exited. This is a terrible thing! We should try and restart it and see if that helps (and then quit if it still doesn't). Exit code %1 and exit status %2").arg(QString::number(exitCode)).arg(QString::number(exitStatus)));
             // grace to allow things to shut down...
-            QTimer::singleShot(1000, qApp, SLOT(quit()));
+            if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->installd) {
             QMessageBox::information(0, i18n("Shashlik Controller Error"), "The Installer daemon has exited. We'll just let that slide.");
@@ -224,11 +238,38 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
                 // This is not always true - the launcher will exit cleanly, even if the vm died for some reason or another. This needs fixing.
                 printf("Normal exit from application %s\n", proc->objectName().toLocal8Bit().data());
             }
-            QTimer::singleShot(1000, qApp, SLOT(quit()));
+            if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else {
             QMessageBox::critical(0, i18n("Shashlik Controller Error"), QString("%1 has exited").arg(proc->program()));
         }
+    }
+}
+
+void Controller::processExited()
+{
+    if(sender() == d->installdTracker) {
+        d->installdTracker->deleteLater();
+        d->installdTracker = 0;
+        emit installdRunningChanged();
+    }
+    else if(sender() == d->serviceManagerTracker) {
+        d->serviceManagerTracker->deleteLater();
+        d->serviceManagerTracker = 0;
+        emit servicemanagerRunningChanged();
+    }
+    else if(sender() == d->surfaceflingerTracker) {
+        d->surfaceflingerTracker->deleteLater();
+        d->surfaceflingerTracker = 0;
+        emit surfaceflingerRunningChanged();
+    }
+    else if(sender() == d->zygoteTracker) {
+        d->zygoteTracker->deleteLater();
+        d->zygoteTracker = 0;
+        emit zygoteRunningChanged();
+    }
+    else {
+        // check as above, application quitty thing...
     }
 }
 
@@ -268,7 +309,7 @@ void Controller::runAM(const QString& arguments)
     }
 }
 
-bool Controller::zygoteRunning()
+bool Controller::zygoteRunning() const
 {
     return (d->zygoteTracker != 0);
 }
@@ -285,9 +326,11 @@ void Controller::startZygote()
     d->zygote->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << "-Xzygote" << d->androidRootDir + "/system/bin/" << "--zygote" << "--start-system-server");
     d->zygote->waitForStarted();
     d->zygoteTracker = new ProcessTracker(d->zygote->processId(), this);
+    connect(d->zygoteTracker, SIGNAL(processExited()), SLOT(processExited()));
+    emit zygoteRunningChanged();
 }
 
-bool Controller::surfaceflingerRunning()
+bool Controller::surfaceflingerRunning() const
 {
     return (d->surfaceflingerTracker != 0);
 }
@@ -304,9 +347,11 @@ void Controller::startSurfaceflinger()
     d->surfaceflinger->start(d->androidRootDir + "/system/bin/surfaceflinger");
     d->surfaceflinger->waitForStarted();
     d->surfaceflingerTracker = new ProcessTracker(d->surfaceflinger->processId(), this);
+    connect(d->surfaceflingerTracker, SIGNAL(processExited()), SLOT(processExited()));
+    emit surfaceflingerRunningChanged();
 }
 
-bool Controller::servicemanagerRunning()
+bool Controller::servicemanagerRunning() const
 {
     return (d->serviceManagerTracker != 0);
 }
@@ -325,9 +370,11 @@ void Controller::startServicemanager()
     d->serviceManager->start(d->androidRootDir + "/system/bin/servicemanager");
     d->serviceManager->waitForStarted();
     d->serviceManagerTracker = new ProcessTracker(d->serviceManager->processId(), this);
+    connect(d->serviceManagerTracker, SIGNAL(processExited()), SLOT(processExited()));
+    emit servicemanagerRunningChanged();
 }
 
-bool Controller::installdRunning()
+bool Controller::installdRunning() const
 {
     return (d->installdTracker != 0);
 }
@@ -344,32 +391,26 @@ void Controller::startInstalld()
     d->installd->start(d->androidRootDir + "/system/bin/installd");
     d->installd->waitForStarted();
     d->installdTracker = new ProcessTracker(d->installd->processId(), this);
+    connect(d->installdTracker, SIGNAL(processExited()), SLOT(processExited()));
+    emit installdRunningChanged();
 }
 
 void Controller::stop()
 {
     if(surfaceflingerRunning()) {
-        bool result = d->surfaceflingerTracker->killProcess();
-        d->surfaceflingerTracker->deleteLater();
-        d->surfaceflingerTracker = 0;
+        d->surfaceflingerTracker->killProcess();
     }
     if(installdRunning()) {
-        bool result = d->installdTracker->killProcess();
-        d->installdTracker->deleteLater();
-        d->installdTracker = 0;
+        d->installdTracker->killProcess();
     }
     if(servicemanagerRunning()) {
-        bool result = d->serviceManagerTracker->killProcess();
-        d->serviceManagerTracker->deleteLater();
-        d->serviceManagerTracker = 0;
+        d->serviceManagerTracker->killProcess();
     }
     if(zygoteRunning()) {
-        bool result = d->zygoteTracker->killProcess();
-        d->zygoteTracker->deleteLater();
-        d->zygoteTracker = 0;
+        d->zygoteTracker->killProcess();
     }
     Q_FOREACH(ProcessTracker* tracker, d->applicationTrackers) {
-        bool result = tracker->killProcess();
+        tracker->killProcess();
         tracker->deleteLater();
     }
     d->applicationTrackers.clear();
