@@ -108,6 +108,26 @@ target_include_directories(surfaceflinger
     ${QT5GUI32_INCLUDE_DIRS}
 )
 
+
+#TESTS
+
+add_executable(surfaceflinger_vsync_test ${REPO_PATH}/tests/vsync/vsync.cpp)
+target_link_libraries(surfaceflinger_vsync_test
+    libsurfaceflinger
+)
+
+target_include_directories(surfaceflinger_vsync_test
+    PRIVATE
+    ${LIBBINDER_INCLUDES}
+    ${LIBLOG_INCLUDES}
+    ${LIBHARDWARE_INCLUDES}
+    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
+    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include
+)
+
+
+
+
 if(FORCE_32BIT_BUILD)
     set_target_properties(libsurfaceflinger PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
     set_target_properties(surfaceflinger PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")

@@ -34,7 +34,9 @@ include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
 include(ECMInstallIcons)
 
-find_package(KF5 REQUIRED COMPONENTS I18n WindowSystem Service Package Declarative Plasma PlasmaQuick)
+find_package(KF5 REQUIRED COMPONENTS I18n)
+# WindowSystem Service Package Declarative Plasma PlasmaQuick)
+
 # find_package(KF5 REQUIRED COMPONENTS
 # WindowSystem CoreAddons Solid Config Auth DBusAddons
 # I18n Service IconThemes Bookmarks
@@ -151,7 +153,7 @@ set(SAFE_IOP_INCLUDES ${SAFE_IOP_PATH}/include)
 
 set(SQLITE3_INCLUDES ${GENERAL_SOURCE_PATH}/sqlite/dist ${GENERAL_SOURCE_PATH}/sqlite/android)
 
-set(SKIA_INCLUDES ${SKIA_PATH}/include/c ${SKIA_PATH}/include/config ${SKIA_PATH}/include/core ${SKIA_PATH}/include/effects ${SKIA_PATH}/include/gpu ${SKIA_PATH}/include/images ${SKIA_PATH}/include/pathops ${SKIA_PATH}/include/pipe ${SKIA_PATH}/include/ports ${SKIA_PATH}/include/utils ${SKIA_PATH}/include/xml)
+set(SKIA_INCLUDES ${SKIA_PATH}/include/ ${SKIA_PATH}/include/config ${SKIA_PATH}/include/core ${SKIA_PATH}/include/effects ${SKIA_PATH}/include/gpu ${SKIA_PATH}/include/images ${SKIA_PATH}/include/pathops ${SKIA_PATH}/include/pipe ${SKIA_PATH}/include/ports ${SKIA_PATH}/include/utils ${SKIA_PATH}/include/xml)
 
 # Tier2 libraries
 

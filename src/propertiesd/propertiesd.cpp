@@ -38,6 +38,9 @@ Propertiesd::Propertiesd(QObject *parent, const QVariantList &)
     : KDEDModule(parent),
       m_properties(QString::fromLatin1("org.kde.shashlik"), QString::fromLatin1("propertiesd"))
 {
+
+    qDebug()  << "I AM THE PRPOPERTIES DAEMON, HEAR ME ROAR!!!!";
+
     if (QFile::exists(QString::fromLatin1(SYSTEM_PROPERTY_PIPE_NAME))) {
         QFile::remove(QString::fromLatin1(SYSTEM_PROPERTY_PIPE_NAME));
     }
@@ -231,6 +234,9 @@ void Propertiesd::initProperties()
 
     writeProperty(QString::fromLatin1("persist.sys.language"), QString::fromLatin1("en"));
     writeProperty(QString::fromLatin1("persist.sys.country"), QString::fromLatin1("US"));
+
+
+    writeProperty(QString::fromLatin1("ro.sf.lcd_density"), QString::fromLatin1("200"));
 
     writeProperty(QString::fromLatin1("system_init.startsensorservice"), QString::fromLatin1("1"));
     writeProperty(QString::fromLatin1("sys.shutdown.requested"), QString::fromLatin1("1"));

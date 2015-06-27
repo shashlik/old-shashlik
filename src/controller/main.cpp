@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
         QDir::root().mkdir(socketDir);
     }
 
-    QApplication app(argc, argv);
+    QCoreApplication app(argc, argv);
     app.setApplicationName("shashlik-launcher");
     app.setApplicationVersion("0.1");
 

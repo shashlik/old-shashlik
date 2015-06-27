@@ -197,28 +197,29 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
     QProcess* proc = qobject_cast<QProcess*>(sender());
     if(proc) {
         if(proc == d->zygote) {
-            QMessageBox::critical(0, i18n("Shashlik Controller Error"), "Zygote has exited - if zygote exits, everything should be killed!");
-            stop();
+            qWarning() << "Zygote has exited - if zygote exits, everything should be killed!";
+//             stop();
             // grace to allow things to shut down...
             QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->serviceManager) {
-            QMessageBox::critical(0, i18n("Shashlik Controller Error"), "The service manager has exited - if this happens, nothing will work and we should just cut our losses and quit everything else.");
+            //QMessageBox::critical(0, i18n("Shashlik Controller Error"), "The service manager has exited - if this happens, nothing will work and we should just cut our losses and quit everything else.");
             stop();
             // grace to allow things to shut down...
             QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->surfaceflinger) {
-            QMessageBox::information(0, i18n("Shashlik Controller Error"), QString("SurfaceFlinger has exited. This is a terrible thing! We should try and restart it and see if that helps (and then quit if it still doesn't). Exit code %1 and exit status %2").arg(QString::number(exitCode)).arg(QString::number(exitStatus)));
+            qWarning() << QString("SurfaceFlinger has exited. This is a terrible thing! We should try and restart it and see if that helps (and then quit if it still doesn't). Exit code %1 and exit status%2").arg(QString::number(exitCode)).arg(QString::number(exitStatus));
+            //QMessageBox::information(0, i18n("Shashlik Controller Error"), QString(");
             // grace to allow things to shut down...
             QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->installd) {
-            QMessageBox::information(0, i18n("Shashlik Controller Error"), "The Installer daemon has exited. We'll just let that slide.");
+            qWarning()  << "The Installer daemon has exited. We'll just let that slide.";
         }
         else if(d->applications.contains(proc)) {
             if(proc->exitCode() == QProcess::CrashExit) {
-                QMessageBox::critical(0, i18n("Shashlik Controller Error"), QString("The application %1 has quit unexpectedly. Something gone done blown up.").arg(proc->objectName()));
+                qWarning() << QString("The application %1 has quit unexpectedly. Something gone done blown up.").arg(proc->objectName());
             }
             else {
                 // This is not always true - the launcher will exit cleanly, even if the vm died for some reason or another. This needs fixing.
@@ -227,7 +228,7 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
             QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else {
-            QMessageBox::critical(0, i18n("Shashlik Controller Error"), QString("%1 has exited").arg(proc->program()));
+            qWarning() << QString("%1 has exited").arg(proc->program());
         }
     }
 }
@@ -282,8 +283,12 @@ void Controller::startZygote()
     connect(d->zygote, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
     d->zygote->setProcessChannelMode(QProcess::MergedChannels);
     qDebug() << "Attempting to start the Zygote...";
-    d->zygote->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << "-Xzygote" << d->androidRootDir + "/system/bin/" << "--zygote" << "--start-system-server");
+// //     d->zygote->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << "-Xzygote" << d->androidRootDir + "/system/bin/" << "--zygote" << "--start-system-server");
+
+
+    d->zygote->start("/home/user/shashlik/src/shashlik/build/src/deps/bootanimation/bootanimation");
     d->zygote->waitForStarted();
+
     d->zygoteTracker = new ProcessTracker(d->zygote->processId(), this);
 }
 
