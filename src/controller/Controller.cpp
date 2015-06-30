@@ -36,6 +36,8 @@ class Controller::Private
 public:
     Private()
         : quitOnError(true)
+        , bootanimation(0)
+        , bootanimationTracker(0)
         , installd(0)
         , installdTracker(0)
         , serviceManager(0)
@@ -58,6 +60,7 @@ public:
         if(serviceManager) serviceManager->terminate();
         if(surfaceflinger) surfaceflinger->terminate();
         if(installd) installd->terminate();
+        if(bootanimation) bootanimation->terminate();
         Q_FOREACH(QProcess* proc, applications) {
             proc->terminate();
         }
@@ -65,6 +68,8 @@ public:
 
     bool quitOnError;
 
+    QProcess* bootanimation;
+    ProcessTracker* bootanimationTracker;
     QProcess* installd;
     ProcessTracker* installdTracker;
     QProcess* serviceManager;
@@ -148,6 +153,9 @@ Controller::Controller(QObject* parent)
     trackers = ProcessTracker::getTrackers(d->androidRootDir + "/system/bin/installd", this);
     if(trackers.count() > 0)
         d->installdTracker = trackers.at(0);
+    trackers = ProcessTracker::getTrackers(d->androidRootDir + "/system/bin/bootanimation", this);
+    if(trackers.count() > 0)
+        d->bootanimationTracker = trackers.at(0);
     trackers = ProcessTracker::getTrackers(d->androidRootDir + "/system/bin/shashlik_launcher", this);
     QString zygoteArg("-Xzygote");
     Q_FOREACH(ProcessTracker* tracker, trackers) {
@@ -194,6 +202,8 @@ void Controller::logSomething()
             origin = "SurfaceFlinger";
         } else if(proc == d->installd) {
             origin = "Installer Daemon";
+        } else if(proc == d->bootanimation) {
+            origin = "Bootanimation";
         } else if(d->applications.contains(proc)) {
             origin = proc->objectName();
         } else {
@@ -251,6 +261,11 @@ void Controller::processExited()
     if(sender() == d->installdTracker) {
         d->installdTracker->deleteLater();
         d->installdTracker = 0;
+        emit installdRunningChanged();
+    }
+    else if(sender() == d->bootanimationTracker) {
+        d->bootanimationTracker->deleteLater();
+        d->bootanimationTracker = 0;
         emit installdRunningChanged();
     }
     else if(sender() == d->serviceManagerTracker) {
@@ -395,6 +410,27 @@ void Controller::startInstalld()
     emit installdRunningChanged();
 }
 
+bool Controller::bootanimationRunning() const
+{
+    return (d->bootanimationTracker != 0);
+}
+
+void Controller::startBootanimation()
+{
+    if(bootanimationRunning())
+        return;
+    d->bootanimation = d->environment(this);
+    connect(d->bootanimation, SIGNAL(readyRead()), this, SLOT(logSomething()));
+    connect(d->bootanimation, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
+    d->bootanimation->setProcessChannelMode(QProcess::MergedChannels);
+    qDebug() << "Attempting to start the installer daemon...";
+    d->bootanimation->start(d->androidRootDir + "/system/bin/bootanimation");
+    d->bootanimation->waitForStarted();
+    d->bootanimationTracker = new ProcessTracker(d->bootanimation->processId(), this);
+    connect(d->bootanimationTracker, SIGNAL(processExited()), SLOT(processExited()));
+    emit bootanimationRunningChanged();
+}
+
 void Controller::stop()
 {
     if(surfaceflingerRunning()) {
@@ -402,6 +438,9 @@ void Controller::stop()
     }
     if(installdRunning()) {
         d->installdTracker->killProcess();
+    }
+    if(bootanimationRunning()) {
+        d->bootanimationTracker->killProcess();
     }
     if(servicemanagerRunning()) {
         d->serviceManagerTracker->killProcess();
