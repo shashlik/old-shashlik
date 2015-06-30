@@ -54,7 +54,7 @@ ProcessTracker::ProcessTracker(int processId, QObject* parent)
 {
     d->watchFile.setFileName(QString("/proc/%1").arg(QString::number(processId)));
     d->watchTimer = new QTimer(this);
-    d->watchTimer->start(1500);
+    d->watchTimer->start(500);
     connect(d->watchTimer, SIGNAL(timeout()), SLOT(fileWatch()));
     QFile f(QString("/proc/%1/cmdline").arg(QString::number(processId)));
     if(f.open(QIODevice::ReadOnly | QFile::Text)) {
