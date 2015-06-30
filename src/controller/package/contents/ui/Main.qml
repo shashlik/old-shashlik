@@ -125,14 +125,19 @@ Rectangle {
                     onStartService: shashlikController.startInstalld();
                 }
                 ControlEntry {
-                    text: "Service Manager";
-                    running: shashlikController.servicemanagerRunning;
-                    onStartService: shashlikController.startServicemanager();
+                    text: "Bootanimation";
+                    running: shashlikController.bootanimationRunning;
+                    onStartService: shashlikController.startBootanimation();
                 }
                 ControlEntry {
                     text: "SurfaceFlinger";
                     running: shashlikController.surfaceflingerRunning;
                     onStartService: shashlikController.startSurfaceflinger();
+                }
+                ControlEntry {
+                    text: "Service Manager";
+                    running: shashlikController.servicemanagerRunning;
+                    onStartService: shashlikController.startServicemanager();
                 }
             }
             Item {
