@@ -266,7 +266,7 @@ void Controller::processExited()
     else if(sender() == d->bootanimationTracker) {
         d->bootanimationTracker->deleteLater();
         d->bootanimationTracker = 0;
-        emit installdRunningChanged();
+        emit bootanimationRunningChanged();
     }
     else if(sender() == d->serviceManagerTracker) {
         d->serviceManagerTracker->deleteLater();
