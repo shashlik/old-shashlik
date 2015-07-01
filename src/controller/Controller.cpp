@@ -288,9 +288,13 @@ void Controller::processExited()
     }
 }
 
-void Controller::runJar(const QString& jarFile)
+void Controller::runApk(QString apkFile)
 {
-    if(QFile::exists(jarFile) && d->waitForZygoteReady()) {
+    // We only accept local files, no URLs here.
+    /// TODO make sure we accept URLs at some point. KIO support would be very nice here.
+    if(apkFile.toLower().startsWith("file://"))
+        apkFile = apkFile.mid(7);
+    if(QFile::exists(apkFile) && d->waitForZygoteReady()) {
         QProcess* process = d->environment(this);
         d->applications.append(process);
         connect(process, SIGNAL(readyRead()), this, SLOT(logSomething()));
@@ -299,9 +303,9 @@ void Controller::runJar(const QString& jarFile)
         QProcessEnvironment env = process->processEnvironment();
         env.insert("CLASSPATH", d->androidRootDir + "/system/framework/launch.jar");
         process->setProcessEnvironment(env);
-        qDebug() << "Launching the application contained within" << jarFile;
-        process->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << d->androidRootDir + "/system/bin/" << "com.android.commands.launch.Launch" << jarFile);
-        process->setObjectName(jarFile.split("/").last());
+        qDebug() << "Launching the application contained within" << apkFile;
+        process->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << d->androidRootDir + "/system/bin/" << "com.android.commands.launch.Launch" << apkFile);
+        process->setObjectName(apkFile.split("/").last());
         process->waitForStarted();
     }
 }

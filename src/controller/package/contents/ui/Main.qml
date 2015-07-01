@@ -187,10 +187,11 @@ Rectangle {
     }
     FileDialog {
         id: fileDialog;
-        title: "Please choose an Android package";
+        title: "Please Choose an Android package";
         folder: shortcuts.home;
         nameFilters: [ "Android packages (*.apk)", "All files (*)" ];
         onAccepted: {
+            shashlikController.runApk(fileDialog.fileUrl);
         }
     }
 }

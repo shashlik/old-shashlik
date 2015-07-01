@@ -58,7 +58,7 @@ Q_SIGNALS:
     void onError(QString description);
 
 public Q_SLOTS:
-    void runJar(const QString& jarFile);
+    void runApk(QString apkFile);
     void runAM(const QString& arguments);
 
     void startZygote();
