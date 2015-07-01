@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 import QtQuick 2.2
+import QtQuick.Dialogs 1.2
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
@@ -106,10 +107,30 @@ Rectangle {
                 }
             }
 
+            Item {
+                id: runApkContainer;
+                clip: true;
+                height: runApkButton.enabled ? units.gridUnit * 4 : 0;
+                Behavior on height { NumberAnimation { duration: 200; } }
+                anchors {
+                    top: navheader.bottom;
+                    left: parent.left;
+                    right: parent.right;
+                }
+                PlasmaComponents.Button {
+                    id: runApkButton;
+                    width: base.width / 2;
+                    height: units.gridUnit * 2;
+                    anchors.centerIn: parent;
+                    text: "Run an apk...";
+                    enabled: shashlikController.zygoteRunning;
+                    onClicked: fileDialog.open();
+                }
+            }
             Column {
                 id: serviceColumn;
                 anchors {
-                    top: navheader.bottom;
+                    top: runApkContainer.bottom;
                     left: parent.left;
                     right: parent.right;
                 }
@@ -140,22 +161,6 @@ Rectangle {
                     onStartService: shashlikController.startServicemanager();
                 }
             }
-            Item {
-                anchors {
-                    top: serviceColumn.bottom;
-                    left: parent.left;
-                    right: parent.right;
-                    bottom: serviceControlRow.top;
-                }
-                PlasmaComponents.Button {
-                    width: base.width / 2;
-                    height: units.gridUnit * 2;
-                    anchors.centerIn: parent;
-                    text: "Run an apk...";
-                    enabled: shashlikController.surfaceflingerRunning || shashlikController.servicemanagerRunning || shashlikController.installdRunning || shashlikController.zygoteRunning;
-                    onClicked: ; //do a thing!
-                }
-            }
             Row {
                 id: serviceControlRow;
                 anchors {
@@ -174,10 +179,18 @@ Rectangle {
                     width: base.width / 2;
                     height: units.gridUnit * 2;
                     text: "Stop all services";
-                    enabled: shashlikController.surfaceflingerRunning || shashlikController.servicemanagerRunning || shashlikController.installdRunning || shashlikController.zygoteRunning;
+                    enabled: shashlikController.surfaceflingerRunning || shashlikController.servicemanagerRunning || shashlikController.installdRunning || shashlikController.bootanimationRunning || shashlikController.zygoteRunning;
                     onClicked: shashlikController.stop();
                 }
             }
+        }
+    }
+    FileDialog {
+        id: fileDialog;
+        title: "Please choose an Android package";
+        folder: shortcuts.home;
+        nameFilters: [ "Android packages (*.apk)", "All files (*)" ];
+        onAccepted: {
         }
     }
 }
