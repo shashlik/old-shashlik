@@ -29,8 +29,10 @@ class Controller : public QObject {
     Q_OBJECT
     Q_PROPERTY(bool zygoteRunning READ zygoteRunning NOTIFY zygoteRunningChanged)
     Q_PROPERTY(bool installdRunning READ installdRunning NOTIFY installdRunningChanged)
+    Q_PROPERTY(bool bootanimationRunning READ bootanimationRunning NOTIFY bootanimationRunningChanged)
     Q_PROPERTY(bool surfaceflingerRunning READ surfaceflingerRunning NOTIFY surfaceflingerRunningChanged)
     Q_PROPERTY(bool servicemanagerRunning READ servicemanagerRunning NOTIFY servicemanagerRunningChanged)
+
     Q_PROPERTY(bool quitOnError READ quitOnError WRITE setQuitOnError NOTIFY quitOnErrorChanged)
 public:
     Controller(QObject* parent = 0);
@@ -40,6 +42,7 @@ public:
     bool installdRunning() const;
     bool surfaceflingerRunning() const;
     bool servicemanagerRunning() const;
+    bool bootanimationRunning() const;
 
     bool quitOnError() const;
     void setQuitOnError(bool newValue);
@@ -47,6 +50,7 @@ public:
 Q_SIGNALS:
     void zygoteRunningChanged();
     void installdRunningChanged();
+    void bootanimationRunningChanged();
     void surfaceflingerRunningChanged();
     void servicemanagerRunningChanged();
     void quitOnErrorChanged();
@@ -54,16 +58,17 @@ Q_SIGNALS:
     void onError(QString description);
 
 public Q_SLOTS:
-    void runJar(const QString& jarFile);
+    void runApk(QString apkFile);
     void runAM(const QString& arguments);
 
     void startZygote();
     void startSurfaceflinger();
     void startServicemanager();
     void startInstalld();
+    void startBootanimation();
 
     void stop();
-    void start() { startServicemanager(); startInstalld(); startSurfaceflinger(); startZygote(); };
+    void start() { startServicemanager(); startInstalld(); startSurfaceflinger(); startBootanimation(); startZygote(); };
     void restart() { stop(); start(); }
 
     void logSomething();

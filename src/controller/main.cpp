@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
             QMessageBox::information(0, i18n("Shashlik Controller"), i18n("We are unable to start an Android environment to run your application inside. Please check your installation and try again."));
             QTimer::singleShot(0, &app, SLOT(quit()));
         }
-        controller->runJar(apkfile.at(0));
+        controller->runApk(apkfile.at(0));
     }
     else if(parser.isSet(amArgument)) {
         controller->runAM(parser.value(amArgument));
