@@ -33,6 +33,7 @@ public:
     ProcessTracker(int processId, QObject* parent = 0);
     virtual ~ProcessTracker();
 
+    int processId() const;
     QStringList arguments() const;
 
     /**

@@ -82,6 +82,11 @@ ProcessTracker::~ProcessTracker()
     delete d;
 }
 
+int ProcessTracker::processId() const
+{
+    return d->processId;
+}
+
 QStringList ProcessTracker::arguments() const
 {
     return d->arguments;

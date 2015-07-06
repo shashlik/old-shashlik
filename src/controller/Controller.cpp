@@ -284,7 +284,13 @@ void Controller::processExited()
         emit zygoteRunningChanged();
     }
     else {
-        // check as above, application quitty thing...
+        Q_FOREACH(ProcessTracker* tracker, d->applicationTrackers) {
+            if(tracker->processId()) {
+                d->applicationTrackers.removeAll(tracker);
+                tracker->deleteLater();
+                break;
+            }
+        }
     }
 }
 
@@ -307,6 +313,9 @@ void Controller::runApk(QString apkFile)
         process->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << d->androidRootDir + "/system/bin/" << "com.android.commands.launch.Launch" << apkFile);
         process->setObjectName(apkFile.split("/").last());
         process->waitForStarted();
+        ProcessTracker* tracker = new ProcessTracker(process->processId());
+        connect(tracker, SIGNAL(processExited()), SLOT(processExited()));
+        d->applicationTrackers.append(tracker);
     }
 }
 
