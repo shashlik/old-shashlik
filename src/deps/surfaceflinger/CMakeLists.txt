@@ -71,9 +71,9 @@ target_link_libraries(libsurfaceflinger
 #     binder
 #     ui
     gui
-    ${QT5CORE32_LIBRARIES}
-    ${QT5WIDGETS32_LIBRARIES}
-    ${QT5X11EXTRAS32_LIBRARIES}
+#     ${QT5CORE32_LIBRARIES}
+#     ${QT5WIDGETS32_LIBRARIES}
+#     ${QT5X11EXTRAS32_LIBRARIES}
 )
 target_include_directories(libsurfaceflinger
     PRIVATE
@@ -82,9 +82,9 @@ target_include_directories(libsurfaceflinger
     ${LIBHARDWARE_INCLUDES}
     ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
     ${OPENGL_INCLUDES}
-    ${QT5CORE32_INCLUDE_DIRS}
-    ${QT5WIDGETS32_INCLUDE_DIRS}
-    ${QT5X11EXTRAS32_INCLUDE_DIRS}
+#     ${QT5CORE32_INCLUDE_DIRS}
+#     ${QT5WIDGETS32_INCLUDE_DIRS}
+#     ${QT5X11EXTRAS32_INCLUDE_DIRS}
 )
 
 add_executable(surfaceflinger ${surfaceflinger_SRCS})
@@ -98,14 +98,14 @@ target_link_libraries(surfaceflinger
 #     log
 #     binder
 #     utils
-    ${QT5GUI32_LIBRARIES}
+#     ${QT5GUI32_LIBRARIES}
 )
 target_include_directories(surfaceflinger
     PRIVATE
     ${LIBCUTILS_INCLUDES}
     ${LIBBINDER_INCLUDES}
     ${LIBHARDWARE_INCLUDES}
-    ${QT5GUI32_INCLUDE_DIRS}
+#     ${QT5GUI32_INCLUDE_DIRS}
 )
 
 if(FORCE_32BIT_BUILD)
