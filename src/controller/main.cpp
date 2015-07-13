@@ -24,13 +24,13 @@
 #include <QApplication>
 #include <QDebug>
 #include <QStringList>
-#include <qcommandlineparser.h>
-#include <qtimer.h>
+#include <QCommandLineParser>
+#include <QTimer>
 #include <QFile>
 #include <QIcon>
-#include <qdir.h>
+#include <QDir>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KAboutData>
 
 #include "Controller.h"

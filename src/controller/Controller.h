@@ -23,7 +23,7 @@
 #define SHASHLIK_CONTROLLER_H
 
 #include <QObject>
-#include <qprocess.h>
+#include <QProcess>
 
 class Controller : public QObject {
     Q_OBJECT

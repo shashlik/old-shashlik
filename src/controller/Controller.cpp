@@ -26,10 +26,9 @@
 
 #include <QCoreApplication>
 #include <QDebug>
-#include <QMessageBox>
-#include <qdir.h>
-#include <qmetaobject.h>
-#include <qtimer.h>
+#include <QDir>
+#include <QMetaObject>
+#include <QTimer>
 
 class Controller::Private
 {
@@ -387,7 +386,7 @@ bool Controller::servicemanagerRunning() const
 void Controller::startServicemanager()
 {
     if(servicemanagerRunning()) {
-        QMessageBox::information(0, "Shashlik Controller", "A service manager is already running. If you believe this to be in error, please stop all Shashlik services and try again.");
+        qCritical() << "A service manager is already running. If you believe this to be in error, please stop all Shashlik services and try again.";
         return;
     }
     d->serviceManager = d->environment(this);
