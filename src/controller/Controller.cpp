@@ -221,28 +221,28 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
     QProcess* proc = qobject_cast<QProcess*>(sender());
     if(proc) {
         if(proc == d->zygote) {
-            QMessageBox::critical(0, i18n("Shashlik Controller Error"), "Zygote has exited - if zygote exits, everything should be killed!");
+            qCritical() << "Zygote has exited - if zygote exits, everything should be killed!";
             stop();
             // grace to allow things to shut down...
             if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->serviceManager) {
-            QMessageBox::critical(0, i18n("Shashlik Controller Error"), "The service manager has exited - if this happens, nothing will work and we should just cut our losses and quit everything else.");
+            qCritical() << "The service manager has exited - if this happens, nothing will work and we should just cut our losses and quit everything else.";
             stop();
             // grace to allow things to shut down...
             if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->surfaceflinger) {
-            QMessageBox::information(0, i18n("Shashlik Controller Error"), QString("SurfaceFlinger has exited. This is a terrible thing! We should try and restart it and see if that helps (and then quit if it still doesn't). Exit code %1 and exit status %2").arg(QString::number(exitCode)).arg(QString::number(exitStatus)));
+            qCritical() << QString("SurfaceFlinger has exited. This is a terrible thing! We should try and restart it and see if that helps (and then quit if it still doesn't). Exit code %1 and exit status %2").arg(QString::number(exitCode)).arg(QString::number(exitStatus));
             // grace to allow things to shut down...
             if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->installd) {
-            QMessageBox::information(0, i18n("Shashlik Controller Error"), "The Installer daemon has exited. We'll just let that slide.");
+            qWarning() << "The Installer daemon has exited. We'll just let that slide.";
         }
         else if(d->applications.contains(proc)) {
             if(proc->exitCode() == QProcess::CrashExit) {
-                QMessageBox::critical(0, i18n("Shashlik Controller Error"), QString("The application %1 has quit unexpectedly. Something gone done blown up.").arg(proc->objectName()));
+                qWarning() << QString("The application %1 has quit unexpectedly. Something gone done blown up.").arg(proc->objectName());
             }
             else {
                 // This is not always true - the launcher will exit cleanly, even if the vm died for some reason or another. This needs fixing.
@@ -251,7 +251,7 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
             if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else {
-            QMessageBox::critical(0, i18n("Shashlik Controller Error"), QString("%1 has exited").arg(proc->program()));
+            qWarning() << QString("%1 has exited").arg(proc->program());
         }
     }
 }
