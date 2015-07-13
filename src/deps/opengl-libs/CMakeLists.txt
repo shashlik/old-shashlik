@@ -122,29 +122,6 @@ set(hwcomposer_drm_SRCS
     ${GENERAL_SOURCE_PATH}/hwcomposer/hwcomposer.cpp
 )
 
-set(gbm_SRCS
-    ${GENERAL_SOURCE_PATH}/gbm/main/backend.c
-    ${GENERAL_SOURCE_PATH}/gbm/main/gbm.c
-    ${GENERAL_SOURCE_PATH}/gbm/backends/dri/gbm_dri.c
-)
-
-add_library(gbm SHARED ${gbm_SRCS})
-target_compile_definitions(gbm
-    PUBLIC
-    -DMODULEDIR="${ANDROID_LIB_DIR}/gbm"
-    -DDEFAULT_DRIVER_DIR="/usr/lib/i386-linux-gnu/dri/"
-)
-
-target_include_directories(gbm
-PRIVATE
-    ${DRM_INCLUDE_DIRS}
-    ${GENERAL_SOURCE_PATH}/gbm/main/
-)
-
-target_link_libraries(gbm
-    ${DRM_LIBRARIES}
-)
-
 add_library(EGL SHARED ${EGL_SRCS})
 if(FORCE_32BIT_BUILD)
     set_target_properties(EGL PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
@@ -253,126 +230,6 @@ target_link_libraries(gralloc_drm
 #     drm_nouveau
 )
 
-#This is the newer one
-#
-add_library(gralloc.drm SHARED ${grallocdrm_module_SRCS})
-if(FORCE_32BIT_BUILD)
-    # because otherwise the module loader looks for the wrong file
-    set_target_properties(gralloc.drm PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32" OUTPUT_NAME gralloc.default PREFIX "")
-endif(FORCE_32BIT_BUILD)
-target_compile_definitions(gralloc.drm
-    PRIVATE
-    -DANDROID_VERSION=0x442
-    -DLOG_TAG="gralloc-drm"
-    -DGRALLOC_32_BITS
-    -DSTANDARD_LINUX_SCREEN
-    -DPLATFORM_SDK_VERSION=19
-)
-target_include_directories(gralloc.drm
-    PRIVATE
-    ${LIBHARDWARE_INCLUDES}
-    ${LIBLOG_INCLUDES}
-    ${LIBCUTILS_INCLUDES}
-    ${DRM_INCLUDE_DIRS}
-    ${GENERAL_SOURCE_PATH}/gralloc
-    ${GENERAL_SOURCE_PATH}/gbm/main
-)
-target_link_libraries(gralloc.drm
-    ${DRM_LIBRARIES}
-    hardware
-    log
-    cutils
-    gbm
-#     glapi
-#     GLES_mesa
-)
-target_compile_definitions(gralloc.drm
-    PRIVATE
-    -DANDROID_VERSION=0x442
-)
-
-add_library(mesa_loader STATIC ${mesa_loader_SRCS})
-if(FORCE_32BIT_BUILD)
-    set_target_properties(mesa_loader PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-endif(FORCE_32BIT_BUILD)
-target_compile_definitions(mesa_loader
-    PRIVATE
-    -DANDROID_VERSION=0x442
-)
-target_include_directories(mesa_loader
-    PRIVATE
-    ${DRM_INCLUDE_DIRS}
-    ${GENERAL_SOURCE_PATH}/mesa/include
-)
-target_link_libraries(mesa_loader
-    ${DRM_LIBRARIES}
-)
-
-add_library(mesa_egl_dri2 STATIC ${mesa_egl_dri2_SRCS})
-if(FORCE_32BIT_BUILD)
-    set_target_properties(mesa_egl_dri2 PROPERTIES COMPILE_FLAGS "-m32 -std=gnu99" LINK_FLAGS "-m32")
-endif(FORCE_32BIT_BUILD)
-target_compile_definitions(mesa_egl_dri2
-    PRIVATE
-    -DHAVE_SHARED_GLAPI
-    -DHAVE_ANDROID_PLATFORM
-    -DHAVE_PTHREAD
-    -DDEFAULT_DRIVER_DIR="${ANDROID_ROOT}/system/lib/dri"
-    -DPATH_MAX=2048
-    -DANDROID_VERSION=0x442
-)
-target_include_directories(mesa_egl_dri2
-    PRIVATE
-    ${DRM_INCLUDE_DIRS}
-    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
-    ${GENERAL_SOURCE_PATH}/mesa/include
-    ${GENERAL_SOURCE_PATH}/mesa/src/egl/main
-    ${GENERAL_SOURCE_PATH}/mesa/src/egl
-    ${GENERAL_SOURCE_PATH}/mesa/src/loader
-    ${GENERAL_SOURCE_PATH}/drm_gralloc
-    ${LIBHARDWARE_INCLUDES}
-    ${ANDROID_CORE_PATH}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
-target_link_libraries(mesa_egl_dri2
-    mesa_loader
-    sync
-)
-
-add_library(GLES_mesa SHARED ${mesa_SRCS})
-if(FORCE_32BIT_BUILD)
-    set_target_properties(GLES_mesa PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-endif(FORCE_32BIT_BUILD)
-target_include_directories(GLES_mesa
-    PRIVATE
-    ${GENERAL_SOURCE_PATH}/mesa/include
-    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
-)
-target_link_libraries(GLES_mesa
-    mesa_egl_dri2
-    mesa_loader
-    glapi
-
-    hardware
-    log
-    cutils
-    sync
-
-    gralloc_drm #I think I can remove this
-
-    drm
-    dl
-)
-target_compile_definitions(GLES_mesa
-    PRIVATE
-    -D_EGL_NATIVE_PLATFORM=_EGL_PLATFORM_ANDROID
-    -D_EGL_DRIVER_SEARCH_DIR="${ANDROID_ROOT}/system/lib/egl"
-    -D_EGL_OS_UNIX=1
-    -D_EGL_BUILT_IN_DRIVER_DRI2
-    -DHAVE_PTHREAD
-    -DANDROID_VERSION=0x442
-)
-
 add_library(hwcomposer.drm SHARED ${hwcomposer_drm_SRCS})
 set_target_properties(hwcomposer.drm PROPERTIES PREFIX "")
 if(FORCE_32BIT_BUILD)
@@ -459,29 +316,8 @@ add_definitions(
     -fpermissive
 )
 
-add_executable(glTest  ${REPO_PATH}/tests/fillrate/fillrate.cpp)
 
-target_include_directories(glTest
-    PRIVATE
-    ${REPO_PATH}/include
-    ${REPO_PATH}/tests/include
-    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
-    ${LIBHARDWARE_INCLUDES}
-
-    ${LIBCUTILS_INCLUDES}
-
-    )
-
-target_link_libraries(glTest
-    EGL
-    log
-    ui
-    GLESv1_CM
-)
-
-
-install(TARGETS GLESv2 GLESv1_CM ETC1 GLES_trace EGL gralloc_drm  gbm DESTINATION ${ANDROID_LIB_DIR})
-# install(TARGETS GLES_android DESTINATION ${ANDROID_LIB_DIR}/egl)
-install(TARGETS GLES_mesa DESTINATION ${ANDROID_LIB_DIR}/egl)
+install(TARGETS GLESv2 GLESv1_CM ETC1 GLES_trace EGL gralloc_drm DESTINATION ${ANDROID_LIB_DIR})
+install(TARGETS GLES_android DESTINATION ${ANDROID_LIB_DIR}/egl)
 install(TARGETS hwcomposer.drm DESTINATION ${ANDROID_LIB_DIR}/hw)
-# install(TARGETS gralloc.drm DESTINATION ${ANDROID_LIB_DIR}/hw)
+install(TARGETS gralloc_drm DESTINATION ${ANDROID_LIB_DIR}/hw)
