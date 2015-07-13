@@ -27,3 +27,4 @@ target_link_libraries(
 #        destinations for these files in the kf5/kde5 install tree.
 #        But until then, let's install them in the shashlik install tree.
 install( TARGETS kded_shashlik_propertiesd        DESTINATION ${LIB_INSTALL_DIR}/qt5/plugins/kf5/kded )
+# install( TARGETS kded_shashlik_propertiesd        DESTINATION /usr/lib64/qt5/plugins/kf5/kded )
