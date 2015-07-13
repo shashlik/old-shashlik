@@ -7,7 +7,7 @@ add_definitions(
     -DANDROID
 )
 
-add_subdirectory(glapi)
+# add_subdirectory(glapi)
 
 set(GLES_trace_SRCS
     ${REPO_PATH}/libs/GLES_trace/src/gltrace_api.cpp
@@ -120,6 +120,29 @@ set(grallocdrm_module_SRCS
 
 set(hwcomposer_drm_SRCS
     ${GENERAL_SOURCE_PATH}/hwcomposer/hwcomposer.cpp
+)
+
+set(gbm_SRCS
+    ${GENERAL_SOURCE_PATH}/gbm/main/backend.c
+    ${GENERAL_SOURCE_PATH}/gbm/main/gbm.c
+    ${GENERAL_SOURCE_PATH}/gbm/backends/dri/gbm_dri.c
+)
+
+add_library(gbm SHARED ${gbm_SRCS})
+target_compile_definitions(gbm
+    PUBLIC
+    -DMODULEDIR="${ANDROID_LIB_DIR}/gbm"
+    -DDEFAULT_DRIVER_DIR="/usr/lib/i386-linux-gnu/dri/"
+)
+
+target_include_directories(gbm
+PRIVATE
+    ${DRM_INCLUDE_DIRS}
+    ${GENERAL_SOURCE_PATH}/gbm/main/
+)
+
+target_link_libraries(gbm
+    ${DRM_LIBRARIES}
 )
 
 add_library(EGL SHARED ${EGL_SRCS})
@@ -252,13 +275,15 @@ target_include_directories(gralloc.drm
     ${LIBCUTILS_INCLUDES}
     ${DRM_INCLUDE_DIRS}
     ${GENERAL_SOURCE_PATH}/gralloc
+    ${GENERAL_SOURCE_PATH}/gbm/main
 )
 target_link_libraries(gralloc.drm
     ${DRM_LIBRARIES}
     hardware
     log
     cutils
-#     gbm
+    gbm
+#     glapi
 #     GLES_mesa
 )
 target_compile_definitions(gralloc.drm
@@ -363,9 +388,9 @@ target_include_directories(hwcomposer.drm
     PRIVATE
     ${DRM_INCLUDE_DIRS}
     ${LIBHARDWARE_INCLUDES}
-    ${GENERAL_SOURCE_PATH}/gralloc
+#     ${GENERAL_SOURCE_PATH}/gralloc #new
 
-#     ${GENERAL_SOURCE_PATH}/drm_gralloc
+    ${GENERAL_SOURCE_PATH}/drm_gralloc
 
 
     ${LIBLOG_INCLUDES}
@@ -377,6 +402,7 @@ target_link_libraries(hwcomposer.drm
     log
     hardware
     sync
+    gralloc_drm
 )
 
 add_library(ETC1 STATIC ${ETC1_SRCS})
@@ -454,9 +480,8 @@ target_link_libraries(glTest
 )
 
 
-
-install(TARGETS GLESv2 GLESv1_CM ETC1 GLES_trace EGL gralloc_drm  DESTINATION ${ANDROID_LIB_DIR})
+install(TARGETS GLESv2 GLESv1_CM ETC1 GLES_trace EGL gralloc_drm  gbm DESTINATION ${ANDROID_LIB_DIR})
 # install(TARGETS GLES_android DESTINATION ${ANDROID_LIB_DIR}/egl)
 install(TARGETS GLES_mesa DESTINATION ${ANDROID_LIB_DIR}/egl)
 install(TARGETS hwcomposer.drm DESTINATION ${ANDROID_LIB_DIR}/hw)
-install(TARGETS gralloc.drm DESTINATION ${ANDROID_LIB_DIR}/hw)
+# install(TARGETS gralloc.drm DESTINATION ${ANDROID_LIB_DIR}/hw)

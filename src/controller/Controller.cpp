@@ -283,10 +283,10 @@ void Controller::startZygote()
     connect(d->zygote, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
     d->zygote->setProcessChannelMode(QProcess::MergedChannels);
     qDebug() << "Attempting to start the Zygote...";
-// //     d->zygote->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << "-Xzygote" << d->androidRootDir + "/system/bin/" << "--zygote" << "--start-system-server");
+    d->zygote->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << "-Xzygote" << d->androidRootDir + "/system/bin/" << "--zygote" << "--start-system-server");
 
 
-    d->zygote->start("/home/user/shashlik/src/shashlik/build/src/deps/bootanimation/bootanimation");
+//     d->zygote->start("/home/user/shashlik/src/shashlik/build/src/deps/bootanimation/bootanimation");
     d->zygote->waitForStarted();
 
     d->zygoteTracker = new ProcessTracker(d->zygote->processId(), this);
