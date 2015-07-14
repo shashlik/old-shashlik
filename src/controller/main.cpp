@@ -29,6 +29,7 @@
 #include <QFile>
 #include <QIcon>
 #include <QDir>
+#include <QMessageBox>
 
 #include <KLocalizedString>
 #include <KAboutData>
@@ -36,6 +37,36 @@
 #include "Controller.h"
 #include "init_util.h"
 #include "View.h"
+
+void showMessage(QString errorMessage, Controller::ErrorLevel errorLevel) {
+    switch(errorLevel) {
+        case Controller::CriticalLevel:
+            qCritical() << "Shashlik ERROR:" << errorMessage;
+            break;
+        case Controller::WarningLevel:
+            qWarning() << "Shashlik Warning:" << errorMessage;
+            break;
+        case Controller::DebugLevel:
+        default:
+            qDebug() << "Shashlik Debug:" << errorMessage;
+            break;
+    }
+}
+
+void showMessageBox(QString errorMessage, Controller::ErrorLevel errorLevel) {
+    switch(errorLevel) {
+        case Controller::CriticalLevel:
+            QMessageBox::critical(0, i18n("Shashlik Controller"), errorMessage);
+            break;
+        case Controller::WarningLevel:
+            QMessageBox::warning(0, i18n("Shashlik Controller"), errorMessage);
+            break;
+        case Controller::DebugLevel:
+        default:
+            // don't show debug messages in the gui, because that's just silly...
+            break;
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -107,6 +138,7 @@ int main(int argc, char *argv[])
         setenv("ANDROID_SOCKET_zygote", ANDROID_SOCKET_zygote, 1);
     }
 
+    bool haveGui = false;
     if(apkfile.length() < 1 && !parser.isSet(amArgument) && !parser.isSet(startArgument) && !parser.isSet(zygoteArgument) && !parser.isSet(surfaceflingerArgument) && !parser.isSet(servicemanagerArgument) && !parser.isSet(installdArgument) && !parser.isSet(restartArgument) && !parser.isSet(stopArgument)) {
         // YES this looks silly. We do this to avoid having to maintain two mains and whatnot.
         delete app;
@@ -120,9 +152,15 @@ int main(int argc, char *argv[])
         KAboutData::setApplicationData(aboutData);
         theApp->setWindowIcon(QIcon::fromTheme("shashlik-controller"));
         app = theApp;
+        haveGui = true;
     }
 
     Controller* controller = new Controller(app);
+    QObject::connect(controller, &Controller::error, showMessage);
+    if(haveGui) {
+        QObject::connect(controller, &Controller::error, showMessageBox);
+    }
+
     if(apkfile.length() > 0) {
         // do a thing with this thing...
         if(!controller->zygoteRunning() || !controller->servicemanagerRunning() || !controller->surfaceflingerRunning()) {
@@ -131,7 +169,7 @@ int main(int argc, char *argv[])
         }
         if(!controller->zygoteRunning() || !controller->servicemanagerRunning() || !controller->surfaceflingerRunning()) {
             // If this happens when the check is actually functional, we should be quitting with a useful error
-            qCritical() << i18n("We are unable to start an Android environment to run your application inside. Please check your installation and try again.");
+            emit controller->error(i18n("We are unable to start an Android environment to run your application inside. Please check your installation and try again."), Controller::CriticalLevel);
             QTimer::singleShot(0, app, SLOT(quit()));
         }
         controller->runApk(apkfile.at(0));
