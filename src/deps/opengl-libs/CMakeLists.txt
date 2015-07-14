@@ -104,7 +104,7 @@ set(mesa_SRCS
     ${GENERAL_SOURCE_PATH}/mesa/src/egl/main/egltypedefs.h
 )
 
-set(gralloc_drm_SRCS
+set(gralloc.shashlik_SRCS
     ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc.c
     ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc_drm.c
     ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc_drm_kms.c
@@ -194,19 +194,21 @@ target_include_directories(GLES_android
     ${GENERAL_SOURCE_PATH}/libhardware/include
 )
 
-add_library(gralloc_drm SHARED ${gralloc_drm_SRCS})
+add_library(gralloc.shashlik SHARED ${gralloc.shashlik_SRCS})
 if(FORCE_32BIT_BUILD)
-    set_target_properties(gralloc_drm PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32" )
+    set_target_properties(gralloc.shashlik PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32" )
     #OUTPUT_NAME gralloc.default PREFIX ""
 endif(FORCE_32BIT_BUILD)
-target_compile_definitions(gralloc_drm
+# because otherwise the module loader looks for the wrong file
+set_target_properties(gralloc.shashlik PROPERTIES PREFIX "")
+target_compile_definitions(gralloc.shashlik
     PRIVATE
     -DENABLE_INTEL
 #     -DENABLE_RADEON
 #     -DENABLE_NOUVEAU
     -DANDROID_VERSION=0x442
 )
-target_include_directories(gralloc_drm
+target_include_directories(gralloc.shashlik
     PRIVATE
 #     /usr/src/linux-4.0.4/drivers/gpu/drm/i915
 #     /usr/src/linux-4.0.4/include/drivers/gpu/drm/i915
@@ -219,7 +221,7 @@ target_include_directories(gralloc_drm
     ${GENERAL_SOURCE_PATH}/mesa/src/mesa/drivers/dri/i915
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
-target_link_libraries(gralloc_drm
+target_link_libraries(gralloc.shashlik
     log
     cutils
     hardware_legacy
@@ -231,18 +233,20 @@ target_link_libraries(gralloc_drm
 #     drm_nouveau
 )
 
-add_library(hwcomposer.drm SHARED ${hwcomposer_drm_SRCS})
-set_target_properties(hwcomposer.drm PROPERTIES PREFIX "")
+add_library(hwcomposer.shashlik SHARED ${hwcomposer_drm_SRCS})
+set_target_properties(hwcomposer.shashlik PROPERTIES PREFIX "")
 if(FORCE_32BIT_BUILD)
-    set_target_properties(hwcomposer.drm PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32" OUTPUT_NAME hwcomposer.default)
+    set_target_properties(hwcomposer.shashlik PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
-target_compile_definitions(hwcomposer.drm
+# because otherwise the module loader looks for the wrong file
+set_target_properties(hwcomposer.shashlik PROPERTIES PREFIX "")
+target_compile_definitions(hwcomposer.shashlik
     PRIVATE
     -DHAVE_PTHREAD
     -DANDROID_VERSION=0x442
     -DLOG_TAG="hwcomposer-drm"
 )
-target_include_directories(hwcomposer.drm
+target_include_directories(hwcomposer.shashlik
     PRIVATE
     ${DRM_INCLUDE_DIRS}
     ${LIBHARDWARE_INCLUDES}
@@ -255,12 +259,12 @@ target_include_directories(hwcomposer.drm
     ${ANDROID_CORE_PATH}/include/sync
     ${GENERAL_SOURCE_PATH}/hwcomposer
 )
-target_link_libraries(hwcomposer.drm
+target_link_libraries(hwcomposer.shashlik
     ${DRM_LIBRARIES}
     log
     hardware
     sync
-    gralloc_drm
+    gralloc.shashlik
 )
 
 add_library(ETC1 STATIC ${ETC1_SRCS})
@@ -318,7 +322,7 @@ add_definitions(
 )
 
 
-install(TARGETS GLESv2 GLESv1_CM ETC1 GLES_trace EGL gralloc_drm DESTINATION ${ANDROID_LIB_DIR})
+install(TARGETS GLESv2 GLESv1_CM ETC1 GLES_trace EGL gralloc.shashlik DESTINATION ${ANDROID_LIB_DIR})
 install(TARGETS GLES_android DESTINATION ${ANDROID_LIB_DIR}/egl)
-install(TARGETS hwcomposer.drm DESTINATION ${ANDROID_LIB_DIR}/hw)
-install(TARGETS gralloc_drm DESTINATION ${ANDROID_LIB_DIR}/hw)
+install(TARGETS hwcomposer.shashlik DESTINATION ${ANDROID_LIB_DIR}/hw)
+install(TARGETS gralloc.shashlik DESTINATION ${ANDROID_LIB_DIR}/hw)
