@@ -212,6 +212,7 @@ target_include_directories(gralloc_drm
 #     /usr/src/linux-4.0.4/include/drivers/gpu/drm/i915
 #     /usr/src/linux-4.0.4/include
     ${LIBLOG_INCLUDES}
+    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include
 
     ${LIBHARDWARE_INCLUDES}
     ${DRM_INCLUDE_DIRS}
@@ -223,7 +224,6 @@ target_link_libraries(gralloc_drm
     cutils
     hardware_legacy
     hardware
-    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include
     ${DRM_LIBRARIES}
     drm_intel
 #     /usr/lib/dri/i915_dri.so
