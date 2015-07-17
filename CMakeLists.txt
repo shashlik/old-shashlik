@@ -78,6 +78,7 @@ add_definitions(-DHAVE_SYS_UIO_H
                 -DHAVE_POSIX_CLOCKS
                 -DHAVE_SYSTEM_PROPERTY_SERVER
                 -D_FILE_OFFSET_BITS=64
+                -DEXCLUDE_FS_CONFIG_STRUCTURES
 )
 
 # In case this file exists, we need to set this to look for certain files in the right place
