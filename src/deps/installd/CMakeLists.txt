@@ -20,9 +20,10 @@ target_link_libraries(installd
 )
 target_include_directories(installd
     PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
+#     ${CMAKE_CURRENT_SOURCE_DIR}
     ${LIBCUTILS_INCLUDES}
     ${LIBLOG_INCLUDES}
     ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
+    ${ANDROID_CORE_PATH}/include
 )
 install(TARGETS installd DESTINATION ${ANDROID_BIN_DIR})
