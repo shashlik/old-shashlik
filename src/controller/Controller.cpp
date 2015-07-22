@@ -26,10 +26,9 @@
 
 #include <QCoreApplication>
 #include <QDebug>
-#include <QMessageBox>
-#include <qdir.h>
-#include <qmetaobject.h>
-#include <qtimer.h>
+#include <QDir>
+#include <QMetaObject>
+#include <QTimer>
 
 class Controller::Private
 {
@@ -224,29 +223,28 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
     QProcess* proc = qobject_cast<QProcess*>(sender());
     if(proc) {
         if(proc == d->zygote) {
-            qWarning() << "Zygote has exited - if zygote exits, everything should be killed!";
-//             stop();
+            emit error("Zygote has exited - if zygote exits, everything should be killed!", CriticalLevel);
+            stop();
             // grace to allow things to shut down...
             if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->serviceManager) {
-            //QMessageBox::critical(0, i18n("Shashlik Controller Error"), "The service manager has exited - if this happens, nothing will work and we should just cut our losses and quit everything else.");
+            emit error("The service manager has exited - if this happens, nothing will work and we should just cut our losses and quit everything else.", CriticalLevel);
             stop();
             // grace to allow things to shut down...
             if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->surfaceflinger) {
-            qWarning() << QString("SurfaceFlinger has exited. This is a terrible thing! We should try and restart it and see if that helps (and then quit if it still doesn't). Exit code %1 and exit status%2").arg(QString::number(exitCode)).arg(QString::number(exitStatus));
-            //QMessageBox::information(0, i18n("Shashlik Controller Error"), QString(");
+            emit error(QString("SurfaceFlinger has exited. This is a terrible thing! We should try and restart it and see if that helps (and then quit if it still doesn't). Exit code %1 and exit status %2").arg(QString::number(exitCode)).arg(QString::number(exitStatus)), CriticalLevel);
             // grace to allow things to shut down...
             if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->installd) {
-            qWarning()  << "The Installer daemon has exited. We'll just let that slide.";
+            emit error("The Installer daemon has exited. We'll just let that slide.", WarningLevel);
         }
         else if(d->applications.contains(proc)) {
             if(proc->exitCode() == QProcess::CrashExit) {
-                qWarning() << QString("The application %1 has quit unexpectedly. Something gone done blown up.").arg(proc->objectName());
+                emit error(QString("The application %1 has quit unexpectedly. Something gone done blown up.").arg(proc->objectName()), WarningLevel);
             }
             else {
                 // This is not always true - the launcher will exit cleanly, even if the vm died for some reason or another. This needs fixing.
@@ -255,7 +253,7 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
             if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else {
-            qWarning() << QString("%1 has exited").arg(proc->program());
+            emit error(QString("%1 has exited").arg(proc->program()), WarningLevel);
         }
     }
 }
@@ -398,7 +396,8 @@ bool Controller::servicemanagerRunning() const
 void Controller::startServicemanager()
 {
     if(servicemanagerRunning()) {
-        QMessageBox::information(0, "Shashlik Controller", "A service manager is already running. If you believe this to be in error, please stop all Shashlik services and try again.");
+        emit error("A service manager is already running. If you believe this to be in error, please stop all Shashlik services and try again.", CriticalLevel);
+        if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         return;
     }
     d->serviceManager = d->environment(this);

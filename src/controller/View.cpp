@@ -26,7 +26,7 @@
 #include <KDeclarative/KDeclarative>
 #include <Plasma/PluginLoader>
 
-#include <QtQml/QQmlContext>
+#include <QQmlContext>
 
 class View::Private {
 public:

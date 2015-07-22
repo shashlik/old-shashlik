@@ -1525,5 +1525,5 @@ set(javalibrary_SRCS
 
 set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -source 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${PROJECT_BINARY_DIR}/core.jar -extdirs \"\")
 add_jar(core ${javalibrary_SRCS})
-install_jar(core ${ANDROID_JAR_DIR})
+# install_jar(core ${ANDROID_JAR_DIR})
 #install_jni_symlink(core ${JAVA_LIB_INSTALL_DIR})

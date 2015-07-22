@@ -17,7 +17,7 @@ set(cutils_SRCS
     ${REPO_PATH}/libcutils/android_reboot.c
     #${REPO_PATH}/libcutils/ashmem-dev.c
     ${REPO_PATH}/libcutils/ashmem-host.c
-#     ${REPO_PATH}/libcutils/atomic.c
+#     ${REPO_PATH}/libcutils/atomic.c # ARM only sources, apparently...
     ${REPO_PATH}/libcutils/config_utils.c
     ${REPO_PATH}/libcutils/cpu_info.c
     ${REPO_PATH}/libcutils/debugger.c

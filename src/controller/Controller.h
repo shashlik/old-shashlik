@@ -23,10 +23,11 @@
 #define SHASHLIK_CONTROLLER_H
 
 #include <QObject>
-#include <qprocess.h>
+#include <QProcess>
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_ENUMS(ErrorLevel)
     Q_PROPERTY(bool zygoteRunning READ zygoteRunning NOTIFY zygoteRunningChanged)
     Q_PROPERTY(bool installdRunning READ installdRunning NOTIFY installdRunningChanged)
     Q_PROPERTY(bool bootanimationRunning READ bootanimationRunning NOTIFY bootanimationRunningChanged)
@@ -35,6 +36,12 @@ class Controller : public QObject {
 
     Q_PROPERTY(bool quitOnError READ quitOnError WRITE setQuitOnError NOTIFY quitOnErrorChanged)
 public:
+    enum ErrorLevel {
+        DebugLevel = 0,
+        WarningLevel,
+        CriticalLevel
+    };
+
     Controller(QObject* parent = 0);
     virtual ~Controller();
 
@@ -55,7 +62,7 @@ Q_SIGNALS:
     void servicemanagerRunningChanged();
     void quitOnErrorChanged();
 
-    void onError(QString description);
+    void error(QString description, Controller::ErrorLevel errorLevel);
 
 public Q_SLOTS:
     void runApk(QString apkFile);

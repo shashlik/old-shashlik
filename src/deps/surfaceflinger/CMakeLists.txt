@@ -77,9 +77,6 @@ target_link_libraries(libsurfaceflinger
     gui
     hwui
     epoxy
-    ${QT5CORE32_LIBRARIES}
-    ${QT5WIDGETS32_LIBRARIES}
-    ${QT5X11EXTRAS32_LIBRARIES}
     ${Wayland_LIBRARIES}
 )
 target_include_directories(libsurfaceflinger
@@ -89,9 +86,6 @@ target_include_directories(libsurfaceflinger
     ${LIBHARDWARE_INCLUDES}
     ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
     ${OPENGL_INCLUDES}
-    ${QT5CORE32_INCLUDE_DIRS}
-    ${QT5WIDGETS32_INCLUDE_DIRS}
-    ${QT5X11EXTRAS32_INCLUDE_DIRS}
     ${Wayland_INCLUDE_DIRS}
 )
 
@@ -106,14 +100,14 @@ target_link_libraries(surfaceflinger
 #     log
 #     binder
 #     utils
-    ${QT5GUI32_LIBRARIES}
+#     ${QT5GUI32_LIBRARIES}
 )
 target_include_directories(surfaceflinger
     PRIVATE
     ${LIBCUTILS_INCLUDES}
     ${LIBBINDER_INCLUDES}
     ${LIBHARDWARE_INCLUDES}
-    ${QT5GUI32_INCLUDE_DIRS}
+#     ${QT5GUI32_INCLUDE_DIRS}
 )
 
 if(FORCE_32BIT_BUILD)
