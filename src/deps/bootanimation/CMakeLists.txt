@@ -41,3 +41,5 @@ target_compile_definitions(bootanimation
     -DHAVE_ANDROID_OS
     -DSK_RELEASE
 )
+
+install(TARGETS bootanimation DESTINATION ${ANDROID_BIN_DIR})

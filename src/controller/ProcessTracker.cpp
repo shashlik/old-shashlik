@@ -21,9 +21,11 @@
  */
 
 #include "ProcessTracker.h"
+
 #include <QFile>
 #include <QDirIterator>
 #include <QDebug>
+#include <QTimer>
 
 #include <stdio.h>
 #include <signal.h>
@@ -33,18 +35,27 @@ class ProcessTracker::Private
 public:
     Private(int processId)
         : processId(processId)
+        , watchTimer(0)
     {}
 
     int processId;
     QString commandLine;
     QStringList arguments;
     QFile logFile;
+    // This should be qfilesystemwatcher. QFSW fails to work for me when watching something in /proc
+    // Guess it would likely also fail for others. Long timer to keep track, then.
+    QTimer* watchTimer;
+    QFile watchFile;
 };
 
 ProcessTracker::ProcessTracker(int processId, QObject* parent)
     : QObject(parent)
     , d(new Private(processId))
 {
+    d->watchFile.setFileName(QString("/proc/%1").arg(QString::number(processId)));
+    d->watchTimer = new QTimer(this);
+    d->watchTimer->start(500);
+    connect(d->watchTimer, SIGNAL(timeout()), SLOT(fileWatch()));
     QFile f(QString("/proc/%1/cmdline").arg(QString::number(processId)));
     if(f.open(QIODevice::ReadOnly | QFile::Text)) {
         QTextStream in(&f);
@@ -71,6 +82,11 @@ ProcessTracker::~ProcessTracker()
     delete d;
 }
 
+int ProcessTracker::processId() const
+{
+    return d->processId;
+}
+
 QStringList ProcessTracker::arguments() const
 {
     return d->arguments;
@@ -83,6 +99,15 @@ bool ProcessTracker::killProcess()
         return true;
     }
     return false;
+}
+
+void ProcessTracker::fileWatch()
+{
+    // something changed, but the file is still there. Never mind we don't care right now.
+    if(d->watchFile.exists())
+        return;
+    d->watchTimer->stop();
+    emit processExited();
 }
 
 QList< ProcessTracker* > ProcessTracker::getTrackers(QString executableFilePath, QObject* parent)

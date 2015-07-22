@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=Android Runtime Controller
+Comment=Controller for the Android application runtime and associated services
+Encoding=UTF-8
+Type=Service
+Icon=shashlik-controller
+X-KDE-ParentApp=
+X-KDE-PluginInfo-Author=Dan Leinir Turthra Jensen
+X-KDE-PluginInfo-Email=admin@leinir.dk
+X-KDE-PluginInfo-Name=org.kde.shashlik.controller
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-Website=http://shashlik.io
+X-KDE-PluginInfo-Category=Online Services
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
+X-Plasma-MainScript=ui/Main.qml

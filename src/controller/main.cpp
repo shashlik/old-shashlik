@@ -27,12 +27,15 @@
 #include <qcommandlineparser.h>
 #include <qtimer.h>
 #include <QFile>
+#include <QIcon>
 #include <qdir.h>
 
 #include <klocalizedstring.h>
+#include <KAboutData>
 
 #include "Controller.h"
 #include "init_util.h"
+#include "View.h"
 
 int main(int argc, char *argv[])
 {
@@ -44,6 +47,14 @@ int main(int argc, char *argv[])
     QCoreApplication app(argc, argv);
     app.setApplicationName("shashlik-launcher");
     app.setApplicationVersion("0.1");
+
+    KLocalizedString::setApplicationDomain("shashlik-controller");
+
+    // About data
+    KAboutData aboutData("shashlik-controller", i18n("Shashlik Controller"), "0.1", i18n("Controller application for the Shashlik Android Runtime"), KAboutLicense::GPL, i18n("Copyright 2015, Dan Leinir Turthra Jensen"));
+    aboutData.addAuthor(i18n("Dan Leinir Turthra Jensen"), i18n("Maintainer"), "admin@leinir.dk");
+    KAboutData::setApplicationData(aboutData);
+    app.setWindowIcon(QIcon::fromTheme("shashlik-controller"));
 
     QCommandLineParser parser;
     parser.setApplicationDescription("Controller interface for the Shashlik Android application launcher");
@@ -116,7 +127,7 @@ int main(int argc, char *argv[])
             QMessageBox::information(0, i18n("Shashlik Controller"), i18n("We are unable to start an Android environment to run your application inside. Please check your installation and try again."));
             QTimer::singleShot(0, &app, SLOT(quit()));
         }
-        controller->runJar(apkfile.at(0));
+        controller->runApk(apkfile.at(0));
     }
     else if(parser.isSet(amArgument)) {
         controller->runAM(parser.value(amArgument));
@@ -145,8 +156,8 @@ int main(int argc, char *argv[])
     }
     else {
         // no need to check for guiArgument - that is what we will have left, or no arguments, which is the same thing
-        QMessageBox::information(0, i18n("Shashlik Controller"), i18n("Sorry, we don't have a UI yet. Select a .apk from your file manager, or run shashlik-controller from the command line. Current status of the services is as follows:\n Servicemanager: %1\n Surfaceflinger: %2\n Installer daemon: %3\n Android virtual machine: %4").arg(controller->servicemanagerRunning()).arg(controller->surfaceflingerRunning()).arg(controller->installdRunning()).arg(controller->zygoteRunning()));
-        QTimer::singleShot(0, &app, SLOT(quit()));
+        controller->setQuitOnError(false);
+        new View(controller);
     }
 
     return app.exec();
