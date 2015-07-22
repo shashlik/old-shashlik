@@ -76,9 +76,9 @@ int main(int argc, char *argv[])
         QDir::root().mkdir(socketDir);
     }
 
-    QCoreApplication app(argc, argv);
-    app.setApplicationName("shashlik-launcher");
-    app.setApplicationVersion("0.1");
+    QCoreApplication *app = new QCoreApplication(argc, argv);
+    app->setApplicationName("shashlik-launcher");
+    app->setApplicationVersion("0.1");
 
     KLocalizedString::setApplicationDomain("shashlik-controller");
 
@@ -86,7 +86,6 @@ int main(int argc, char *argv[])
     KAboutData aboutData("shashlik-controller", i18n("Shashlik Controller"), "0.1", i18n("Controller application for the Shashlik Android Runtime"), KAboutLicense::GPL, i18n("Copyright 2015, Dan Leinir Turthra Jensen"));
     aboutData.addAuthor(i18n("Dan Leinir Turthra Jensen"), i18n("Maintainer"), "admin@leinir.dk");
     KAboutData::setApplicationData(aboutData);
-    app.setWindowIcon(QIcon::fromTheme("shashlik-controller"));
 
     QCommandLineParser parser;
     parser.setApplicationDescription("Controller interface for the Shashlik Android application launcher");
@@ -150,7 +149,7 @@ int main(int argc, char *argv[])
     }
 
     bool haveGui = false;
-    if(apkfile.length() < 1 && !parser.isSet(amArgument) && !parser.isSet(startArgument) && !parser.isSet(zygoteArgument) && !parser.isSet(surfaceflingerArgument) && !parser.isSet(servicemanagerArgument) && !parser.isSet(installdArgument) && !parser.isSet(restartArgument) && !parser.isSet(stopArgument)) {
+    if(apkfile.length() < 1 && !parser.isSet(amArgument) && !parser.isSet(startArgument) && !parser.isSet(zygoteArgument) && !parser.isSet(surfaceflingerArgument) && !parser.isSet(servicemanagerArgument) && !parser.isSet(installdArgument) && !parser.isSet(restartArgument) && !parser.isSet(stopArgument) && !parser.isSet(statusArgument)) {
         // YES this looks silly. We do this to avoid having to maintain two mains and whatnot.
         delete app;
         QApplication *theApp = new QApplication(argc, argv);
