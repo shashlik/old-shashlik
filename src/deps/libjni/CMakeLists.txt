@@ -42,22 +42,24 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${Wayland_INCLUDE_DIRS}
 )
 
-set(GENTOID_DIR ${GENERAL_SOURCE_PATH}/../../gentoid)
+set(GENTROID_DIR ${GENERAL_SOURCE_PATH}/gentroid-frameworks-base)
 
 set(libjni_SRCS
-    ${GENTOID_DIR}/core/jni/WaylandClient.cpp
-    ${GENTOID_DIR}/core/jni/com_google_android_gles_jni_EGLImpl.cpp
-    ${GENTOID_DIR}/core/jni/com_google_android_gles_jni_GLImpl.cpp
-    ${GENTOID_DIR}/core/jni/android_app_NativeActivity.cpp
-    ${GENTOID_DIR}/core/jni/android_opengl_EGL14.cpp
-    ${GENTOID_DIR}/core/jni/android_opengl_EGLExt.cpp
-    ${GENTOID_DIR}/core/jni/android_opengl_GLES20.cpp
-    ${GENTOID_DIR}/core/jni/android_opengl_GLES30.cpp
-    ${GENTOID_DIR}/core/jni/android_view_Wayland.cpp
-    ${GENTOID_DIR}/core/jni/android_view_DisplayEventReceiver.cpp
-    ${GENTOID_DIR}/core/jni/android_view_HardwareRenderer.cpp
-    ${GENTOID_DIR}/core/jni/android_view_GLES20DisplayList.cpp
-#     ${GENTOID_DIR}/core/jni/android_view_GLES20Canvas.cpp
+    ${GENTROID_DIR}/core/jni/WaylandClient.cpp
+    ${GENTROID_DIR}/core/jni/com_google_android_gles_jni_EGLImpl.cpp
+    ${GENTROID_DIR}/core/jni/com_google_android_gles_jni_GLImpl.cpp
+    ${GENTROID_DIR}/core/jni/android_app_NativeActivity.cpp
+    ${GENTROID_DIR}/core/jni/android_opengl_EGL14.cpp
+    ${GENTROID_DIR}/core/jni/android_opengl_EGLExt.cpp
+    ${GENTROID_DIR}/core/jni/android_opengl_GLES20.cpp
+    ${GENTROID_DIR}/core/jni/android_opengl_GLES30.cpp
+    ${GENTROID_DIR}/core/jni/android_view_Wayland.cpp
+    ${GENTROID_DIR}/core/jni/android_view_DisplayEventReceiver.cpp
+    ${GENTROID_DIR}/core/jni/android_view_HardwareRenderer.cpp
+    ${GENTROID_DIR}/core/jni/android_view_GLES20DisplayList.cpp
+#     ${GENTROID_DIR}/core/jni/android_view_GLES20Canvas.cpp
+    ${GENTROID_DIR}/core/jni/android/opengl/poly_clip.cpp
+    ${GENTROID_DIR}/core/jni/android/opengl/util.cpp
 
 
     ${JNI_SOURCE_DIR}/AndroidRuntime.cpp
@@ -175,8 +177,8 @@ set(libjni_SRCS
     ${JNI_SOURCE_DIR}/android_hardware_UsbRequest.cpp
     ${JNI_SOURCE_DIR}/android_debug_JNITest.cpp
     ${JNI_SOURCE_DIR}/android_util_FileObserver.cpp
-    ${JNI_SOURCE_DIR}/android/opengl/poly_clip.cpp
-    ${JNI_SOURCE_DIR}/android/opengl/util.cpp
+#     ${JNI_SOURCE_DIR}/android/opengl/poly_clip.cpp
+#     ${JNI_SOURCE_DIR}/android/opengl/util.cpp
     ${JNI_SOURCE_DIR}/android_server_NetworkManagementSocketTagger.cpp
     ${JNI_SOURCE_DIR}/android_server_Watchdog.cpp
     ${JNI_SOURCE_DIR}/android_ddm_DdmHandleNativeHeap.cpp
