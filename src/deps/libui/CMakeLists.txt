@@ -22,8 +22,9 @@ target_link_libraries(ui
     hardware utils sync
 )
 target_include_directories(ui
-    PRIVATE
+    PUBLIC
     ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
+    PRIVATE
     ${GENERAL_SOURCE_PATH}/android-core/include
 #     ${GENERAL_SOURCE_PATH}/bionic/libc/kernel/common
     ${GENERAL_SOURCE_PATH}/libhardware/include

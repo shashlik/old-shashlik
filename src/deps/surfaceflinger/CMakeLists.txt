@@ -4,6 +4,7 @@ find_package(Qt5Core) # Yes, this is a hack. We need the 32bit libraries
 find_package(Qt5Gui) # Yes, this is a hack. We need the 32bit libraries
 find_package(Qt5Widgets) # Yes, this is a hack. We need the 32bit libraries
 find_package(Qt5X11Extras) # Yes, this is a hack. We need the 32bit libraries
+find_package(Wayland COMPONENTS Client Egl Cursor REQUIRED)
 
 set(REPO_PATH ${ANDROID_FRAMEWORKS_NATIVE_PATH}/services/surfaceflinger)
 
@@ -58,6 +59,9 @@ target_compile_definitions(libsurfaceflinger
     -DVSYNC_EVENT_PHASE_OFFSET_NS=0
     -DSF_VSYNC_EVENT_PHASE_OFFSET_NS=0
     -DPRESENT_TIME_OFFSET_FROM_VSYNC_NS=0
+    PUBLIC
+    -DWL_EGL_PLATFORM
+    ${Wayland_DEFINITIONS}
 )
 target_link_libraries(libsurfaceflinger
 #     cutils
@@ -71,9 +75,12 @@ target_link_libraries(libsurfaceflinger
 #     binder
 #     ui
     gui
+    hwui
+    epoxy
     ${QT5CORE32_LIBRARIES}
     ${QT5WIDGETS32_LIBRARIES}
     ${QT5X11EXTRAS32_LIBRARIES}
+    ${Wayland_LIBRARIES}
 )
 target_include_directories(libsurfaceflinger
     PRIVATE
@@ -85,6 +92,7 @@ target_include_directories(libsurfaceflinger
     ${QT5CORE32_INCLUDE_DIRS}
     ${QT5WIDGETS32_INCLUDE_DIRS}
     ${QT5X11EXTRAS32_INCLUDE_DIRS}
+    ${Wayland_INCLUDE_DIRS}
 )
 
 add_executable(surfaceflinger ${surfaceflinger_SRCS})

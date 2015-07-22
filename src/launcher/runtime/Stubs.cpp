@@ -109,26 +109,26 @@
 //     return 0;
 // }
 // 
-// int register_android_opengl_jni_GLES10(JNIEnv* env)
-// {
-//     return 0;
-// }
-// 
-// int register_android_opengl_jni_GLES10Ext(JNIEnv* env)
-// {
-//     return 0;
-// }
-// 
-// int register_android_opengl_jni_GLES11(JNIEnv* env)
-// {
-//     return 0;
-// }
-// 
-// int register_android_opengl_jni_GLES11Ext(JNIEnv* env)
-// {
-//     return 0;
-// }
-// 
+int register_android_opengl_jni_GLES10(JNIEnv* env)
+{
+    return 0;
+}
+
+int register_android_opengl_jni_GLES10Ext(JNIEnv* env)
+{
+    return 0;
+}
+
+int register_android_opengl_jni_GLES11(JNIEnv* env)
+{
+    return 0;
+}
+
+int register_android_opengl_jni_GLES11Ext(JNIEnv* env)
+{
+    return 0;
+}
+
 // int register_android_opengl_jni_GLES20(JNIEnv* env)
 // {
 //     return 0;

@@ -34,8 +34,8 @@ include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
 include(ECMInstallIcons)
 
-find_package(KF5 REQUIRED COMPONENTS I18n)
-# WindowSystem Service Package Declarative Plasma PlasmaQuick)
+find_package(KF5 REQUIRED COMPONENTS I18n
+WindowSystem Service Package Declarative Plasma PlasmaQuick)
 
 # find_package(KF5 REQUIRED COMPONENTS
 # WindowSystem CoreAddons Solid Config Auth DBusAddons
@@ -44,6 +44,7 @@ find_package(KF5 REQUIRED COMPONENTS I18n)
 # )
 
 find_package(OpenSSL REQUIRED)
+find_package(OpenGL REQUIRED)
 
 find_package(BISON)
 find_package(FLEX)
@@ -79,6 +80,8 @@ add_definitions(-DHAVE_SYS_UIO_H
                 -DHAVE_SYSTEM_PROPERTY_SERVER
                 -D_FILE_OFFSET_BITS=64
                 -DEXCLUDE_FS_CONFIG_STRUCTURES
+                -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
+                -DWL_EGL_PLATFORM
 )
 
 # In case this file exists, we need to set this to look for certain files in the right place
@@ -172,8 +175,8 @@ set(LIBBINDER_INCLUDES ${CMAKE_SOURCE_DIR}/src/libs/libbinder
                        #${LIBXXX_INCLUDS}/include
 )
 
-set(OPENGL_LIBS EGL GLESv2 GLESv1_CM)
-set(OPENGL_INCLUDES ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include)
+# set(OPENGL_LIBS EGL GLESv2 GLESv1_CM)
+# set(OPENGL_INCLUDES ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include)
 
 # ----------------------------------------------------------------
 

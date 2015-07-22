@@ -36,11 +36,12 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(gui PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(gui
-    GLESv2 ETC1 ui binder
+    GLESv2 EGL GLESv1_CM ${DRM_LIBRARIES} ui binder  hwui
 )
 target_compile_definitions(gui
     PRIVATE
     -DHAVE_ANDROID_OS
+    -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
 )
 target_include_directories(gui
     PRIVATE

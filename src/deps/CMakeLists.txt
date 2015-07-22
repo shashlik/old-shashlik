@@ -33,6 +33,7 @@ add_subdirectory(libandroidfw)    # frameworks-base
 add_subdirectory(libgui)
 add_subdirectory(libsync)
 add_subdirectory(libui)
+add_subdirectory(libhwui)
 add_subdirectory(libinput)
 add_subdirectory(opengl-libs)     # frameworks-native
 add_subdirectory(installd)

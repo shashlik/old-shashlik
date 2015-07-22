@@ -28,6 +28,7 @@
 #include <qtimer.h>
 #include <QFile>
 #include <QIcon>
+#include <QDebug>
 #include <qdir.h>
 
 #include <klocalizedstring.h>
@@ -88,6 +89,8 @@ int main(int argc, char *argv[])
     parser.addOption(stopArgument);
     QCommandLineOption restartArgument("restart", i18n("Stop and start all services (equivalent to running shashlik-controller first with --stop and then with --start)"));
     parser.addOption(restartArgument);
+    QCommandLineOption statusArgument("status", i18n("See the status of the various services"));
+    parser.addOption(statusArgument);
 
     parser.process(app);
     QStringList apkfile = parser.positionalArguments();
@@ -153,6 +156,11 @@ int main(int argc, char *argv[])
     else if(parser.isSet(stopArgument)) {
         controller->stop();
         QTimer::singleShot(0, &app, SLOT(quit()));
+    }
+    else if(parser.isSet(statusArgument)) {
+        qDebug() << "Status of servicemanager:" << controller->servicemanagerRunning();
+        qDebug() << "Status of zygote:" << controller->surfaceflingerRunning();
+        qDebug() << "Status of surfaceflinger:" << controller->zygoteRunning();
     }
     else {
         // no need to check for guiArgument - that is what we will have left, or no arguments, which is the same thing

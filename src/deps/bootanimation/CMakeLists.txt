@@ -22,6 +22,7 @@ target_link_libraries(bootanimation
     EGL
     GLESv1_CM
     gui
+    epoxy
 )
 target_include_directories(bootanimation
     PRIVATE

@@ -103,7 +103,7 @@ public:
         path.replaceInStrings("ANDROID_ROOT", androidRootDir);
         env.insert("PATH", path.join(QLatin1String(":")));
 
-        QStringList ldpath = QStringList() << env.value("LD_LIBRARY_PATH") << "LIBPATH/lib64" << "LIBPATH/lib64/egl" << "ANDROID_ROOT/vendor/lib" << "ANDROID_ROOT/system/lib";
+        QStringList ldpath = QStringList() << env.value("LD_LIBRARY_PATH") <<  "/usr/lib" << "LIBPATH/lib64" << "LIBPATH/lib64/egl" << "ANDROID_ROOT/vendor/lib" << "ANDROID_ROOT/system/lib";
         ldpath.replaceInStrings("LIBPATH", libraryRoot);
         ldpath.replaceInStrings("ANDROID_ROOT", androidRootDir);
         env.insert("LD_LIBRARY_PATH", ldpath.join(QLatin1String(":")));
@@ -121,7 +121,10 @@ public:
         env.insert("LOOP_MOUNTPOINT", QString("/mnt/obb").prepend(androidRootDir));
         env.insert("HAL_LIBRARY_PATH1", QString("/system/lib/hw").prepend(androidRootDir));
 
-        env.insert("ANDROID_BOOTLOGO", "1");
+//         env.insert("ANDROID_BOOTLOGO", "1");
+        env.insert("ANDROID_WINDOW_SIZE", "200x200");
+        env.insert("EGL_PLATFORM", "wayland");
+//         env.insert("MESA_DEBUG", "yasplz");
 
         // TODO this should probably use some XDG type thing to sniff what this really is...
         env.insert("EXTERNAL_STORAGE", "/mnt");
@@ -352,10 +355,13 @@ void Controller::startZygote()
     connect(d->zygote, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
     d->zygote->setProcessChannelMode(QProcess::MergedChannels);
     qDebug() << "Attempting to start the Zygote...";
+//     d->zygote->start("strace " + d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << "-Xzygote" << d->androidRootDir + "/system/bin/" << "--zygote" << "--start-system-server");
     d->zygote->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << "-Xzygote" << d->androidRootDir + "/system/bin/" << "--zygote" << "--start-system-server");
 
-
-//     d->zygote->start("/home/user/shashlik/src/shashlik/build/src/deps/bootanimation/bootanimation");
+    
+//      d->zygote->start(d->androidRootDir + "/system/lib/emulator_test_renderer");
+//      d->zygote->start("gdbserver localhost:1234 " + d->androidRootDir + "/system/lib/emulator_test_renderer");
+//      d->zygote->start("strace " + d->androidRootDir + "/system/lib/emulator_test_renderer 2> /home/leinir/derp");
     d->zygote->waitForStarted();
 
     d->zygoteTracker = new ProcessTracker(d->zygote->processId(), this);
