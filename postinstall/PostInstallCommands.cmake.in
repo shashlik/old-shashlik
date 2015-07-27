@@ -171,29 +171,32 @@ process_installed_android_jar(ext ${JAVALIB_DIR}ext/ext.jar ${CMAKE_BINARY_DIR}/
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar)
 process_installed_android_jar(conscrypt ${JAVALIB_DIR}conscrypt/conscrypt-nojarjarthing.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary conscrypt-nojarjarthing)
 
-set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar)
+set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext.jar:${ANDROID_JAR_DIR}/okhttp.jar)
 process_installed_android_jar(okhttp ${JAVALIB_DIR}okhttp/okhttp.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
-set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar)
+set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext.jar:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar)
 process_installed_android_jar(framework ${JAVALIB_DIR}frameworks/framework.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
-set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar)
+set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext.jar:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar)
 process_installed_android_jar(voip-common ${JAVALIB_DIR}voip/voip-common.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
-set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar)
+set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext.jar:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar)
 process_installed_android_jar(telephony-common ${JAVALIB_DIR}telephony/telephony-common.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
-set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar)
+set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext.jar:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar)
 process_installed_android_jar(framework2 ${JAVALIB_DIR}frameworks/framework2.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
-set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar)
+set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext.jar:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar)
 process_installed_android_jar(launch ${CMAKE_BINARY_DIR}/src/launcher/launch.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
-set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar)
+set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext.jar:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar)
 process_installed_android_jar(shashlik ${JAVALIB_DIR}shashlik/shashlik.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
-set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar)
+set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext.jar:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar)
 process_installed_android_jar(am ${JAVALIB_DIR}am/am.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+
+# set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext.jar:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar:${ANDROID_JAR_DIR}/framework2.jar)
+# process_installed_android_jar(packageinstaller ${JAVALIB_DIR}packageinstaller/packageinstaller.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 # message(STATUS "Copying: core classes-full-debug.jar to classes-jarjar.jar")
 # out/host/linux-x86/bin/acp -fp out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes-full-debug.jar out/target/common/obj/JAVA_LIBRARIES/core_intermediates/classes-jarjar.jar
