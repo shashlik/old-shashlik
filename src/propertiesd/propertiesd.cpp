@@ -119,6 +119,7 @@ void Propertiesd::readRequest()
     }
     else {
         qDebug() << "OK, so something is terribly wrong here... Command is not only unknown but out of bounds. Command value is" << (int)data[0] << "and the rest is" << data;
+        dev->write("00");
     }
 }
 
@@ -195,18 +196,18 @@ void Propertiesd::initProperties()
     writeProperty(QString::fromLatin1("ro.config.low_ram"), QString::fromLatin1("0"));
     writeProperty(QString::fromLatin1("ro.config.headless"), QString::fromLatin1("0"));
 
-    writeProperty(QString::fromLatin1("ro.zygote.disable_gl_preload"), QString::fromLatin1("true"));
+    writeProperty(QString::fromLatin1("ro.zygote.disable_gl_preload"), QString::fromLatin1("false"));
 
     writeProperty(QString::fromLatin1("debug.egl.trace"), QString::fromLatin1("error"));
     writeProperty(QString::fromLatin1("debug.egl.callstack"), QString::fromLatin1("0"));
 
-//     writeProperty(QString::fromLatin1("debug.sf.showupdates"), QString::fromLatin1("0"));
-//     writeProperty(QString::fromLatin1("debug.sf.ddms"), QString::fromLatin1("0"));
-//     writeProperty(QString::fromLatin1("debug.sf.no_hw_vsync"), QString::fromLatin1("0"));
+    writeProperty(QString::fromLatin1("debug.sf.showupdates"), QString::fromLatin1("0"));
+    writeProperty(QString::fromLatin1("debug.sf.ddms"), QString::fromLatin1("0"));
+    writeProperty(QString::fromLatin1("debug.sf.no_hw_vsync"), QString::fromLatin1("0"));
 
     writeProperty(QString::fromLatin1("ro.bq.gpu_to_cpu_unsupported"), QString::fromLatin1("0"));
-    writeProperty(QString::fromLatin1("ro.hardware.hwcomposer"), QString::fromLatin1("drm"));
-    writeProperty(QString::fromLatin1("ro.hardware.gralloc"), QString::fromLatin1("drm"));
+    writeProperty(QString::fromLatin1("ro.hardware.hwcomposer"), QString::fromLatin1("shashlik"));
+    writeProperty(QString::fromLatin1("ro.hardware.gralloc"), QString::fromLatin1("shashlik"));
 //     writeProperty(QString::fromLatin1("ro.hardware"), QString::fromLatin1("0"));
 //     writeProperty(QString::fromLatin1("ro.product.board"), QString::fromLatin1("0"));
 //     writeProperty(QString::fromLatin1("ro.board.platform"), QString::fromLatin1("0"));
@@ -219,12 +220,12 @@ void Propertiesd::initProperties()
     writeProperty(QString::fromLatin1("dalvik.vm.check-dex-sum"), QString::fromLatin1("false"));
     writeProperty(QString::fromLatin1("dalvik.vm.enableassertions"), QString::fromLatin1("false"));
     writeProperty(QString::fromLatin1("dalvik.vm.jniopts"), QString::fromLatin1(""));
-    writeProperty(QString::fromLatin1("dalvik.vm.heapstartsize"), QString::fromLatin1("4m"));
-    writeProperty(QString::fromLatin1("dalvik.vm.heapsize"), QString::fromLatin1("16m"));
-    writeProperty(QString::fromLatin1("dalvik.vm.heapgrowthlimit"), QString::fromLatin1(""));
-    writeProperty(QString::fromLatin1("dalvik.vm.heapminfree"), QString::fromLatin1(""));
-    writeProperty(QString::fromLatin1("dalvik.vm.heapmaxfree"), QString::fromLatin1(""));
-    writeProperty(QString::fromLatin1("dalvik.vm.heaptargetutilization"), QString::fromLatin1(""));
+    writeProperty(QString::fromLatin1("dalvik.vm.heapstartsize"), QString::fromLatin1("8m"));
+    writeProperty(QString::fromLatin1("dalvik.vm.heapgrowthlimit"), QString::fromLatin1("192m"));
+    writeProperty(QString::fromLatin1("dalvik.vm.heapsize"), QString::fromLatin1("512m"));
+    writeProperty(QString::fromLatin1("dalvik.vm.heaptargetutilization"), QString::fromLatin1("0.75"));
+    writeProperty(QString::fromLatin1("dalvik.vm.heapminfree"), QString::fromLatin1("512k"));
+    writeProperty(QString::fromLatin1("dalvik.vm.heapmaxfree"), QString::fromLatin1("8m"));
     writeProperty(QString::fromLatin1("dalvik.vm.dexopt-flags"), QString::fromLatin1(""));
     writeProperty(QString::fromLatin1("dalvik.vm.lockprof.threshold"), QString::fromLatin1(""));
     writeProperty(QString::fromLatin1("dalvik.vm.extra-opts"), QString::fromLatin1(""));
@@ -240,6 +241,14 @@ void Propertiesd::initProperties()
 
     writeProperty(QString::fromLatin1("system_init.startsensorservice"), QString::fromLatin1("1"));
     writeProperty(QString::fromLatin1("sys.shutdown.requested"), QString::fromLatin1("1"));
+    writeProperty(QString::fromLatin1("config.disable_systemui"), QString::fromLatin1("1"));
+
+    writeProperty(QString::fromLatin1("config.disable_storage"), QString::fromLatin1("1"));
+    writeProperty(QString::fromLatin1("config.disable_media"), QString::fromLatin1("1"));
+    writeProperty(QString::fromLatin1("config.disable_location"), QString::fromLatin1("1"));
+    writeProperty(QString::fromLatin1("config.disable_noncore"), QString::fromLatin1("1"));
+    writeProperty(QString::fromLatin1("config.disable_network"), QString::fromLatin1("1"));
+    writeProperty(QString::fromLatin1("persist.sys.strictmode.disable"), QString::fromLatin1("1"));
 
 //     writeProperty(QString::fromLatin1(""), QString::fromLatin1(""));
 }
