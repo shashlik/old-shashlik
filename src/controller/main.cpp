@@ -22,20 +22,52 @@
 #include <stdio.h>
 
 #include <QApplication>
-#include <QMessageBox>
+#include <QDebug>
 #include <QStringList>
-#include <qcommandlineparser.h>
-#include <qtimer.h>
+#include <QCommandLineParser>
+#include <QTimer>
 #include <QFile>
 #include <QIcon>
-#include <qdir.h>
+#include <QDir>
+#include <QDebug>
+#include <QMessageBox>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KAboutData>
 
 #include "Controller.h"
 #include "init_util.h"
 #include "View.h"
+
+void showMessage(QString errorMessage, Controller::ErrorLevel errorLevel) {
+    switch(errorLevel) {
+        case Controller::CriticalLevel:
+            qCritical() << "Shashlik ERROR:" << errorMessage;
+            break;
+        case Controller::WarningLevel:
+            qWarning() << "Shashlik Warning:" << errorMessage;
+            break;
+        case Controller::DebugLevel:
+        default:
+            qDebug() << "Shashlik Debug:" << errorMessage;
+            break;
+    }
+}
+
+void showMessageBox(QString errorMessage, Controller::ErrorLevel errorLevel) {
+    switch(errorLevel) {
+        case Controller::CriticalLevel:
+            QMessageBox::critical(0, i18n("Shashlik Controller"), errorMessage);
+            break;
+        case Controller::WarningLevel:
+            QMessageBox::warning(0, i18n("Shashlik Controller"), errorMessage);
+            break;
+        case Controller::DebugLevel:
+        default:
+            // don't show debug messages in the gui, because that's just silly...
+            break;
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -44,9 +76,9 @@ int main(int argc, char *argv[])
         QDir::root().mkdir(socketDir);
     }
 
-    QApplication app(argc, argv);
-    app.setApplicationName("shashlik-controller");
-    app.setApplicationVersion("0.1");
+    QCoreApplication *app = new QCoreApplication(argc, argv);
+    app->setApplicationName("shashlik-launcher");
+    app->setApplicationVersion("0.1");
 
     KLocalizedString::setApplicationDomain("shashlik-controller");
 
@@ -54,7 +86,6 @@ int main(int argc, char *argv[])
     KAboutData aboutData("shashlik-controller", i18n("Shashlik Controller"), "0.1", i18n("Controller application for the Shashlik Android Runtime"), KAboutLicense::GPL, i18n("Copyright 2015, Dan Leinir Turthra Jensen"));
     aboutData.addAuthor(i18n("Dan Leinir Turthra Jensen"), i18n("Maintainer"), "admin@leinir.dk");
     KAboutData::setApplicationData(aboutData);
-    app.setWindowIcon(QIcon::fromTheme("shashlik-controller"));
 
     QCommandLineParser parser;
     parser.setApplicationDescription("Controller interface for the Shashlik Android application launcher");
@@ -88,8 +119,10 @@ int main(int argc, char *argv[])
     parser.addOption(stopArgument);
     QCommandLineOption restartArgument("restart", i18n("Stop and start all services (equivalent to running shashlik-controller first with --stop and then with --start)"));
     parser.addOption(restartArgument);
+    QCommandLineOption statusArgument("status", i18n("See the status of the various services"));
+    parser.addOption(statusArgument);
 
-    parser.process(app);
+    parser.process(*app);
     QStringList apkfile = parser.positionalArguments();
 
     // If the socket file already exists, assume it was created for us, and just needs to be opened...
@@ -115,7 +148,29 @@ int main(int argc, char *argv[])
         setenv("ANDROID_SOCKET_zygote", ANDROID_SOCKET_zygote, 1);
     }
 
-    Controller* controller = new Controller(&app);
+    bool haveGui = false;
+    if(apkfile.length() < 1 && !parser.isSet(amArgument) && !parser.isSet(startArgument) && !parser.isSet(zygoteArgument) && !parser.isSet(surfaceflingerArgument) && !parser.isSet(servicemanagerArgument) && !parser.isSet(installdArgument) && !parser.isSet(restartArgument) && !parser.isSet(stopArgument) && !parser.isSet(statusArgument)) {
+        // YES this looks silly. We do this to avoid having to maintain two mains and whatnot.
+        delete app;
+        QApplication *theApp = new QApplication(argc, argv);
+
+        KLocalizedString::setApplicationDomain("shashlik-controller");
+
+        // About data
+        KAboutData aboutData("shashlik-controller", i18n("Shashlik Controller"), "0.1", i18n("Controller application for the Shashlik Android Runtime"), KAboutLicense::GPL, i18n("Copyright 2015, Dan Leinir Turthra Jensen"));
+        aboutData.addAuthor(i18n("Dan Leinir Turthra Jensen"), i18n("Maintainer"), "admin@leinir.dk");
+        KAboutData::setApplicationData(aboutData);
+        theApp->setWindowIcon(QIcon::fromTheme("shashlik-controller"));
+        app = theApp;
+        haveGui = true;
+    }
+
+    Controller* controller = new Controller(app);
+    QObject::connect(controller, &Controller::error, showMessage);
+    if(haveGui) {
+        QObject::connect(controller, &Controller::error, showMessageBox);
+    }
+
     if(apkfile.length() > 0) {
         // do a thing with this thing...
         if(!controller->zygoteRunning() || !controller->servicemanagerRunning() || !controller->surfaceflingerRunning()) {
@@ -124,8 +179,8 @@ int main(int argc, char *argv[])
         }
         if(!controller->zygoteRunning() || !controller->servicemanagerRunning() || !controller->surfaceflingerRunning()) {
             // If this happens when the check is actually functional, we should be quitting with a useful error
-            QMessageBox::information(0, i18n("Shashlik Controller"), i18n("We are unable to start an Android environment to run your application inside. Please check your installation and try again."));
-            QTimer::singleShot(0, &app, SLOT(quit()));
+            emit controller->error(i18n("We are unable to start an Android environment to run your application inside. Please check your installation and try again."), Controller::CriticalLevel);
+            QTimer::singleShot(0, app, SLOT(quit()));
         }
         controller->runApk(apkfile.at(0));
     }
@@ -152,7 +207,12 @@ int main(int argc, char *argv[])
     }
     else if(parser.isSet(stopArgument)) {
         controller->stop();
-        QTimer::singleShot(0, &app, SLOT(quit()));
+        QTimer::singleShot(0, app, SLOT(quit()));
+    }
+    else if(parser.isSet(statusArgument)) {
+        qDebug() << "Status of servicemanager:" << controller->servicemanagerRunning();
+        qDebug() << "Status of zygote:" << controller->surfaceflingerRunning();
+        qDebug() << "Status of surfaceflinger:" << controller->zygoteRunning();
     }
     else {
         // no need to check for guiArgument - that is what we will have left, or no arguments, which is the same thing
@@ -160,5 +220,5 @@ int main(int argc, char *argv[])
         new View(controller);
     }
 
-    return app.exec();
+    return app->exec();
 }

@@ -33,8 +33,9 @@ add_subdirectory(libandroidfw)    # frameworks-base
 add_subdirectory(libgui)
 add_subdirectory(libsync)
 add_subdirectory(libui)
+add_subdirectory(libhwui)
 add_subdirectory(libinput)
-add_subdirectory(opengl-libs)     # frameworks-native
+# add_subdirectory(opengl-libs)     # frameworks-native
 add_subdirectory(installd)
 
 add_subdirectory(libbase)
@@ -60,6 +61,7 @@ add_subdirectory(javalibrary-frameworks)
 add_subdirectory(javalibrary-voip)
 add_subdirectory(javalibrary-telephony)
 add_subdirectory(libjavacore)
+# add_subdirectory(javalibrary-packageinstaller)
 
 add_subdirectory(javalibrary-shashlik)
 

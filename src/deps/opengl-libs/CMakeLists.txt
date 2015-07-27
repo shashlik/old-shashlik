@@ -7,7 +7,7 @@ add_definitions(
     -DANDROID
 )
 
-add_subdirectory(glapi)
+# add_subdirectory(glapi)
 
 set(GLES_trace_SRCS
     ${REPO_PATH}/libs/GLES_trace/src/gltrace_api.cpp
@@ -104,7 +104,8 @@ set(mesa_SRCS
     ${GENERAL_SOURCE_PATH}/mesa/src/egl/main/egltypedefs.h
 )
 
-set(gralloc_drm_SRCS
+set(gralloc.shashlik_SRCS
+    ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc.c
     ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc_drm.c
     ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc_drm_kms.c
     ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc_drm_intel.c
@@ -113,7 +114,6 @@ set(gralloc_drm_SRCS
 )
 
 set(grallocdrm_module_SRCS
-#     ${GENERAL_SOURCE_PATH}/drm_gralloc/gralloc.c
     ${GENERAL_SOURCE_PATH}/gralloc/alloc_device.cpp
     ${GENERAL_SOURCE_PATH}/gralloc/gralloc_module.cpp
 )
@@ -121,106 +121,112 @@ set(grallocdrm_module_SRCS
 set(hwcomposer_drm_SRCS
     ${GENERAL_SOURCE_PATH}/hwcomposer/hwcomposer.cpp
 )
+# 
+# add_library(EGL SHARED ${EGL_SRCS})
+# if(FORCE_32BIT_BUILD)
+#     set_target_properties(EGL PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+# endif(FORCE_32BIT_BUILD)
+# target_link_libraries(EGL
+#     GLES_trace
+# #     GLES_android
+# )
+# target_include_directories(EGL
+#     PRIVATE
+#     ${REPO_PATH}/include
+#     ${REPO_PATH}/libs
+#     ${REPO_PATH}/libs/GLES_trace
+#     ${LIBUTILS_INCLUDES}
+#     ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified bionic_tls.h
+#     ${GENERAL_SOURCE_PATH}/libhardware/include
+# )
+# target_compile_definitions(EGL
+#     PRIVATE
+#     -DLOG_TAG="libEGL"
+#     PUBLIC
+#     -DEGL_TRACE=1
+#     -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
+# )
+# 
+# add_library(GLES_trace SHARED ${GLES_trace_SRCS})
+# if(FORCE_32BIT_BUILD)
+#     set_target_properties(GLES_trace PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+# endif(FORCE_32BIT_BUILD)
+# target_link_libraries(GLES_trace
+#     cutils utils protobuf-cpp-2.3.0-lite lzf
+#     #stlport 
+# )
+# target_compile_definitions(GLES_trace
+#     PRIVATE
+#     -DLOG_TAG="libGLES_trace"
+#     -DGOOGLE_PROTOBUF_NO_RTTI
+#     -DEGL_TRACE=1
+#     -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
+# )
+# target_include_directories(GLES_trace
+#     PRIVATE
+#     ${REPO_PATH}/include
+#     ${REPO_PATH}/libs
+#     ${REPO_PATH}/libs/GLES_trace
+#     ${LIBCUTILS_INCLUDES}
+#     ${GENERAL_SOURCE_PATH}/protobuf/src
+#     ${GENERAL_SOURCE_PATH} # for liblzf/lzf.h
+#     ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified bionic_tls.h
+# )
+# 
+# add_library(GLES_android SHARED ${agl_SRCS})
+# if(FORCE_32BIT_BUILD)
+#     set_target_properties(GLES_android PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+# endif(FORCE_32BIT_BUILD)
+# target_link_libraries(GLES_android
+#     pixelflinger ETC1 ui
+# )
+# target_compile_definitions(GLES_android
+#     PRIVATE
+#     -DLOG_TAG="libagl"
+#     -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
+# )
+# target_include_directories(GLES_android
+#     PRIVATE
+#     ${REPO_PATH}/include
+#     ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
+#     ${LIBCUTILS_INCLUDES}
+#     ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified bionic_tls.h
+#     ${GENERAL_SOURCE_PATH}/libhardware/include
+# )
 
-add_library(EGL SHARED ${EGL_SRCS})
+add_library(gralloc.shashlik SHARED ${gralloc.shashlik_SRCS})
 if(FORCE_32BIT_BUILD)
-    set_target_properties(EGL PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+    set_target_properties(gralloc.shashlik PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32" )
+    #OUTPUT_NAME gralloc.default PREFIX ""
 endif(FORCE_32BIT_BUILD)
-target_link_libraries(EGL
-    GLES_trace
-#     GLES_android
-)
-target_include_directories(EGL
-    PRIVATE
-    ${REPO_PATH}/include
-    ${REPO_PATH}/libs
-    ${REPO_PATH}/libs/GLES_trace
-    ${LIBUTILS_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified bionic_tls.h
-    ${GENERAL_SOURCE_PATH}/libhardware/include
-)
-target_compile_definitions(EGL
-    PRIVATE
-    -DLOG_TAG="libEGL"
-    PUBLIC
-    -DEGL_TRACE=1
-    -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
-)
-
-add_library(GLES_trace SHARED ${GLES_trace_SRCS})
-if(FORCE_32BIT_BUILD)
-    set_target_properties(GLES_trace PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-endif(FORCE_32BIT_BUILD)
-target_link_libraries(GLES_trace
-    cutils utils protobuf-cpp-2.3.0-lite lzf
-    #stlport 
-)
-target_compile_definitions(GLES_trace
-    PRIVATE
-    -DLOG_TAG="libGLES_trace"
-    -DGOOGLE_PROTOBUF_NO_RTTI
-    -DEGL_TRACE=1
-    -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
-)
-target_include_directories(GLES_trace
-    PRIVATE
-    ${REPO_PATH}/include
-    ${REPO_PATH}/libs
-    ${REPO_PATH}/libs/GLES_trace
-    ${LIBCUTILS_INCLUDES}
-    ${GENERAL_SOURCE_PATH}/protobuf/src
-    ${GENERAL_SOURCE_PATH} # for liblzf/lzf.h
-    ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified bionic_tls.h
-)
-
-add_library(GLES_android SHARED ${agl_SRCS})
-if(FORCE_32BIT_BUILD)
-    set_target_properties(GLES_android PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-endif(FORCE_32BIT_BUILD)
-target_link_libraries(GLES_android
-    pixelflinger ETC1 ui
-)
-target_compile_definitions(GLES_android
-    PRIVATE
-    -DLOG_TAG="libagl"
-    -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
-)
-target_include_directories(GLES_android
-    PRIVATE
-    ${REPO_PATH}/include
-    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
-    ${LIBCUTILS_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified bionic_tls.h
-    ${GENERAL_SOURCE_PATH}/libhardware/include
-)
-
-add_library(gralloc_drm SHARED ${gralloc_drm_SRCS})
-if(FORCE_32BIT_BUILD)
-    set_target_properties(gralloc_drm PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-endif(FORCE_32BIT_BUILD)
-target_compile_definitions(gralloc_drm
+# because otherwise the module loader looks for the wrong file
+set_target_properties(gralloc.shashlik PROPERTIES PREFIX "")
+target_compile_definitions(gralloc.shashlik
     PRIVATE
     -DENABLE_INTEL
 #     -DENABLE_RADEON
 #     -DENABLE_NOUVEAU
     -DANDROID_VERSION=0x442
 )
-target_include_directories(gralloc_drm
+target_include_directories(gralloc.shashlik
     PRIVATE
-#     /usr/src/linux-4.0.4/drivers/gpu/drm/i915
 #     /usr/src/linux-4.0.4/include/drivers/gpu/drm/i915
-#     /usr/src/linux-4.0.4/include
     ${LIBLOG_INCLUDES}
+    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include
+
     ${LIBHARDWARE_INCLUDES}
     ${DRM_INCLUDE_DIRS}
-    ${GENERAL_SOURCE_PATH}/mesa/src/mesa/drivers/dri/i915
+#     /usr/src/linux-4.0.4/drivers/gpu/drm/i915
+#     /usr/src/linux-4.0.4/include/uapi
+#     /usr/src/linux-4.0.4/include
+#     ${GENERAL_SOURCE_PATH}/mesa/src/mesa/drivers/dri/i915
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
-target_link_libraries(gralloc_drm
+target_link_libraries(gralloc.shashlik
     log
     cutils
     hardware_legacy
-
+    hardware
     ${DRM_LIBRARIES}
     drm_intel
 #     /usr/lib/dri/i915_dri.so
@@ -228,214 +234,97 @@ target_link_libraries(gralloc_drm
 #     drm_nouveau
 )
 
-add_library(gralloc.drm SHARED ${grallocdrm_module_SRCS})
+add_library(hwcomposer.shashlik SHARED ${hwcomposer_drm_SRCS})
+set_target_properties(hwcomposer.shashlik PROPERTIES PREFIX "")
+if(FORCE_32BIT_BUILD)
+    set_target_properties(hwcomposer.shashlik PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+endif(FORCE_32BIT_BUILD)
 # because otherwise the module loader looks for the wrong file
-set_target_properties(gralloc.drm PROPERTIES PREFIX "")
-if(FORCE_32BIT_BUILD)
-    set_target_properties(gralloc.drm PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-endif(FORCE_32BIT_BUILD)
-target_compile_definitions(gralloc.drm
-    PRIVATE
-    -DANDROID_VERSION=0x442
-    -DLOG_TAG="gralloc-drm"
-    -DGRALLOC_32_BITS
-    -DSTANDARD_LINUX_SCREEN
-    -DPLATFORM_SDK_VERSION=19
-)
-target_include_directories(gralloc.drm
-    PRIVATE
-    ${LIBHARDWARE_INCLUDES}
-    ${LIBLOG_INCLUDES}
-    ${LIBCUTILS_INCLUDES}
-    ${DRM_INCLUDE_DIRS}
-    ${GENERAL_SOURCE_PATH}/gralloc
-)
-target_link_libraries(gralloc.drm
-    ${DRM_LIBRARIES}
-    hardware
-    log
-    cutils
-)
-# target_compile_definitions(gralloc.drm
-#     PRIVATE
-#     -DANDROID_VERSION=0x442
-# )
-# target_include_directories(gralloc.drm
-#     PRIVATE
-#     ${LIBHARDWARE_INCLUDES}
-#     ${DRM_INCLUDE_DIRS}
-# )
-# target_link_libraries(gralloc.drm
-#     gralloc_drm
-#     log
-# 
-#     GLESv1_CM
-#     ${DRM_LIBRARIES}
-# )
-
-add_library(mesa_loader STATIC ${mesa_loader_SRCS})
-if(FORCE_32BIT_BUILD)
-    set_target_properties(mesa_loader PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-endif(FORCE_32BIT_BUILD)
-target_compile_definitions(mesa_loader
-    PRIVATE
-    -DANDROID_VERSION=0x442
-)
-target_include_directories(mesa_loader
-    PRIVATE
-    ${DRM_INCLUDE_DIRS}
-    ${GENERAL_SOURCE_PATH}/mesa/include
-)
-target_link_libraries(mesa_loader
-    ${DRM_LIBRARIES}
-)
-
-add_library(mesa_egl_dri2 STATIC ${mesa_egl_dri2_SRCS})
-if(FORCE_32BIT_BUILD)
-    set_target_properties(mesa_egl_dri2 PROPERTIES COMPILE_FLAGS "-m32 -std=gnu99" LINK_FLAGS "-m32")
-endif(FORCE_32BIT_BUILD)
-target_compile_definitions(mesa_egl_dri2
-    PRIVATE
-    -DHAVE_SHARED_GLAPI
-    -DHAVE_ANDROID_PLATFORM
-    -DHAVE_PTHREAD
-    -DDEFAULT_DRIVER_DIR="${ANDROID_ROOT}/system/lib/dri"
-    -DPATH_MAX=2048
-    -DANDROID_VERSION=0x442
-)
-target_include_directories(mesa_egl_dri2
-    PRIVATE
-    ${DRM_INCLUDE_DIRS}
-    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
-    ${GENERAL_SOURCE_PATH}/mesa/include
-    ${GENERAL_SOURCE_PATH}/mesa/src/egl/main
-    ${GENERAL_SOURCE_PATH}/mesa/src/egl
-    ${GENERAL_SOURCE_PATH}/mesa/src/loader
-    ${GENERAL_SOURCE_PATH}/drm_gralloc
-    ${LIBHARDWARE_INCLUDES}
-    ${ANDROID_CORE_PATH}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
-target_link_libraries(mesa_egl_dri2
-    mesa_loader
-    sync
-)
-
-add_library(GLES_mesa SHARED ${mesa_SRCS})
-if(FORCE_32BIT_BUILD)
-    set_target_properties(GLES_mesa PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-endif(FORCE_32BIT_BUILD)
-target_include_directories(GLES_mesa
-    PRIVATE
-    ${GENERAL_SOURCE_PATH}/mesa/include
-    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
-)
-target_link_libraries(GLES_mesa
-    mesa_egl_dri2
-    mesa_loader
-    glapi
-
-    gralloc_drm
-    hardware
-    log
-    cutils
-    sync
-
-    drm
-    dl
-)
-target_compile_definitions(GLES_mesa
-    PRIVATE
-    -D_EGL_NATIVE_PLATFORM=_EGL_PLATFORM_ANDROID
-    -D_EGL_DRIVER_SEARCH_DIR="${ANDROID_ROOT}/system/lib/egl"
-    -D_EGL_OS_UNIX=1
-    -D_EGL_BUILT_IN_DRIVER_DRI2
-    -DHAVE_PTHREAD
-    -DANDROID_VERSION=0x442
-)
-
-add_library(hwcomposer.drm SHARED ${hwcomposer_drm_SRCS})
-set_target_properties(hwcomposer.drm PROPERTIES PREFIX "")
-if(FORCE_32BIT_BUILD)
-    set_target_properties(hwcomposer.drm PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-endif(FORCE_32BIT_BUILD)
-target_compile_definitions(hwcomposer.drm
+set_target_properties(hwcomposer.shashlik PROPERTIES PREFIX "")
+target_compile_definitions(hwcomposer.shashlik
     PRIVATE
     -DHAVE_PTHREAD
     -DANDROID_VERSION=0x442
     -DLOG_TAG="hwcomposer-drm"
 )
-target_include_directories(hwcomposer.drm
+target_include_directories(hwcomposer.shashlik
     PRIVATE
     ${DRM_INCLUDE_DIRS}
     ${LIBHARDWARE_INCLUDES}
-    ${GENERAL_SOURCE_PATH}/gralloc
+#     ${GENERAL_SOURCE_PATH}/gralloc #new
+
+    ${GENERAL_SOURCE_PATH}/drm_gralloc
+
+
     ${LIBLOG_INCLUDES}
     ${ANDROID_CORE_PATH}/include/sync
     ${GENERAL_SOURCE_PATH}/hwcomposer
 )
-target_link_libraries(hwcomposer.drm
+target_link_libraries(hwcomposer.shashlik
     ${DRM_LIBRARIES}
     log
     hardware
     sync
+    gralloc.shashlik
 )
-
-add_library(ETC1 STATIC ${ETC1_SRCS})
-if(FORCE_32BIT_BUILD)
-    set_target_properties(ETC1 PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-endif(FORCE_32BIT_BUILD)
-target_link_libraries(ETC1
-    pthread dl
-)
-target_include_directories(ETC1
-    PRIVATE
-    ${REPO_PATH}/include
-)
-
-add_library(GLESv1_CM SHARED ${GLESv1_CM_SRCS})
-if(FORCE_32BIT_BUILD)
-    set_target_properties(GLESv1_CM PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-endif(FORCE_32BIT_BUILD)
-target_link_libraries(GLESv1_CM
-    EGL
-)
-target_compile_definitions(GLESv1_CM
-    PRIVATE
-    -DLOG_TAG="libGLESv1_CM"
-    -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
-)
-target_include_directories(GLESv1_CM
-    PRIVATE
-    ${REPO_PATH}/include
-    ${LIBCUTILS_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified bionic_tls.h
-)
-
-add_library(GLESv2 SHARED ${GLESv2_SRCS})
-if(FORCE_32BIT_BUILD)
-    set_target_properties(GLESv2 PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-endif(FORCE_32BIT_BUILD)
-target_link_libraries(GLESv2
-    EGL
-)
-target_compile_definitions(GLESv2
-    PRIVATE
-    -DLOG_TAG="libGLESv1_CM"
-    -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
-)
-target_include_directories(GLESv2
-    PRIVATE
-    ${REPO_PATH}/include
-    ${LIBCUTILS_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified bionic_tls.h
-)
+# 
+# add_library(ETC1 STATIC ${ETC1_SRCS})
+# if(FORCE_32BIT_BUILD)
+#     set_target_properties(ETC1 PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+# endif(FORCE_32BIT_BUILD)
+# target_link_libraries(ETC1
+#     pthread dl
+# )
+# target_include_directories(ETC1
+#     PRIVATE
+#     ${REPO_PATH}/include
+# )
+# 
+# add_library(GLESv1_CM SHARED ${GLESv1_CM_SRCS})
+# if(FORCE_32BIT_BUILD)
+#     set_target_properties(GLESv1_CM PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+# endif(FORCE_32BIT_BUILD)
+# target_link_libraries(GLESv1_CM
+#     EGL
+# )
+# target_compile_definitions(GLESv1_CM
+#     PRIVATE
+#     -DLOG_TAG="libGLESv1_CM"
+#     -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
+# )
+# target_include_directories(GLESv1_CM
+#     PRIVATE
+#     ${REPO_PATH}/include
+#     ${LIBCUTILS_INCLUDES}
+#     ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified bionic_tls.h
+# )
+# 
+# add_library(GLESv2 SHARED ${GLESv2_SRCS})
+# if(FORCE_32BIT_BUILD)
+#     set_target_properties(GLESv2 PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+# endif(FORCE_32BIT_BUILD)
+# target_link_libraries(GLESv2
+#     EGL
+# )
+# target_compile_definitions(GLESv2
+#     PRIVATE
+#     -DLOG_TAG="libGLESv1_CM"
+#     -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
+# )
+# target_include_directories(GLESv2
+#     PRIVATE
+#     ${REPO_PATH}/include
+#     ${LIBCUTILS_INCLUDES}
+#     ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified bionic_tls.h
+# )
 
 add_definitions(
     -fpermissive
 )
 
-install(TARGETS GLESv2 GLESv1_CM ETC1 GLES_trace EGL gralloc_drm DESTINATION ${ANDROID_LIB_DIR})
+
+# install(TARGETS GLESv2 GLESv1_CM ETC1 GLES_trace EGL gralloc.shashlik DESTINATION ${ANDROID_LIB_DIR})
 # install(TARGETS GLES_android DESTINATION ${ANDROID_LIB_DIR}/egl)
-install(TARGETS GLES_mesa DESTINATION ${ANDROID_LIB_DIR}/egl)
-install(TARGETS hwcomposer.drm gralloc.drm DESTINATION ${ANDROID_LIB_DIR}/hw)
+install(TARGETS hwcomposer.shashlik DESTINATION ${ANDROID_LIB_DIR}/hw)
+install(TARGETS gralloc.shashlik DESTINATION ${ANDROID_LIB_DIR})
+install(TARGETS gralloc.shashlik DESTINATION ${ANDROID_LIB_DIR}/hw)

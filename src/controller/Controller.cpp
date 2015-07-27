@@ -26,10 +26,9 @@
 
 #include <QCoreApplication>
 #include <QDebug>
-#include <QMessageBox>
-#include <qdir.h>
-#include <qmetaobject.h>
-#include <qtimer.h>
+#include <QDir>
+#include <QMetaObject>
+#include <QTimer>
 
 class Controller::Private
 {
@@ -103,7 +102,7 @@ public:
         path.replaceInStrings("ANDROID_ROOT", androidRootDir);
         env.insert("PATH", path.join(QLatin1String(":")));
 
-        QStringList ldpath = QStringList() << env.value("LD_LIBRARY_PATH") << "LIBPATH/lib64" << "LIBPATH/lib64/egl" << "ANDROID_ROOT/vendor/lib" << "ANDROID_ROOT/system/lib";
+        QStringList ldpath = QStringList() << env.value("LD_LIBRARY_PATH") <<  "/usr/lib" << "LIBPATH/lib64" << "LIBPATH/lib64/egl" << "ANDROID_ROOT/vendor/lib" << "ANDROID_ROOT/system/lib";
         ldpath.replaceInStrings("LIBPATH", libraryRoot);
         ldpath.replaceInStrings("ANDROID_ROOT", androidRootDir);
         env.insert("LD_LIBRARY_PATH", ldpath.join(QLatin1String(":")));
@@ -121,7 +120,10 @@ public:
         env.insert("LOOP_MOUNTPOINT", QString("/mnt/obb").prepend(androidRootDir));
         env.insert("HAL_LIBRARY_PATH1", QString("/system/lib/hw").prepend(androidRootDir));
 
-        env.insert("ANDROID_BOOTLOGO", "1");
+//         env.insert("ANDROID_BOOTLOGO", "1");
+        env.insert("ANDROID_WINDOW_SIZE", "200x200");
+        env.insert("EGL_PLATFORM", "wayland");
+//         env.insert("MESA_DEBUG", "yasplz");
 
         // TODO this should probably use some XDG type thing to sniff what this really is...
         env.insert("EXTERNAL_STORAGE", "/mnt");
@@ -221,28 +223,28 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
     QProcess* proc = qobject_cast<QProcess*>(sender());
     if(proc) {
         if(proc == d->zygote) {
-            QMessageBox::critical(0, i18n("Shashlik Controller Error"), "Zygote has exited - if zygote exits, everything should be killed!");
+            emit error("Zygote has exited - if zygote exits, everything should be killed!", CriticalLevel);
             stop();
             // grace to allow things to shut down...
             if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->serviceManager) {
-            QMessageBox::critical(0, i18n("Shashlik Controller Error"), "The service manager has exited - if this happens, nothing will work and we should just cut our losses and quit everything else.");
+            emit error("The service manager has exited - if this happens, nothing will work and we should just cut our losses and quit everything else.", CriticalLevel);
             stop();
             // grace to allow things to shut down...
             if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->surfaceflinger) {
-            QMessageBox::information(0, i18n("Shashlik Controller Error"), QString("SurfaceFlinger has exited. This is a terrible thing! We should try and restart it and see if that helps (and then quit if it still doesn't). Exit code %1 and exit status %2").arg(QString::number(exitCode)).arg(QString::number(exitStatus)));
+            emit error(QString("SurfaceFlinger has exited. This is a terrible thing! We should try and restart it and see if that helps (and then quit if it still doesn't). Exit code %1 and exit status %2").arg(QString::number(exitCode)).arg(QString::number(exitStatus)), CriticalLevel);
             // grace to allow things to shut down...
             if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else if(proc == d->installd) {
-            QMessageBox::information(0, i18n("Shashlik Controller Error"), "The Installer daemon has exited. We'll just let that slide.");
+            emit error("The Installer daemon has exited. We'll just let that slide.", WarningLevel);
         }
         else if(d->applications.contains(proc)) {
             if(proc->exitCode() == QProcess::CrashExit) {
-                QMessageBox::critical(0, i18n("Shashlik Controller Error"), QString("The application %1 has quit unexpectedly. Something gone done blown up.").arg(proc->objectName()));
+                emit error(QString("The application %1 has quit unexpectedly. Something gone done blown up.").arg(proc->objectName()), WarningLevel);
             }
             else {
                 // This is not always true - the launcher will exit cleanly, even if the vm died for some reason or another. This needs fixing.
@@ -251,7 +253,7 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
             if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         }
         else {
-            QMessageBox::critical(0, i18n("Shashlik Controller Error"), QString("%1 has exited").arg(proc->program()));
+            emit error(QString("%1 has exited").arg(proc->program()), WarningLevel);
         }
     }
 }
@@ -309,10 +311,15 @@ void Controller::runApk(QString apkFile)
         QProcessEnvironment env = process->processEnvironment();
         env.insert("CLASSPATH", d->androidRootDir + "/system/framework/launch.jar");
         process->setProcessEnvironment(env);
+        qDebug() << "Installing the application contained within" << apkFile;
+        process->start(d->androidRootDir + "/system/bin/installer", QStringList() << apkFile);
+
+        process->setObjectName(apkFile.split("/").last());
+        process->waitForFinished(10000);
+
         qDebug() << "Launching the application contained within" << apkFile;
         process->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << d->androidRootDir + "/system/bin/" << "com.android.commands.launch.Launch" << apkFile);
-        process->setObjectName(apkFile.split("/").last());
-        process->waitForStarted();
+
         ProcessTracker* tracker = new ProcessTracker(process->processId());
         connect(tracker, SIGNAL(processExited()), SLOT(processExited()));
         d->applicationTrackers.append(tracker);
@@ -351,8 +358,15 @@ void Controller::startZygote()
     connect(d->zygote, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
     d->zygote->setProcessChannelMode(QProcess::MergedChannels);
     qDebug() << "Attempting to start the Zygote...";
+//     d->zygote->start("strace " + d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << "-Xzygote" << d->androidRootDir + "/system/bin/" << "--zygote" << "--start-system-server");
     d->zygote->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << "-Xzygote" << d->androidRootDir + "/system/bin/" << "--zygote" << "--start-system-server");
+
+    
+//      d->zygote->start(d->androidRootDir + "/system/lib/emulator_test_renderer");
+//      d->zygote->start("gdbserver localhost:1234 " + d->androidRootDir + "/system/lib/emulator_test_renderer");
+//      d->zygote->start("strace " + d->androidRootDir + "/system/lib/emulator_test_renderer 2> /home/leinir/derp");
     d->zygote->waitForStarted();
+
     d->zygoteTracker = new ProcessTracker(d->zygote->processId(), this);
     connect(d->zygoteTracker, SIGNAL(processExited()), SLOT(processExited()));
     emit zygoteRunningChanged();
@@ -372,6 +386,7 @@ void Controller::startSurfaceflinger()
     connect(d->surfaceflinger, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
     d->surfaceflinger->setProcessChannelMode(QProcess::MergedChannels);
     qDebug() << "Attempting to start SurfaceFlinger...";
+//     d->surfaceflinger->start("gdbserver localhost:1234 " + d->androidRootDir + "/system/bin/surfaceflinger");
     d->surfaceflinger->start(d->androidRootDir + "/system/bin/surfaceflinger");
     d->surfaceflinger->waitForStarted();
     d->surfaceflingerTracker = new ProcessTracker(d->surfaceflinger->processId(), this);
@@ -387,7 +402,8 @@ bool Controller::servicemanagerRunning() const
 void Controller::startServicemanager()
 {
     if(servicemanagerRunning()) {
-        QMessageBox::information(0, "Shashlik Controller", "A service manager is already running. If you believe this to be in error, please stop all Shashlik services and try again.");
+        emit error("A service manager is already running. If you believe this to be in error, please stop all Shashlik services and try again.", CriticalLevel);
+        if(d->quitOnError) QTimer::singleShot(1000, qApp, SLOT(quit()));
         return;
     }
     d->serviceManager = d->environment(this);

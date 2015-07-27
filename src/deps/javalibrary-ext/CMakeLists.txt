@@ -950,4 +950,4 @@ set(ext_res_SRCS
 
 set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -source 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary/core.jar -extdirs \"\")
 add_jar(ext ${nist-sip_SRCS} ${apache-http_SRCS} ${tagsoup_SRCS} ${libphonenumber_SRCS} INCLUDE_JARS core)
-install_jar(ext ${ANDROID_JAR_DIR})
+# install_jar(ext ${ANDROID_JAR_DIR})

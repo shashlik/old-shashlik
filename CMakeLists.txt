@@ -13,13 +13,13 @@ set(SHASHLIK_VERSION_YEAR 2014)
 
 
 find_package(ECM 1.0.0 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_SOURCE_DIR}/cmake)
 
 
 # For Qt5 and KF5 stuff, you must set the CMake module path first. See
 # BUILDING for how to do that.
 
-find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Core Quick Gui Widgets)
+find_package(Qt5 NO_MODULE COMPONENTS Core Quick Gui Widgets)
 
 # set(KF5_VERSION "5.0.0") # handled by release scripts
 # set(KF5_DEP_VERSION "5.0.0") # handled by release scripts
@@ -34,7 +34,7 @@ include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
 include(ECMInstallIcons)
 
-find_package(KF5 REQUIRED COMPONENTS I18n WindowSystem Service Package Declarative Plasma PlasmaQuick)
+find_package(KF5 COMPONENTS I18n WindowSystem Service Package Declarative Plasma PlasmaQuick)
 # find_package(KF5 REQUIRED COMPONENTS
 # WindowSystem CoreAddons Solid Config Auth DBusAddons
 # I18n Service IconThemes Bookmarks
@@ -42,6 +42,7 @@ find_package(KF5 REQUIRED COMPONENTS I18n WindowSystem Service Package Declarati
 # )
 
 find_package(OpenSSL REQUIRED)
+find_package(OpenGL REQUIRED)
 
 find_package(BISON)
 find_package(FLEX)
@@ -76,6 +77,9 @@ add_definitions(-DHAVE_SYS_UIO_H
                 -DHAVE_POSIX_CLOCKS
                 -DHAVE_SYSTEM_PROPERTY_SERVER
                 -D_FILE_OFFSET_BITS=64
+                -DEXCLUDE_FS_CONFIG_STRUCTURES
+                -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
+                -DWL_EGL_PLATFORM
 )
 
 # In case this file exists, we need to set this to look for certain files in the right place
@@ -169,8 +173,8 @@ set(LIBBINDER_INCLUDES ${CMAKE_SOURCE_DIR}/src/libs/libbinder
                        #${LIBXXX_INCLUDS}/include
 )
 
-set(OPENGL_LIBS EGL GLESv2 GLESv1_CM)
-set(OPENGL_INCLUDES ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include)
+# set(OPENGL_LIBS EGL GLESv2 GLESv1_CM)
+# set(OPENGL_INCLUDES ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/include)
 
 # ----------------------------------------------------------------
 

@@ -4,10 +4,16 @@ find_package(Qt5Core) # Yes, this is a hack. We need the 32bit libraries
 find_package(Qt5Gui) # Yes, this is a hack. We need the 32bit libraries
 find_package(Qt5Widgets) # Yes, this is a hack. We need the 32bit libraries
 find_package(Qt5X11Extras) # Yes, this is a hack. We need the 32bit libraries
+find_package(KF5Wayland REQUIRED)
+find_package(Wayland COMPONENTS Client Egl Cursor REQUIRED)
 
 set(REPO_PATH ${ANDROID_FRAMEWORKS_NATIVE_PATH}/services/surfaceflinger)
 
 add_definitions(-fvisibility=hidden -fpermissive -fPIC)
+
+set(waylandthings_SRCS
+    WaylandClient.cpp
+)
 
 set(libsurfaceflinger_SRCS
     ${REPO_PATH}/Client.cpp
@@ -46,6 +52,23 @@ set(surfaceflinger_SRCS
     ${REPO_PATH}/main_surfaceflinger.cpp
 )
 
+add_library(waylandthings STATIC ${waylandthings_SRCS})
+target_compile_definitions(waylandthings
+    PUBLIC
+    -DWL_EGL_PLATFORM
+    ${Wayland_DEFINITIONS}
+)
+target_include_directories(waylandthings
+    PRIVATE
+    ${CMAKE_CURRENT_SRC_DIR}
+    ${OPENGL_INCLUDES}
+    ${Wayland_INCLUDE_DIRS}
+    /usr/include/KF5/KWayland
+    /usr/include/KF5
+    ${QT5CORE32_INCLUDE_DIRS}
+    ${QT5GUI32_INCLUDE_DIRS}
+)
+
 add_library(libsurfaceflinger SHARED ${libsurfaceflinger_SRCS})
 set_target_properties(libsurfaceflinger PROPERTIES PREFIX "") # this because we've got both a lib and an executable named surfaceflinger...
 target_compile_definitions(libsurfaceflinger
@@ -58,6 +81,9 @@ target_compile_definitions(libsurfaceflinger
     -DVSYNC_EVENT_PHASE_OFFSET_NS=0
     -DSF_VSYNC_EVENT_PHASE_OFFSET_NS=0
     -DPRESENT_TIME_OFFSET_FROM_VSYNC_NS=0
+    PUBLIC
+    -DWL_EGL_PLATFORM
+    ${Wayland_DEFINITIONS}
 )
 target_link_libraries(libsurfaceflinger
 #     cutils
@@ -71,20 +97,27 @@ target_link_libraries(libsurfaceflinger
 #     binder
 #     ui
     gui
+    hwui
+    epoxy
+    ${Wayland_LIBRARIES}
+    KF5WaylandClient
     ${QT5CORE32_LIBRARIES}
-    ${QT5WIDGETS32_LIBRARIES}
-    ${QT5X11EXTRAS32_LIBRARIES}
+    ${QT5GUI32_LIBRARIES}
+    waylandthings
 )
 target_include_directories(libsurfaceflinger
     PRIVATE
+    ${CMAKE_CURRENT_SRC_DIR}
     ${LIBBINDER_INCLUDES}
     ${LIBLOG_INCLUDES}
     ${LIBHARDWARE_INCLUDES}
     ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
     ${OPENGL_INCLUDES}
+    ${Wayland_INCLUDE_DIRS}
+    /usr/include/KF5/KWayland
+    /usr/include/KF5
     ${QT5CORE32_INCLUDE_DIRS}
-    ${QT5WIDGETS32_INCLUDE_DIRS}
-    ${QT5X11EXTRAS32_INCLUDE_DIRS}
+    ${QT5GUI32_INCLUDE_DIRS}
 )
 
 add_executable(surfaceflinger ${surfaceflinger_SRCS})
@@ -98,17 +131,20 @@ target_link_libraries(surfaceflinger
 #     log
 #     binder
 #     utils
-    ${QT5GUI32_LIBRARIES}
+#     ${QT5GUI32_LIBRARIES}
+    ${QT5CORE32_LIBRARIES}
 )
 target_include_directories(surfaceflinger
     PRIVATE
     ${LIBCUTILS_INCLUDES}
     ${LIBBINDER_INCLUDES}
     ${LIBHARDWARE_INCLUDES}
-    ${QT5GUI32_INCLUDE_DIRS}
+#     ${QT5GUI32_INCLUDE_DIRS}
+    ${QT5CORE32_INCLUDE_DIRS}
 )
 
 if(FORCE_32BIT_BUILD)
+    set_target_properties(waylandthings PROPERTIES COMPILE_FLAGS "-m32 -std=c++11" LINK_FLAGS "-m32")
     set_target_properties(libsurfaceflinger PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
     set_target_properties(surfaceflinger PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)

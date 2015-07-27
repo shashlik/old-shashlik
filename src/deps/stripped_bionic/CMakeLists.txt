@@ -14,7 +14,6 @@ set(stripped_bionic_SRCS
     ${BIONIC_LIBC_SRC_DIR}/tzcode/strftime.c
 #     ${BIONIC_LIBC_SRC_DIR}/tzcode/localtime.c
     malloc_debug_common.c
-    mmap.c
     android_set_abort_message.cpp
     time64.c
     bionic_time.c
@@ -22,11 +21,11 @@ set(stripped_bionic_SRCS
 
 enable_language(ASM)
 set(assembler_SRCS
-    ${BIONIC_LIBC_SRC_DIR}/arch-x86/syscalls/__mmap2.S
+#     ${BIONIC_LIBC_SRC_DIR}/arch-x86/syscalls/__mmap2.S
 )
 set_property(SOURCE ${assembler_SRCS} PROPERTY LANGUAGE ASM)
 
-add_library(stripped_bionic SHARED ${stripped_bionic_SRCS} ${assembler_SRCS})
+add_library(stripped_bionic SHARED ${stripped_bionic_SRCS})
 if(FORCE_32BIT_BUILD)
     set_target_properties(stripped_bionic PROPERTIES COMPILE_FLAGS "-m32 -std=c99" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)

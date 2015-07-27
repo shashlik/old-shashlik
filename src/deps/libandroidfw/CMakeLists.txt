@@ -19,12 +19,20 @@ set(androidfw_SRCS
     ${ANDROIDFW_SRC_DIR}/CursorWindow.cpp
 )
 
-include_directories(${ANDROID_FRAMEWORKS_BASE}/include ${LIBUTILS_INCLUDES} ${LIBCUTILS_INCLUDES} ${LIBLOG_INCLUDES} ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include)
 add_library(androidfw SHARED ${androidfw_SRCS})
 if(FORCE_32BIT_BUILD)
     set_target_properties(androidfw PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 #target_include_directories(icu4c zlib)
+target_include_directories(androidfw
+    PUBLIC
+    ${ANDROID_FRAMEWORKS_BASE}/include
+    PRIVATE
+    ${LIBUTILS_INCLUDES}
+    ${LIBCUTILS_INCLUDES}
+    ${LIBLOG_INCLUDES}
+    ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
+)
 target_link_libraries(androidfw
     binder
 #     cutils

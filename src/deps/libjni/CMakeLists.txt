@@ -4,17 +4,19 @@ set(JNI_SOURCE_DIR ${ANDROID_FRAMEWORKS_BASE}/core/jni)
 
 #find_package(KF5Archive NO_MODULE)
 find_package(LibCAP REQUIRED) # required for zygote init, that is, sys/capability.h
+find_package (Wayland COMPONENTS Client Egl Cursor REQUIRED)
 
 add_definitions(-DHAVE_ANDROID_OS   # To make cutils/trace work.  FIXME: Check what other consequences this has.
                 -fpermissive  # FIXME: for pointer to int conversion in printf on x86_64
 
-                -DHAVE_CONFIG_H -DKHTML_NO_EXCEPTIONS -DGKWQ_NO_JAVA
+                -DHAVE_CONFIG_H -DKHTML_NO_EXCEPTIONS -DGKWQ_NO_JAVA -DUSE_OPENGL_RENDERER
                 -DNO_SUPPORT_JS_BINDING -DQT_NO_WHEELEVENT -DKHTML_NO_XBL
-                -U__APPLE__
+#                 -U__APPLE__
                 -DPACKED=""
                 -DEGL_TRACE=1
                 -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
                 -DSK_BUILD_FOR_ANDROID # lololo skia internals
+                ${Wayland_DEFINITIONS}
 )
 
 
@@ -37,30 +39,50 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 #                     ${GENERAL_SOURCE_PATH}/bionic/libc/private
                     ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified string.h
                     ${LibCAP_INCLUDE_DIRS}
+                    ${Wayland_INCLUDE_DIRS}
 )
 
+set(GENTROID_DIR ${GENERAL_SOURCE_PATH}/gentroid-frameworks-base)
+
 set(libjni_SRCS
+    ${GENTROID_DIR}/core/jni/WaylandClient.cpp
+    ${GENTROID_DIR}/core/jni/com_google_android_gles_jni_EGLImpl.cpp
+    ${GENTROID_DIR}/core/jni/com_google_android_gles_jni_GLImpl.cpp
+    ${GENTROID_DIR}/core/jni/android_app_NativeActivity.cpp
+    ${GENTROID_DIR}/core/jni/android_opengl_EGL14.cpp
+    ${GENTROID_DIR}/core/jni/android_opengl_EGLExt.cpp
+    ${GENTROID_DIR}/core/jni/android_opengl_GLES20.cpp
+    ${GENTROID_DIR}/core/jni/android_opengl_GLES30.cpp
+    ${GENTROID_DIR}/core/jni/android_view_Wayland.cpp
+    ${GENTROID_DIR}/core/jni/android_view_DisplayEventReceiver.cpp
+    ${GENTROID_DIR}/core/jni/android_view_HardwareRenderer.cpp
+    ${GENTROID_DIR}/core/jni/android_view_GLES20DisplayList.cpp
+#     ${GENTROID_DIR}/core/jni/android_view_GLES20Canvas.cpp
+    ${GENTROID_DIR}/core/jni/android/opengl/poly_clip.cpp
+    ${GENTROID_DIR}/core/jni/android/opengl/util.cpp
+
+
     ${JNI_SOURCE_DIR}/AndroidRuntime.cpp
     ${JNI_SOURCE_DIR}/Time.cpp
     ${JNI_SOURCE_DIR}/com_android_internal_content_NativeLibraryHelper.cpp
-    ${JNI_SOURCE_DIR}/com_google_android_gles_jni_EGLImpl.cpp
-    ${JNI_SOURCE_DIR}/com_google_android_gles_jni_GLImpl.cpp
-    ${JNI_SOURCE_DIR}/android_app_NativeActivity.cpp
-    ${JNI_SOURCE_DIR}/android_opengl_EGL14.cpp
-    ${JNI_SOURCE_DIR}/android_opengl_EGLExt.cpp
-    ${JNI_SOURCE_DIR}/android_opengl_GLES10.cpp
-    ${JNI_SOURCE_DIR}/android_opengl_GLES10Ext.cpp
-    ${JNI_SOURCE_DIR}/android_opengl_GLES11.cpp
-    ${JNI_SOURCE_DIR}/android_opengl_GLES11Ext.cpp
-    ${JNI_SOURCE_DIR}/android_opengl_GLES20.cpp
-    ${JNI_SOURCE_DIR}/android_opengl_GLES30.cpp
+#     ${JNI_SOURCE_DIR}/com_google_android_gles_jni_EGLImpl.cpp
+#     ${JNI_SOURCE_DIR}/com_google_android_gles_jni_GLImpl.cpp
+#     ${JNI_SOURCE_DIR}/android_app_NativeActivity.cpp
+#     ${JNI_SOURCE_DIR}/android_opengl_EGL14.cpp
+#     ${JNI_SOURCE_DIR}/android_opengl_EGLExt.cpp
+#     ${JNI_SOURCE_DIR}/android_opengl_GLES10.cpp
+#     ${JNI_SOURCE_DIR}/android_opengl_GLES10Ext.cpp
+#     ${JNI_SOURCE_DIR}/android_opengl_GLES11.cpp
+#     ${JNI_SOURCE_DIR}/android_opengl_GLES11Ext.cpp
+#     ${JNI_SOURCE_DIR}/android_opengl_GLES20.cpp
+#     ${JNI_SOURCE_DIR}/android_opengl_GLES30.cpp
     ${JNI_SOURCE_DIR}/android_database_CursorWindow.cpp
     ${JNI_SOURCE_DIR}/android_database_SQLiteCommon.cpp
     ${JNI_SOURCE_DIR}/android_database_SQLiteConnection.cpp
     ${JNI_SOURCE_DIR}/android_database_SQLiteGlobal.cpp
     ${JNI_SOURCE_DIR}/android_database_SQLiteDebug.cpp
 #     ${JNI_SOURCE_DIR}/android_emoji_EmojiFactory.cpp
-    ${JNI_SOURCE_DIR}/android_view_DisplayEventReceiver.cpp
+#     ${JNI_SOURCE_DIR}/android_view_DisplayEventReceiver.cpp
     ${JNI_SOURCE_DIR}/android_view_Surface.cpp
     ${JNI_SOURCE_DIR}/android_view_SurfaceControl.cpp
     ${JNI_SOURCE_DIR}/android_view_SurfaceSession.cpp
@@ -72,9 +94,9 @@ set(libjni_SRCS
     ${JNI_SOURCE_DIR}/android_view_InputQueue.cpp
     ${JNI_SOURCE_DIR}/android_view_KeyEvent.cpp
     ${JNI_SOURCE_DIR}/android_view_KeyCharacterMap.cpp
-    ${JNI_SOURCE_DIR}/android_view_HardwareRenderer.cpp
+#     ${JNI_SOURCE_DIR}/android_view_HardwareRenderer.cpp
     ${JNI_SOURCE_DIR}/android_view_GraphicBuffer.cpp
-    ${JNI_SOURCE_DIR}/android_view_GLES20DisplayList.cpp
+#     ${JNI_SOURCE_DIR}/android_view_GLES20DisplayList.cpp
     ${JNI_SOURCE_DIR}/android_view_GLES20Canvas.cpp
     ${JNI_SOURCE_DIR}/android_view_MotionEvent.cpp
     ${JNI_SOURCE_DIR}/android_view_PointerIcon.cpp
@@ -155,8 +177,8 @@ set(libjni_SRCS
     ${JNI_SOURCE_DIR}/android_hardware_UsbRequest.cpp
     ${JNI_SOURCE_DIR}/android_debug_JNITest.cpp
     ${JNI_SOURCE_DIR}/android_util_FileObserver.cpp
-    ${JNI_SOURCE_DIR}/android/opengl/poly_clip.cpp
-    ${JNI_SOURCE_DIR}/android/opengl/util.cpp
+#     ${JNI_SOURCE_DIR}/android/opengl/poly_clip.cpp
+#     ${JNI_SOURCE_DIR}/android/opengl/util.cpp
     ${JNI_SOURCE_DIR}/android_server_NetworkManagementSocketTagger.cpp
     ${JNI_SOURCE_DIR}/android_server_Watchdog.cpp
     ${JNI_SOURCE_DIR}/android_ddm_DdmHandleNativeHeap.cpp
@@ -195,12 +217,16 @@ netutils
 gui
 input
 shashlik_jni
+hwui
 #KF5::Archive
     GLESv1_CM
-    #GLESv2
+    EGL
+    GLESv2
+    epoxy
 #     icuuc icui18n - these two included via sqlite3
 #    ${OPENGL_LIBRARIES} - included by skia
 			  #Qt5::Core
+			  ${Wayland_LIBRARIES}
 )
 
 install(TARGETS jni DESTINATION ${ANDROID_LIB_DIR})

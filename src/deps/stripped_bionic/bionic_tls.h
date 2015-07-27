@@ -106,10 +106,15 @@ extern int __set_tls(void* ptr);
 // #error unsupported architecture
 #endif
 
+
+//Dave version from the internet
+//i386 arch
+# define __get_tls() ({ void** __val; __asm__("movl %%gs:0, %0" : "=r"(__val)); __val; })
+/*
 # define __get_tls() \
     ({ register void* __val; \
        asm ("mov %%gs:0, %0" : "=r"(__val)); \
-       (volatile void*) __val; })
+       (volatile void*) __val; })*/
 __END_DECLS
 
 // #if defined(__cplusplus)
