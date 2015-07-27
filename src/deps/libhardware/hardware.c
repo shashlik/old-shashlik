@@ -148,10 +148,10 @@ int hw_get_module_by_class(const char *class_id, const char *inst,
                            const struct hw_module_t **module)
 {
     int i;
-    char prop[PATH_MAX];
+    char prop[PROPERTY_VALUE_MAX];
     char path[PATH_MAX];
-    char name[PATH_MAX];
-    char prop_name[PATH_MAX];
+    char name[PROPERTY_VALUE_MAX];
+    char prop_name[PROPERTY_KEY_MAX];
 
     if (inst)
         snprintf(name, PATH_MAX, "%s.%s", class_id, inst);

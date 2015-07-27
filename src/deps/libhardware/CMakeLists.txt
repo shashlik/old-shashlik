@@ -8,11 +8,11 @@ set(libhardware_SRCS
 
 set(MODULES_PATH ${REPO_PATH}/modules)
 
-# set(gralloc_SRCS
-#     ${MODULES_PATH}/gralloc/framebuffer.cpp
-#     ${MODULES_PATH}/gralloc/gralloc.cpp
-#     ${MODULES_PATH}/gralloc/mapper.cpp
-# )
+set(gralloc_SRCS
+    ${MODULES_PATH}/gralloc/framebuffer.cpp
+    ${MODULES_PATH}/gralloc/gralloc.cpp
+    ${MODULES_PATH}/gralloc/mapper.cpp
+)
 
 set(hwcomposer_SRCS
     ${MODULES_PATH}/hwcomposer/hwcomposer.cpp
@@ -81,9 +81,9 @@ include_directories(
 add_library(hardware SHARED ${libhardware_SRCS})
 target_link_libraries(hardware cutils log dl)
 
-# add_library(gralloc.default SHARED ${gralloc_SRCS})
-# target_compile_definitions(gralloc.default PUBLIC -DLOG_TAG=\"gralloc\")
-# target_link_libraries(gralloc.default log cutils)
+add_library(gralloc.default SHARED ${gralloc_SRCS})
+target_compile_definitions(gralloc.default PUBLIC -DLOG_TAG=\"gralloc\")
+target_link_libraries(gralloc.default log cutils)
 
 # add_library(hwcomposer.default SHARED ${hwcomposer_SRCS})
 # target_compile_definitions(hwcomposer.default PUBLIC -DLOG_TAG=\"hwcomposer\")
@@ -118,17 +118,18 @@ target_link_libraries(hardware cutils log dl)
 # )
 
 # because otherwise the module loader looks for the wrong file
-# set_target_properties(gralloc.default hwcomposer.default PROPERTIES PREFIX "")
+set_target_properties(gralloc.default PROPERTIES PREFIX "")
+# set_target_properties(hwcomposer.default PROPERTIES PREFIX "")
 # set_target_properties(hwcomposer.intel PROPERTIES PREFIX "")
 
 if(FORCE_32BIT_BUILD)
     set_target_properties(hardware PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-#     set_target_properties(gralloc.default PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+    set_target_properties(gralloc.default PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 #     set_target_properties(hwcomposer.default PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 #     set_target_properties(hwcomposer.intel PROPERTIES COMPILE_FLAGS "-m32 -Werror" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
 install(TARGETS hardware DESTINATION ${ANDROID_LIB_DIR})
-# install(TARGETS gralloc.default DESTINATION ${ANDROID_LIB_DIR}/hw)
+install(TARGETS gralloc.default DESTINATION ${ANDROID_LIB_DIR}/hw)
 # install(TARGETS hwcomposer.default DESTINATION ${ANDROID_LIB_DIR}/hw)
 # install(TARGETS hwcomposer.intel DESTINATION ${ANDROID_LIB_DIR}/hw)
