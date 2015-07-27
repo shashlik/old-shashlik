@@ -311,10 +311,15 @@ void Controller::runApk(QString apkFile)
         QProcessEnvironment env = process->processEnvironment();
         env.insert("CLASSPATH", d->androidRootDir + "/system/framework/launch.jar");
         process->setProcessEnvironment(env);
+        qDebug() << "Installing the application contained within" << apkFile;
+        process->start(d->androidRootDir + "/system/bin/installer", QStringList() << apkFile);
+
+        process->setObjectName(apkFile.split("/").last());
+        process->waitForFinished(10000);
+
         qDebug() << "Launching the application contained within" << apkFile;
         process->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << d->androidRootDir + "/system/bin/" << "com.android.commands.launch.Launch" << apkFile);
-        process->setObjectName(apkFile.split("/").last());
-        process->waitForStarted();
+
         ProcessTracker* tracker = new ProcessTracker(process->processId());
         connect(tracker, SIGNAL(processExited()), SLOT(processExited()));
         d->applicationTrackers.append(tracker);
@@ -381,6 +386,7 @@ void Controller::startSurfaceflinger()
     connect(d->surfaceflinger, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
     d->surfaceflinger->setProcessChannelMode(QProcess::MergedChannels);
     qDebug() << "Attempting to start SurfaceFlinger...";
+//     d->surfaceflinger->start("gdbserver localhost:1234 " + d->androidRootDir + "/system/bin/surfaceflinger");
     d->surfaceflinger->start(d->androidRootDir + "/system/bin/surfaceflinger");
     d->surfaceflinger->waitForStarted();
     d->surfaceflingerTracker = new ProcessTracker(d->surfaceflinger->processId(), this);

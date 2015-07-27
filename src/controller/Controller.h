@@ -75,7 +75,7 @@ public Q_SLOTS:
     void startBootanimation();
 
     void stop();
-    void start() { startServicemanager(); startInstalld(); startSurfaceflinger(); startBootanimation(); startZygote(); };
+    void start() { startServicemanager(); startInstalld(); startSurfaceflinger(); /*startBootanimation();*/ startZygote(); };
     void restart() { stop(); start(); }
 
     void logSomething();
