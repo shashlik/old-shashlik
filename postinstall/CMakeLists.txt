@@ -1,4 +1,5 @@
 # Create the android directory structure locally, before installing it
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/cache)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/sbin)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/dev)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/proc)
@@ -32,6 +33,7 @@ file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/data)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/local/tmp)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/data)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/app-private)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/app-lib)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/app)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/property)
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/android/data/ssh)
