@@ -169,7 +169,7 @@ set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar)
 process_installed_android_jar(ext ${JAVALIB_DIR}ext/ext.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar)
-process_installed_android_jar(conscrypt ${JAVALIB_DIR}conscrypt/conscrypt-nojarjarthing.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary conscrypt-nojarjarthing)
+process_installed_android_jar(conscrypt ${JAVALIB_DIR}conscrypt/conscrypt-nojarjar.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary conscrypt-nojarjar)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext.jar:${ANDROID_JAR_DIR}/okhttp.jar)
 process_installed_android_jar(okhttp ${JAVALIB_DIR}okhttp/okhttp.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
