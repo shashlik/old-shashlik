@@ -1,5 +1,7 @@
 project(installd)
 
+add_definitions(-fpermissive)
+
 find_package(Qt5Core) # Yes, this is a hack. We need the 32bit libraries
 
 set(REPO_PATH ${ANDROID_FRAMEWORKS_NATIVE_PATH}/cmds/installd)
