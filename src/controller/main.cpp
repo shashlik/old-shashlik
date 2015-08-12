@@ -113,6 +113,9 @@ int main(int argc, char *argv[])
     QCommandLineOption installdArgument("installd", i18n("Start the installer daemon only"));
     parser.addOption(installdArgument);
 
+    QCommandLineOption adbdArgument("adbd", i18n("Start the android debugger daemon only"));
+    parser.addOption(adbdArgument);
+
     QCommandLineOption startArgument("start", i18n("Start everything needed to launch applications (equivalent to running with --servicemanager, surfaceflinger and --zygote separately and in that order)"));
     parser.addOption(startArgument);
     QCommandLineOption stopArgument("stop", i18n("Stop everything needed to launch applications"));
@@ -146,6 +149,15 @@ int main(int argc, char *argv[])
         ANDROID_SOCKET_zygote[size] = '\0';
         snprintf(ANDROID_SOCKET_zygote, size, "%d", fd);
         setenv("ANDROID_SOCKET_zygote", ANDROID_SOCKET_zygote, 1);
+
+        fd = create_socket("adbd", SOCK_STREAM, 0666, getuid(), getgid());
+        if(fd < 0)
+            return fd;
+        size = snprintf(NULL, 0, "%d", fd) + 1;
+        char *ANDROID_SOCKET_adbd = (char *)alloca(size);
+        ANDROID_SOCKET_adbd[size] = '\0';
+        snprintf(ANDROID_SOCKET_adbd, size, "%d", fd);
+        setenv("ANDROID_SOCKET_adbd", ANDROID_SOCKET_adbd, 1);
     }
 
     bool haveGui = false;
@@ -202,6 +214,9 @@ int main(int argc, char *argv[])
     else if(parser.isSet(installdArgument)) {
         controller->startInstalld();
     }
+    else if(parser.isSet(adbdArgument)) {
+        controller->startAdbd();
+    }
     else if(parser.isSet(restartArgument)) {
         controller->restart();
     }
@@ -213,6 +228,8 @@ int main(int argc, char *argv[])
         qDebug() << "Status of servicemanager:" << controller->servicemanagerRunning();
         qDebug() << "Status of zygote:" << controller->surfaceflingerRunning();
         qDebug() << "Status of surfaceflinger:" << controller->zygoteRunning();
+        qDebug() << "Status of adbd:" << controller->adbdRunning();
+        qDebug() << "Status of installd:" << controller->installdRunning();
     }
     else {
         // no need to check for guiArgument - that is what we will have left, or no arguments, which is the same thing

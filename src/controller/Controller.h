@@ -32,6 +32,7 @@ class Controller : public QObject {
     Q_PROPERTY(bool installdRunning READ installdRunning NOTIFY installdRunningChanged)
     Q_PROPERTY(bool bootanimationRunning READ bootanimationRunning NOTIFY bootanimationRunningChanged)
     Q_PROPERTY(bool surfaceflingerRunning READ surfaceflingerRunning NOTIFY surfaceflingerRunningChanged)
+    Q_PROPERTY(bool adbdRunning READ adbdRunning NOTIFY adbdRunningChanged)
     Q_PROPERTY(bool servicemanagerRunning READ servicemanagerRunning NOTIFY servicemanagerRunningChanged)
 
     Q_PROPERTY(bool quitOnError READ quitOnError WRITE setQuitOnError NOTIFY quitOnErrorChanged)
@@ -49,6 +50,7 @@ public:
     bool installdRunning() const;
     bool surfaceflingerRunning() const;
     bool servicemanagerRunning() const;
+    bool adbdRunning() const;
     bool bootanimationRunning() const;
 
     bool quitOnError() const;
@@ -59,6 +61,7 @@ Q_SIGNALS:
     void installdRunningChanged();
     void bootanimationRunningChanged();
     void surfaceflingerRunningChanged();
+    void adbdRunningChanged();
     void servicemanagerRunningChanged();
     void quitOnErrorChanged();
 
@@ -73,9 +76,10 @@ public Q_SLOTS:
     void startServicemanager();
     void startInstalld();
     void startBootanimation();
+    void startAdbd();
 
     void stop();
-    void start() { startServicemanager(); startInstalld(); startSurfaceflinger(); /*startBootanimation();*/ startZygote(); };
+    void start() { startServicemanager(); startInstalld(); startSurfaceflinger(); startBootanimation(); /*startZygote(); startAdbd();*/ };
     void restart() { stop(); start(); }
 
     void logSomething();
