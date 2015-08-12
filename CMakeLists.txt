@@ -80,6 +80,7 @@ add_definitions(-DHAVE_SYS_UIO_H
                 -DEXCLUDE_FS_CONFIG_STRUCTURES
                 -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
                 -DWL_EGL_PLATFORM
+                -DSHASHLIK_ROOT="${CMAKE_INSTALL_PREFIX}"
 )
 
 # In case this file exists, we need to set this to look for certain files in the right place
