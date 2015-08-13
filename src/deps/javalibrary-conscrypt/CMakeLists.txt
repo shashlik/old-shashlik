@@ -139,6 +139,10 @@ include_directories(
 )
 add_definitions(-Wall -Wextra -Werror)
 add_library(javacrypto SHARED ${conscrypt_lib_SRCS})
+target_compile_definitions(javacrypto
+    PRIVATE
+    -DJNI_JARJAR_PREFIX=com/android/
+)
 add_custom_command(TARGET javacrypto POST_BUILD
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMAND rm -f libconscrypt_jni.so
