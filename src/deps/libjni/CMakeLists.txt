@@ -81,7 +81,7 @@ set(libjni_SRCS
     ${JNI_SOURCE_DIR}/android_database_SQLiteConnection.cpp
     ${JNI_SOURCE_DIR}/android_database_SQLiteGlobal.cpp
     ${JNI_SOURCE_DIR}/android_database_SQLiteDebug.cpp
-#     ${JNI_SOURCE_DIR}/android_emoji_EmojiFactory.cpp
+    ${JNI_SOURCE_DIR}/android_emoji_EmojiFactory.cpp
 #     ${JNI_SOURCE_DIR}/android_view_DisplayEventReceiver.cpp
     ${JNI_SOURCE_DIR}/android_view_Surface.cpp
     ${JNI_SOURCE_DIR}/android_view_SurfaceControl.cpp
@@ -218,6 +218,7 @@ gui
 input
 shashlik_jni
 hwui
+emoji
 #KF5::Archive
     GLESv1_CM
     EGL

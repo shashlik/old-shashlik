@@ -42,6 +42,7 @@ add_subdirectory(adb)
 
 add_subdirectory(libbase)
 add_subdirectory(libziparchive)
+add_subdirectory(libemoji)
 
 # ----------------------------------------------------------------
 #                             Dalvik
