@@ -66,6 +66,12 @@ ENDIF(DRM_FOUND)
 # ----------------------------------------------------------------
 # System settings
 
+if(COMMAND CMAKE_POLICY)
+    if (POLICY CMP0063)
+        cmake_policy(SET CMP0063 NEW)
+    endif()
+endif()
+
 # It is necessary to note that we have endian.h, which we do on all systems we
 # target otherwise the android code goes and redefines it all on us. Not so
 # great...
@@ -80,6 +86,7 @@ add_definitions(-DHAVE_SYS_UIO_H
                 -DEXCLUDE_FS_CONFIG_STRUCTURES
                 -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
                 -DWL_EGL_PLATFORM
+                -DSHASHLIK_ROOT="${CMAKE_INSTALL_PREFIX}"
 )
 
 # In case this file exists, we need to set this to look for certain files in the right place

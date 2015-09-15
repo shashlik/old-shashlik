@@ -1,8 +1,5 @@
 project(libshashlikutils)
 
-# generate shashlikversion.h
-configure_file(shashlikversion.h.cmake ${CMAKE_BINARY_DIR}/shashlikversion.h)
-
 find_package(Qt5Core) # Yes, this is a hack. We need the 32bit libraries
 #find_package(KF5Archive NO_MODULE)
 

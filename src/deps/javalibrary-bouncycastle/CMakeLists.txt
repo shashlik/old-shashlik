@@ -3,8 +3,13 @@ project(javalibrary-bouncycastle)
 set(REPO_PATH ${GENERAL_SOURCE_PATH}/bouncycastle)
 
 # find -L bouncycastle/bcprov/src/main/java/  -name "*.java"
+
 # filter out bcprov/src/main/java/org/bouncycastle/crypto/digests/AndroidDigestFactoryBouncyCastle.java
-# reason from Android.mk: where we want to be sure to use OpenSSLDigest
+# reason from Android.mk: used for bouncycastle for target where we want to be sure to use OpenSSLDigest
+
+# filter out bcprov/src/main/java/org/bouncycastle/crypto/digests/AndroidDigestFactoryOpenSSL.java
+# filter out bcprov/src/main/java/org/bouncycastle/crypto/digests/OpenSSLDigest.java
+# reaon from Android.mk: used for bouncycastle-host where we can't use OpenSSLDigest
 set(bcprov_SRCS
     ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/asn1/ASN1Null.java
     ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/asn1/ASN1ObjectIdentifier.java
@@ -258,10 +263,10 @@ set(bcprov_SRCS
     ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/AndroidDigestFactory.java
 #     ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/AndroidDigestFactoryBouncyCastle.java
     ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/AndroidDigestFactoryInterface.java
-    ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/AndroidDigestFactoryOpenSSL.java
+#     ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/AndroidDigestFactoryOpenSSL.java
     ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/GeneralDigest.java
     ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/LongDigest.java
-    ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/OpenSSLDigest.java
+#     ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/OpenSSLDigest.java
     ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/SHA1Digest.java
     ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/SHA256Digest.java
     ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/SHA384Digest.java
@@ -586,7 +591,89 @@ set(bcprov_SRCS
     ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/x509/X509V3CertificateGenerator.java
 )
 
+# find -L bouncycastle/bcpkix/src/main/java/  -name "*.java"
+set(bcpkix_SRCS
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/RuntimeOperatorException.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/DigestCalculatorProvider.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/RawContentVerifier.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/DigestAlgorithmIdentifierFinder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/jcajce/JcaContentSignerBuilder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/jcajce/JcaContentVerifierProviderBuilder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/jcajce/JcaDigestCalculatorProviderBuilder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/jcajce/OperatorHelper.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/DigestCalculator.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/bc/BcDigestProvider.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/bc/BcDigestCalculatorProvider.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/bc/BcDefaultDigestProvider.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/OperatorCreationException.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/ContentVerifierProvider.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/SignatureAlgorithmIdentifierFinder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/ContentSigner.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/OperatorStreamException.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/OperatorException.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/ContentVerifier.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/DefaultDigestAlgorithmIdentifierFinder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/operator/DefaultSignatureAlgorithmIdentifierFinder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSReadable.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSTypedData.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSRuntimeException.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/NullOutputStream.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/SimpleAttributeTableGenerator.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/SignerInformationStore.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSVerifierCertificateNotValidException.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/SignerInformationVerifier.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSException.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/SignerInfoGeneratorBuilder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSAbsentContent.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/jcajce/JcaSimpleSignerInfoVerifierBuilder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/jcajce/JcaSignerInfoVerifierBuilder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/jcajce/JcaSignerInfoGeneratorBuilder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSAttributeTableGenerationException.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSSignatureAlgorithmNameGenerator.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSSignatureEncryptionAlgorithmFinder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSProcessableByteArray.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/SignerId.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSProcessable.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSAttributeTableGenerator.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSSignerDigestMismatchException.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSSignedData.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSSignedDataGenerator.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSSignedGenerator.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSSignedHelper.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/CMSUtils.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/DefaultCMSSignatureAlgorithmNameGenerator.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/DefaultCMSSignatureEncryptionAlgorithmFinder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/DefaultSignedAttributeTableGenerator.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/SignerInfoGenerator.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cms/SignerInformation.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cert/X509AttributeCertificateHolder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cert/AttributeCertificateIssuer.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cert/CertIOException.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cert/jcajce/JcaX509CertificateHolder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cert/jcajce/JcaCertStore.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cert/CertException.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cert/X509CertificateHolder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cert/X509CRLEntryHolder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cert/selector/X509CertificateHolderSelector.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cert/selector/MSOutlookKeyIdCalculator.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cert/AttributeCertificateHolder.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cert/CertUtils.java
+    ${REPO_PATH}/bcpkix/src/main/java/org/bouncycastle/cert/X509CRLHolder.java
+)
+
+set(bcprov_target_SRCS
+    ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/AndroidDigestFactoryOpenSSL.java
+    ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/OpenSSLDigest.java
+)
+
+set(bcprov_host_SRCS
+    ${REPO_PATH}/bcprov/src/main/java/org/bouncycastle/crypto/digests/AndroidDigestFactoryBouncyCastle.java
+)
+
 set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -source 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
-add_jar(bouncycastle SOURCES ${bcprov_SRCS} INCLUDE_JARS core conscrypt)
-jarjar_process(bouncycastle "${REPO_PATH}/jarjar-rules.txt" "${CMAKE_CURRENT_BINARY_DIR}/bouncycastle.jar" "${CMAKE_CURRENT_BINARY_DIR}/bouncycastle-nojarjar.jar")
+add_jar(bouncycastle-prejarjar SOURCES ${bcprov_SRCS} ${bcprov_target_SRCS} INCLUDE_JARS core ${CMAKE_BINARY_DIR}/src/deps/javalibrary-conscrypt/conscrypt.jar)
+jarjar_process(bouncycastle-prejarjar "${REPO_PATH}/jarjar-rules.txt" "${CMAKE_CURRENT_BINARY_DIR}/bouncycastle-prejarjar.jar" "${CMAKE_CURRENT_BINARY_DIR}/bouncycastle.jar" "${CMAKE_CURRENT_BINARY_DIR}/bouncycastle-nojarjar.jar")
+add_jar(bouncycastle-bcprov SOURCES ${bcprov_SRCS} ${bcprov_host_SRCS} INCLUDE_JARS core ${CMAKE_BINARY_DIR}/src/deps/javalibrary-conscrypt/conscrypt.jar)
+add_dependencies(bouncycastle-bcprov conscrypt-prejarjar)
+add_jar(bouncycastle-bcpkix SOURCES ${bcpkix_SRCS} INCLUDE_JARS bouncycastle-bcprov)
 # install_jar(bouncycastle ${ANDROID_JAR_DIR})

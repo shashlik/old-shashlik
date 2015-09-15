@@ -35,6 +35,8 @@ class Controller::Private
 public:
     Private()
         : quitOnError(true)
+        , adbd(0)
+        , adbdTracker(0)
         , bootanimation(0)
         , bootanimationTracker(0)
         , installd(0)
@@ -59,6 +61,7 @@ public:
         if(serviceManager) serviceManager->terminate();
         if(surfaceflinger) surfaceflinger->terminate();
         if(installd) installd->terminate();
+        if(adbd) adbd->terminate();
         if(bootanimation) bootanimation->terminate();
         Q_FOREACH(QProcess* proc, applications) {
             proc->terminate();
@@ -67,6 +70,8 @@ public:
 
     bool quitOnError;
 
+    QProcess* adbd;
+    ProcessTracker* adbdTracker;
     QProcess* bootanimation;
     ProcessTracker* bootanimationTracker;
     QProcess* installd;
@@ -112,6 +117,7 @@ public:
         bootclasspath.replaceInStrings("JARPATH", jarPath);
         env.insert("BOOTCLASSPATH", bootclasspath.join(QLatin1String(":")));
 
+        env.insert("SHASHLIK_ROOT", androidRootDir);
         env.insert("ANDROID_ROOT", QString("/system").prepend(androidRootDir));
         env.insert("ANDROID_ASSETS", QString("/system/app").prepend(androidRootDir));
         env.insert("ANDROID_DATA", QString("/data").prepend(androidRootDir));
@@ -119,11 +125,11 @@ public:
         env.insert("ASEC_MOUNTPOINT", QString("/mnt/asec").prepend(androidRootDir));
         env.insert("LOOP_MOUNTPOINT", QString("/mnt/obb").prepend(androidRootDir));
         env.insert("HAL_LIBRARY_PATH1", QString("/system/lib/hw").prepend(androidRootDir));
+        env.insert("DOWNLOAD_CACHE", QString("/cache").prepend(androidRootDir));
 
 //         env.insert("ANDROID_BOOTLOGO", "1");
         env.insert("ANDROID_WINDOW_SIZE", "200x200");
         env.insert("EGL_PLATFORM", "wayland");
-//         env.insert("MESA_DEBUG", "yasplz");
 
         // TODO this should probably use some XDG type thing to sniff what this really is...
         env.insert("EXTERNAL_STORAGE", "/mnt");
@@ -158,6 +164,9 @@ Controller::Controller(QObject* parent)
     trackers = ProcessTracker::getTrackers(d->androidRootDir + "/system/bin/bootanimation", this);
     if(trackers.count() > 0)
         d->bootanimationTracker = trackers.at(0);
+    trackers = ProcessTracker::getTrackers(d->androidRootDir + "/system/bin/adbd", this);
+    if(trackers.count() > 0)
+        d->adbdTracker = trackers.at(0);
     trackers = ProcessTracker::getTrackers(d->androidRootDir + "/system/bin/shashlik_launcher", this);
     QString zygoteArg("-Xzygote");
     Q_FOREACH(ProcessTracker* tracker, trackers) {
@@ -206,6 +215,8 @@ void Controller::logSomething()
             origin = "Installer Daemon";
         } else if(proc == d->bootanimation) {
             origin = "Bootanimation";
+        } else if(proc == d->adbd) {
+            origin = "ADBD";
         } else if(d->applications.contains(proc)) {
             origin = proc->objectName();
         } else {
@@ -242,6 +253,12 @@ void Controller::processExited(int exitCode, QProcess::ExitStatus exitStatus)
         else if(proc == d->installd) {
             emit error("The Installer daemon has exited. We'll just let that slide.", WarningLevel);
         }
+        else if(proc == d->bootanimation) {
+            emit error(QString("The boot animation has exited. We'll just let that slide. Exit code was %1 and exit status was %2").arg(exitCode).arg(exitStatus), WarningLevel);
+        }
+        else if(proc == d->adbd) {
+            emit error("The android debugger daemon has exited. We'll just let that slide.", WarningLevel);
+        }
         else if(d->applications.contains(proc)) {
             if(proc->exitCode() == QProcess::CrashExit) {
                 emit error(QString("The application %1 has quit unexpectedly. Something gone done blown up.").arg(proc->objectName()), WarningLevel);
@@ -269,6 +286,11 @@ void Controller::processExited()
         d->bootanimationTracker->deleteLater();
         d->bootanimationTracker = 0;
         emit bootanimationRunningChanged();
+    }
+    else if(sender() == d->adbdTracker) {
+        d->adbdTracker->deleteLater();
+        d->adbdTracker = 0;
+        emit adbdRunningChanged();
     }
     else if(sender() == d->serviceManagerTracker) {
         d->serviceManagerTracker->deleteLater();
@@ -311,11 +333,11 @@ void Controller::runApk(QString apkFile)
         QProcessEnvironment env = process->processEnvironment();
         env.insert("CLASSPATH", d->androidRootDir + "/system/framework/launch.jar");
         process->setProcessEnvironment(env);
-        qDebug() << "Installing the application contained within" << apkFile;
-        process->start(d->androidRootDir + "/system/bin/installer", QStringList() << apkFile);
+//         qDebug() << "Installing the application contained within" << apkFile;
+//         process->start(d->androidRootDir + "/system/bin/adb", QStringList() << "install" << apkFile);
 
         process->setObjectName(apkFile.split("/").last());
-        process->waitForFinished(10000);
+//         process->waitForFinished(10000);
 
         qDebug() << "Launching the application contained within" << apkFile;
         process->start(d->androidRootDir + "/system/bin/shashlik_launcher", QStringList() << d->androidRootDir + "/system/bin/" << "com.android.commands.launch.Launch" << apkFile);
@@ -418,6 +440,28 @@ void Controller::startServicemanager()
     emit servicemanagerRunningChanged();
 }
 
+bool Controller::adbdRunning() const
+{
+    return (d->adbdTracker != 0);
+}
+
+void Controller::startAdbd()
+{
+    if(adbdRunning())
+        return;
+    d->adbd = d->environment(this);
+    connect(d->adbd, SIGNAL(readyRead()), this, SLOT(logSomething()));
+    connect(d->adbd, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
+    d->adbd->setProcessChannelMode(QProcess::MergedChannels);
+    qDebug() << "Attempting to start the android debugger daemon...";
+    d->adbd->start(d->androidRootDir + "/system/bin/adbd");
+//     d->adbd->start("gdbserver localhost:1234 " + d->androidRootDir + "/system/bin/adbd");
+    d->adbd->waitForStarted();
+    d->adbdTracker = new ProcessTracker(d->adbd->processId(), this);
+    connect(d->adbdTracker, SIGNAL(processExited()), SLOT(processExited()));
+    emit adbdRunningChanged();
+}
+
 bool Controller::installdRunning() const
 {
     return (d->installdTracker != 0);
@@ -452,7 +496,7 @@ void Controller::startBootanimation()
     connect(d->bootanimation, SIGNAL(readyRead()), this, SLOT(logSomething()));
     connect(d->bootanimation, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processExited(int,QProcess::ExitStatus)));
     d->bootanimation->setProcessChannelMode(QProcess::MergedChannels);
-    qDebug() << "Attempting to start the installer daemon...";
+    qDebug() << "Attempting to start the boot animation...";
     d->bootanimation->start(d->androidRootDir + "/system/bin/bootanimation");
     d->bootanimation->waitForStarted();
     d->bootanimationTracker = new ProcessTracker(d->bootanimation->processId(), this);
@@ -473,6 +517,9 @@ void Controller::stop()
     }
     if(servicemanagerRunning()) {
         d->serviceManagerTracker->killProcess();
+    }
+    if(adbdRunning()) {
+        d->adbdTracker->killProcess();
     }
     if(zygoteRunning()) {
         d->zygoteTracker->killProcess();

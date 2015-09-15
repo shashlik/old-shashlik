@@ -2581,6 +2581,7 @@ foreach(_fileNameAndPathWithoutExtension ${aidl_entries_to_handle})
 endforeach()
 
 add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml
+    DEPENDS signapk
     COMMAND touch ${CMAKE_CURRENT_BINARY_DIR}/dummy
     COMMAND jar cf package-export.apk dummy
     COMMAND zip -qd ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk dummy
@@ -2590,7 +2591,13 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml
 #    COMMAND aapt package -x -z -m  -J ${CMAKE_CURRENT_BINARY_DIR}/src -M frameworks/base/core/res/AndroidManifest.xml -P ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml -S frameworks/webview/chromium/overlay/frameworks/base/core/res/res -S frameworks/base/core/res/res -A frameworks/base/core/res/assets  -G ${CMAKE_CURRENT_BINARY_DIR}/proguard_options --min-sdk-version 19 --target-sdk-version 19 --version-code 19 --version-name 4.4.4-eng.leinir.20150212.133909
     COMMAND aapt package -u -x -z   -M ${REPO_PATH}/core/res/AndroidManifest.xml -S ${REPO_PATH}/core/res/res -A ${REPO_PATH}/core/res/assets  --min-sdk-version 19 --target-sdk-version 19 --product default --version-code 19 --version-name 4.4.4-eng.leinir.20150212.133909   -F ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk
     COMMAND aapt package -x -z -m  -J ${CMAKE_CURRENT_BINARY_DIR}/src -M ${REPO_PATH}/core/res/AndroidManifest.xml -P ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml -S ${REPO_PATH}/core/res/res -A ${REPO_PATH}/core/res/assets  -G ${CMAKE_CURRENT_BINARY_DIR}/proguard_options --min-sdk-version 19 --target-sdk-version 19 --version-code 19 --version-name 4.4.4-eng.leinir.20150212.133909
+    COMMAND mv ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk.unsigned
+    COMMAND java -cp ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar:${CMAKE_BINARY_DIR}/src/deps/javalibrary-conscrypt/conscrypt-prejarjar.jar:${CMAKE_BINARY_DIR}/src/deps/javalibrary-bouncycastle/bouncycastle-bcprov.jar:${CMAKE_BINARY_DIR}/src/deps/javalibrary-bouncycastle/bouncycastle-bcpkix.jar:${CMAKE_BINARY_DIR}/src/deps/signapk/signapk.jar com.android.signapk.SignApk ${CMAKE_SOURCE_DIR}/platform.x509.pem ${CMAKE_SOURCE_DIR}/platform.pk8  ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk.unsigned ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk.signed
+    COMMAND mv ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk.signed ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk.unaligned
+    COMMAND zipalign -f 4 ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk.unaligned ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk.aligned
+    COMMAND mv ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk.aligned ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk
 )
+
 add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/R.java
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml
     COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal
@@ -2622,8 +2629,8 @@ set_source_files_properties(${framework_R_SRCS} PROPERTIES GENERATED TRUE)
 
 set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -source 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar -extdirs \"\")
 find_jar(JUNIT_JAR NAMES junit)
-add_jar(framework SOURCES ${eventlogtags_SRCS} ${framework_R_SRCS} ${javalibrary_frameworks_SRCS} ${javalibrary_frameworks_interface_SRCS} INCLUDE_JARS core conscrypt ext okhttp bouncycastle ${JUNIT_JAR})
-add_jar(framework2 SOURCES ${eventlogtags2_SRCS} ${javalibrary_framework2_SRCS} INCLUDE_JARS core conscrypt ext okhttp bouncycastle framework telephony-common ${CMAKE_BINARY_DIR}/src/deps/javalibrary-telephony/telephony-common.jar ${JUNIT_JAR})
+add_jar(framework SOURCES ${eventlogtags_SRCS} ${framework_R_SRCS} ${javalibrary_frameworks_SRCS} ${javalibrary_frameworks_interface_SRCS} INCLUDE_JARS core ${CMAKE_BINARY_DIR}/src/deps/javalibrary-conscrypt/conscrypt.jar ext ${CMAKE_BINARY_DIR}/src/deps/javalibrary-okhttp/okhttp.jar ${CMAKE_BINARY_DIR}/src/deps/javalibrary-bouncycastle/bouncycastle.jar ${JUNIT_JAR})
+add_jar(framework2 SOURCES ${eventlogtags2_SRCS} ${javalibrary_framework2_SRCS} INCLUDE_JARS core ${CMAKE_BINARY_DIR}/src/deps/javalibrary-conscrypt/conscrypt.jar ext ${CMAKE_BINARY_DIR}/src/deps/javalibrary-okhttp/okhttp.jar ${CMAKE_BINARY_DIR}/src/deps/javalibrary-bouncycastle/bouncycastle.jar framework telephony-common ${CMAKE_BINARY_DIR}/src/deps/javalibrary-telephony/telephony-common.jar ${JUNIT_JAR})
 # install_jar(framework ${ANDROID_JAR_DIR})
 # install_jar(framework2 ${ANDROID_JAR_DIR})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/package-export.apk DESTINATION ${ANDROID_JAR_DIR} RENAME framework-res.apk)

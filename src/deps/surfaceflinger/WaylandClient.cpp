@@ -22,6 +22,7 @@ using namespace KWayland::Client;
 
 WaylandClient::WaylandClient(QObject *parent)
     : QObject(parent)
+    , m_displayConnected(false)
     , m_connectionThread(new QThread(this))
     , m_connectionThreadObject(new ConnectionThread(nullptr))
     , m_eventQueue(nullptr)
@@ -33,6 +34,7 @@ WaylandClient::WaylandClient(QObject *parent)
     , m_derpySurface(EGL_NO_SURFACE)
     , m_derpyWindow(nullptr)
 {
+    connect(m_connectionThreadObject, SIGNAL(connected()), this, SLOT(displayConnected()));
     init();
 }
 
@@ -43,8 +45,44 @@ WaylandClient::~WaylandClient()
     m_connectionThreadObject->deleteLater();
 }
 
+const char* WaylandClient::EGLErrorString(EGLint nErr) const {
+    switch(nErr){
+        case EGL_SUCCESS:               return "EGL_SUCCESS";
+        case EGL_BAD_DISPLAY:           return "EGL_BAD_DISPLAY";
+        case EGL_NOT_INITIALIZED:       return "EGL_NOT_INITIALIZED";
+        case EGL_BAD_ACCESS:            return "EGL_BAD_ACCESS";
+        case EGL_BAD_ALLOC:             return "EGL_BAD_ALLOC";
+        case EGL_BAD_ATTRIBUTE:         return "EGL_BAD_ATTRIBUTE";
+        case EGL_BAD_CONFIG:            return "EGL_BAD_CONFIG";
+        case EGL_BAD_CONTEXT:           return "EGL_BAD_CONTEXT";
+        case EGL_BAD_CURRENT_SURFACE:   return "EGL_BAD_CURRENT_SURFACE";
+        case EGL_BAD_MATCH:             return "EGL_BAD_MATCH";
+        case EGL_BAD_NATIVE_PIXMAP:     return "EGL_BAD_NATIVE_PIXMAP";
+        case EGL_BAD_NATIVE_WINDOW:     return "EGL_BAD_NATIVE_WINDOW";
+        case EGL_BAD_PARAMETER:         return "EGL_BAD_PARAMETER";
+        case EGL_BAD_SURFACE:           return "EGL_BAD_SURFACE";
+        default:                        return "unknown";
+    }
+}
+
+void WaylandClient::displayConnected()
+{
+    qDebug() << "WaylandClient connected to display";
+    m_displayConnected = true;
+}
+
+void WaylandClient::waitForReady()
+{
+    while(!m_displayConnected && !hasShellSurface()) {
+        qApp->processEvents(QEventLoop::WaitForMoreEvents);
+        qDebug() << "Waiting for events to be processed...";
+    }
+}
+
 wl_display* WaylandClient::display()
 {
+    qDebug() << "Getting wayland client display";
+    waitForReady();
     return m_connectionThreadObject->display();
 }
 
@@ -55,10 +93,15 @@ bool WaylandClient::hasShellSurface() const
 
 EGLSurface WaylandClient::getSurface(EGLDisplay display, EGLConfig config, int w, int h)
 {
+    waitForReady();
     if(m_derpySurface == EGL_NO_SURFACE) {
         qDebug() << "No surface yet, let's create one";
         m_derpyWindow = wl_egl_window_create(*m_surface, w, h);
         m_derpySurface = eglCreateWindowSurface(display, config, m_derpyWindow, nullptr);
+        EGLint error = eglGetError();
+        if(m_derpySurface == EGL_NO_SURFACE) {
+            qDebug() << "Error creating surface, oh no! The error was" << EGLErrorString(error);
+        }
     }
     wl_egl_window_resize(m_derpyWindow, w, h, 0, 0);
     qDebug() << "Returning a window surface of size w*h:" << w << h;

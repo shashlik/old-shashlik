@@ -11,6 +11,7 @@ add_subdirectory(libutils)        # android-core
 add_subdirectory(libcutils)       # android-core
 add_subdirectory(libpixelflinger) # android-core
 add_subdirectory(libusbhost)      # android-core
+add_subdirectory(libzipfile)      # android-core
 
 add_subdirectory(libnativehelper) # native-helper
 
@@ -37,9 +38,11 @@ add_subdirectory(libhwui)
 add_subdirectory(libinput)
 # add_subdirectory(opengl-libs)     # frameworks-native
 add_subdirectory(installd)
+add_subdirectory(adb)
 
 add_subdirectory(libbase)
 add_subdirectory(libziparchive)
+add_subdirectory(libemoji)
 
 # ----------------------------------------------------------------
 #                             Dalvik
@@ -49,17 +52,20 @@ add_subdirectory(libjni)
 add_subdirectory(libdex)
 add_subdirectory(aidl) # must be before the java libraries, as it is used to create the interfaces
 add_subdirectory(aapt)
+add_subdirectory(zipalign) # used to align the APK files (which are zip archives), allowing for mmapping them
 
 # dalvik vm
 add_subdirectory(vm)
 add_subdirectory(javalibrary-core)
 add_subdirectory(javalibrary-conscrypt)
 add_subdirectory(javalibrary-bouncycastle)
+add_subdirectory(signapk) # used to sign APK files, in particular the frameworks resource bundle
 add_subdirectory(javalibrary-ext)
 add_subdirectory(javalibrary-okhttp)
 add_subdirectory(javalibrary-frameworks)
 add_subdirectory(javalibrary-voip)
 add_subdirectory(javalibrary-telephony)
+add_subdirectory(javalibrary-settingsprovider)
 add_subdirectory(libjavacore)
 # add_subdirectory(javalibrary-packageinstaller)
 

@@ -146,9 +146,9 @@ Rectangle {
                     onStartService: shashlikController.startInstalld();
                 }
                 ControlEntry {
-                    text: "Bootanimation";
-                    running: shashlikController.bootanimationRunning;
-                    onStartService: shashlikController.startBootanimation();
+                    text: "Android Debug Daemon";
+                    running: shashlikController.adbdRunning;
+                    onStartService: shashlikController.startAdbd();
                 }
                 ControlEntry {
                     text: "SurfaceFlinger";
@@ -159,6 +159,11 @@ Rectangle {
                     text: "Service Manager";
                     running: shashlikController.servicemanagerRunning;
                     onStartService: shashlikController.startServicemanager();
+                }
+                ControlEntry {
+                    text: "Bootanimation";
+                    running: shashlikController.bootanimationRunning;
+                    onStartService: shashlikController.startBootanimation();
                 }
             }
             Row {
@@ -179,7 +184,7 @@ Rectangle {
                     width: base.width / 2;
                     height: units.gridUnit * 2;
                     text: "Stop all services";
-                    enabled: shashlikController.surfaceflingerRunning || shashlikController.servicemanagerRunning || shashlikController.installdRunning || shashlikController.bootanimationRunning || shashlikController.zygoteRunning;
+                    enabled: shashlikController.surfaceflingerRunning || shashlikController.servicemanagerRunning || shashlikController.installdRunning || shashlikController.adbdRunning || shashlikController.zygoteRunning || shashlikController.bootanimationRunning;
                     onClicked: shashlikController.stop();
                 }
             }

@@ -139,6 +139,10 @@ include_directories(
 )
 add_definitions(-Wall -Wextra -Werror)
 add_library(javacrypto SHARED ${conscrypt_lib_SRCS})
+target_compile_definitions(javacrypto
+    PRIVATE
+    -DJNI_JARJAR_PREFIX=com/android/
+)
 add_custom_command(TARGET javacrypto POST_BUILD
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMAND rm -f libconscrypt_jni.so
@@ -154,8 +158,8 @@ install(TARGETS javacrypto DESTINATION ${ANDROID_LIB_DIR})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libconscrypt_jni.so DESTINATION ${ANDROID_LIB_DIR})
 
 set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -source 1.5 -encoding UTF-8 -Xmaxwarns 9999999 -g -bootclasspath ${CMAKE_BINARY_DIR}/src/deps/javalibrary/core.jar -extdirs \"\")
-add_jar(conscrypt ${javalibrary_SRCS} INCLUDE_JARS core)
-add_jar(conscrypt-nojarjarthing ${javalibrary_SRCS} INCLUDE_JARS core)
-jarjar_process(conscrypt "${REPO_PATH}/crypto/jarjar-rules.txt" "${CMAKE_CURRENT_BINARY_DIR}/conscrypt.jar" "${CMAKE_CURRENT_BINARY_DIR}/conscrypt-nojarjar.jar")
+add_jar(conscrypt-prejarjar ${javalibrary_SRCS} INCLUDE_JARS core)
+# add_jar(conscrypt-nojarjarthing ${javalibrary_SRCS} INCLUDE_JARS core)
+jarjar_process(conscrypt-prejarjar "${REPO_PATH}/crypto/jarjar-rules.txt" "${CMAKE_CURRENT_BINARY_DIR}/conscrypt-prejarjar.jar" "${CMAKE_CURRENT_BINARY_DIR}/conscrypt.jar" "${CMAKE_CURRENT_BINARY_DIR}/conscrypt-nojarjar.jar")
 #install_jar(conscrypt ${ANDROID_JAR_DIR})
 # install(FILES ${CMAKE_CURRENT_BINARY_DIR}/conscrypt-nojarjarthing.jar DESTINATION ${ANDROID_JAR_DIR} RENAME conscrypt.jar)

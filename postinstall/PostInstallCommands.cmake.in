@@ -4,6 +4,7 @@ set(ANDROID_ROOT @ANDROID_ROOT@)
 set(ANDROID_BIN_DIR @ANDROID_BIN_DIR@)
 set(ANDROID_JAR_DIR @ANDROID_JAR_DIR@)
 set(ANDROID_FRAMEWORKS_BASE @ANDROID_FRAMEWORKS_BASE@)
+set(GENERAL_SOURCE_PATH @GENERAL_SOURCE_PATH@)
 
 find_package(Java 1.6 REQUIRED)
 include(UseJava)
@@ -152,12 +153,60 @@ function(process_installed_android_jar _TARGET_NAME _INSTALLED_FILE _WORK_DIR)
     endif()
 endfunction()
 
+function(process_jar_to_apk _TARGET_NAME _ORIGIN _DESTINATION _REPO_PATH _RESOURCE_PACKAGE _WORK_DIR)
+    set(LOCAL_WORK_DIR ${_WORK_DIR}/${_TARGET_NAME}-intermediates)
+
+    message(STATUS " *** Processing ${_TARGET_NAME} for apk creation and installation")
+
+    message(STATUS "Creating local work dir ${LOCAL_WORK_DIR}")
+    # make an intermediary work directory inside the given work dir _WORK_DIR/intermediates
+    file(MAKE_DIRECTORY ${LOCAL_WORK_DIR})
+
+    message(STATUS "Moving jar file ${_ORIGIN} into the working directory")
+    # move installed file to intermediates/classes.jar
+    file(COPY ${_ORIGIN}/${_TARGET_NAME}.jar DESTINATION ${LOCAL_WORK_DIR})
+    file(RENAME ${LOCAL_WORK_DIR}/${_TARGET_NAME}.jar ${LOCAL_WORK_DIR}/classes.jar)
+
+    # dex classes.jar
+    message(STATUS "Dexing classes.jar for target ${_TARGET_NAME} (this will take a while)")
+    execute_process(RESULT_VARIABLE dxresult COMMAND dx -JXms16M -JXmx2048M --dex --output=${LOCAL_WORK_DIR}/classes.dex ${LOCAL_WORK_DIR}/classes.jar)
+
+#     # build apk base
+#     message(STATUS "Building the apk base")
+#     execute_process(COMMAND touch ${LOCAL_WORK_DIR}/dummy)
+#     execute_process(COMMAND cd ${LOCAL_WORK_DIR} && zip -qd ${LOCAL_WORK_DIR}/${_TARGET_NAME}.apk dummy)
+#     execute_process(COMMAND rm ${LOCAL_WORK_DIR}/dummy)
+# 
+#     # build resources
+#     message(STATUS "Building resources (this step may take a while)")
+#     execute_process(COMMAND ${CMAKE_BINARY_DIR}/src/deps/aapt/aapt package -u -z -c en_US,normal,ldpi,mdpi,hdpi,xhdpi,xxhdpi,nodpi --preferred-configurations hdpi -M ${_REPO_PATH}/AndroidManifest.xml -S ${_REPO_PATH}/res  -I ${CMAKE_BINARY_DIR}/src/deps/javalibrary-frameworks/frameworks-res.apk --min-sdk-version 19 --target-sdk-version 19 --product tablet,nosdcard --version-code 19 --version-name 4.2.1-68   -F ${LOCAL_WORK_DIR}/package.apk)
+
+    # add the dex to the package
+    message(STATUS "Adding our dexed application to the apk")
+    execute_process(COMMAND cp ${_RESOURCE_PACKAGE} ${LOCAL_WORK_DIR}/package.apk)
+    execute_process(COMMAND ${CMAKE_BINARY_DIR}/src/deps/aapt/aapt add -k ${LOCAL_WORK_DIR}/package.apk ${LOCAL_WORK_DIR}/classes.dex)
+
+    # sign and align the apk
+    message(STATUS "Signing and aligning the apk file")
+    execute_process(COMMAND mv ${LOCAL_WORK_DIR}/package.apk ${LOCAL_WORK_DIR}/package.apk.unsigned)
+    execute_process(COMMAND java -cp ${CMAKE_BINARY_DIR}/src/deps/javalibrary-core/core.jar:${CMAKE_BINARY_DIR}/src/deps/javalibrary-conscrypt/conscrypt-prejarjar.jar:${CMAKE_BINARY_DIR}/src/deps/javalibrary-bouncycastle/bouncycastle-bcprov.jar:${CMAKE_BINARY_DIR}/src/deps/javalibrary-bouncycastle/bouncycastle-bcpkix.jar:${CMAKE_BINARY_DIR}/src/deps/signapk/signapk.jar com.android.signapk.SignApk ${CMAKE_SOURCE_DIR}/../platform.x509.pem ${CMAKE_SOURCE_DIR}/../platform.pk8  ${LOCAL_WORK_DIR}/package.apk.unsigned ${LOCAL_WORK_DIR}/package.apk.signed)
+    execute_process(COMMAND mv ${LOCAL_WORK_DIR}/package.apk.signed ${LOCAL_WORK_DIR}/package.apk.unaligned)
+    execute_process(COMMAND ${CMAKE_BINARY_DIR}/src/deps/zipalign/zipalign -f 4 ${LOCAL_WORK_DIR}/package.apk.unaligned ${LOCAL_WORK_DIR}/package.apk.aligned)
+    execute_process(COMMAND mv ${LOCAL_WORK_DIR}/package.apk.aligned ${LOCAL_WORK_DIR}/${_TARGET_NAME}.apk)
+
+    message(STATUS "Installing newly created apk for target ${_TARGET_NAME}")
+    set(PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${LOCAL_WORK_DIR}/${_TARGET_NAME}.apk DESTINATION ${_DESTINATION})
+    file(INSTALL ${LOCAL_WORK_DIR}/${_TARGET_NAME}.apk DESTINATION ${_DESTINATION})
+endfunction()
+
 set(ENV{LD_LIBRARY_PATH} ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}:${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/egl:${ANDROID_ROOT}/system/lib)
 set(ENV{PATH} ${ANDROID_BIN_DIR}:$ENV{PATH})
 set(ENV{ANDROID_DATA} ${ANDROID_ROOT}/data)
 set(ENV{ANDROID_ROOT} ${ANDROID_ROOT})
 
 set(JAVALIB_DIR ${CMAKE_BINARY_DIR}/src/deps/javalibrary-)
+
+# First we process all our core jar files
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar)
 process_installed_android_jar(core ${JAVALIB_DIR}core/core.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
@@ -169,7 +218,7 @@ set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar)
 process_installed_android_jar(ext ${JAVALIB_DIR}ext/ext.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar)
-process_installed_android_jar(conscrypt ${JAVALIB_DIR}conscrypt/conscrypt-nojarjarthing.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary conscrypt-nojarjarthing)
+process_installed_android_jar(conscrypt ${JAVALIB_DIR}conscrypt/conscrypt.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary conscrypt)
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext.jar:${ANDROID_JAR_DIR}/okhttp.jar)
 process_installed_android_jar(okhttp ${JAVALIB_DIR}okhttp/okhttp.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
@@ -194,6 +243,41 @@ process_installed_android_jar(shashlik ${JAVALIB_DIR}shashlik/shashlik.jar ${CMA
 
 set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext.jar:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar)
 process_installed_android_jar(am ${JAVALIB_DIR}am/am.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+
+# Then we process apk files (because we need the jar files to do this bit)
+
+set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext.jar:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar)
+process_jar_to_apk(
+    SettingsProvider
+    ${CMAKE_BINARY_DIR}/src/deps/javalibrary-settingsprovider
+    ${ANDROID_ROOT}/system/app
+    ${GENERAL_SOURCE_PATH}/android-frameworks-base/packages/SettingsProvider
+    ${CMAKE_BINARY_DIR}/src/deps/javalibrary-settingsprovider/package-export.apk
+    ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+
+# target Dex: SettingsProvider
+# out/host/linux-x86/bin/dx -JXms16M -JXmx2048M --dex --output=out/target/common/obj/APPS/SettingsProvider_intermediates/noproguard.classes-with-local.dex     out/target/common/obj/APPS/SettingsProvider_intermediates/noproguard.classes.jar
+# Copying: out/target/common/obj/APPS/SettingsProvider_intermediates/noproguard.classes.dex
+# out/host/linux-x86/bin/acp -fp out/target/common/obj/APPS/SettingsProvider_intermediates/noproguard.classes-with-local.dex out/target/common/obj/APPS/SettingsProvider_intermediates/noproguard.classes.dex
+
+# target Package: SettingsProvider (out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk)
+# touch out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates//dummy
+# (cd out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/ && jar cf package.apk dummy)
+# zip -qd out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk dummy
+# rm out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates//dummy
+# out/host/linux-x86/bin/aapt package -u -z -c en_US,normal,ldpi,mdpi,hdpi,xhdpi,xxhdpi,nodpi --preferred-configurations hdpi -M frameworks/base/packages/SettingsProvider/AndroidManifest.xml -S frameworks/base/packages/SettingsProvider/res  -I out/target/common/obj/APPS/framework-res_intermediates/package-export.apk --min-sdk-version 17 --target-sdk-version 17 --product tablet,nosdcard --version-code 17 --version-name 4.2.1-68   -F out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk
+# _adtp_classes_dex=out/target/common/obj/APPS/SettingsProvider_intermediates/classes.dex; cp out/target/common/obj/APPS/SettingsProvider_intermediates/noproguard.classes.dex $_adtp_classes_dex && out/host/linux-x86/bin/aapt add -k out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk $_adtp_classes_dex && rm -f $_adtp_classes_dex
+#  'out/target/common/obj/APPS/SettingsProvider_intermediates/classes.dex' as 'classes.dex'...
+# if [ -d out/target/common/obj/APPS/SettingsProvider_intermediates/classes ] ; then java_res_jar_flags=$(find out/target/common/obj/APPS/SettingsProvider_intermediates/classes -type f -a -not -name "*.class" | sed -e "s?^out/target/common/obj/APPS/SettingsProvider_intermediates/classes/? -C out/target/common/obj/APPS/SettingsProvider_intermediates/classes ?"); if [ -n "$java_res_jar_flags" ] ; then echo $java_res_jar_flags >out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/java_res_jar_flags; jar uf out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk $java_res_jar_flags; fi; fi
+# mv out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk.unsigned
+# java -jar out/host/linux-x86/framework/signapk.jar build/target/product/security/platform.x509.pem build/target/product/security/platform.pk8 out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk.unsigned out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk.signed
+# mv out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk.signed out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk
+# mv out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk.unaligned
+# out/host/linux-x86/bin/zipalign -f 4 out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk.unaligned out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk.aligned
+# mv out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk.aligned out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk
+# Install: out/target/product/vexpress/system/app/SettingsProvider.apk
+# out/host/linux-x86/bin/acp -fp out/target/product/vexpress/obj/APPS/SettingsProvider_intermediates/package.apk out/target/product/vexpress/system/app/SettingsProvider.apk
+
 
 # set(ENV{BOOTCLASSPATH} ${ANDROID_JAR_DIR}/core.jar:${ANDROID_JAR_DIR}/bouncycastle.jar:${ANDROID_JAR_DIR}/conscrypt.jar:${ANDROID_JAR_DIR}/ext.jar:${ANDROID_JAR_DIR}/okhttp.jar:${ANDROID_JAR_DIR}/framework.jar:${ANDROID_JAR_DIR}/voip-common.jar:${ANDROID_JAR_DIR}/telephony-common.jar:${ANDROID_JAR_DIR}/framework2.jar)
 # process_installed_android_jar(packageinstaller ${JAVALIB_DIR}packageinstaller/packageinstaller.jar ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
