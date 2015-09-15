@@ -58,8 +58,8 @@ set(libjni_SRCS
     ${GENTROID_DIR}/core/jni/android_view_HardwareRenderer.cpp
     ${GENTROID_DIR}/core/jni/android_view_GLES20DisplayList.cpp
 #     ${GENTROID_DIR}/core/jni/android_view_GLES20Canvas.cpp
-    ${GENTROID_DIR}/core/jni/android/opengl/poly_clip.cpp
-    ${GENTROID_DIR}/core/jni/android/opengl/util.cpp
+#     ${GENTROID_DIR}/core/jni/android/opengl/poly_clip.cpp
+#     ${GENTROID_DIR}/core/jni/android/opengl/util.cpp
 
 
     ${JNI_SOURCE_DIR}/AndroidRuntime.cpp
@@ -70,10 +70,10 @@ set(libjni_SRCS
 #     ${JNI_SOURCE_DIR}/android_app_NativeActivity.cpp
 #     ${JNI_SOURCE_DIR}/android_opengl_EGL14.cpp
 #     ${JNI_SOURCE_DIR}/android_opengl_EGLExt.cpp
-#     ${JNI_SOURCE_DIR}/android_opengl_GLES10.cpp
-#     ${JNI_SOURCE_DIR}/android_opengl_GLES10Ext.cpp
-#     ${JNI_SOURCE_DIR}/android_opengl_GLES11.cpp
-#     ${JNI_SOURCE_DIR}/android_opengl_GLES11Ext.cpp
+    ${JNI_SOURCE_DIR}/android_opengl_GLES10.cpp
+    ${JNI_SOURCE_DIR}/android_opengl_GLES10Ext.cpp
+    ${JNI_SOURCE_DIR}/android_opengl_GLES11.cpp
+    ${JNI_SOURCE_DIR}/android_opengl_GLES11Ext.cpp
 #     ${JNI_SOURCE_DIR}/android_opengl_GLES20.cpp
 #     ${JNI_SOURCE_DIR}/android_opengl_GLES30.cpp
     ${JNI_SOURCE_DIR}/android_database_CursorWindow.cpp
@@ -177,8 +177,8 @@ set(libjni_SRCS
     ${JNI_SOURCE_DIR}/android_hardware_UsbRequest.cpp
     ${JNI_SOURCE_DIR}/android_debug_JNITest.cpp
     ${JNI_SOURCE_DIR}/android_util_FileObserver.cpp
-#     ${JNI_SOURCE_DIR}/android/opengl/poly_clip.cpp
-#     ${JNI_SOURCE_DIR}/android/opengl/util.cpp
+    ${JNI_SOURCE_DIR}/android/opengl/poly_clip.cpp
+    ${JNI_SOURCE_DIR}/android/opengl/util.cpp
     ${JNI_SOURCE_DIR}/android_server_NetworkManagementSocketTagger.cpp
     ${JNI_SOURCE_DIR}/android_server_Watchdog.cpp
     ${JNI_SOURCE_DIR}/android_ddm_DdmHandleNativeHeap.cpp
