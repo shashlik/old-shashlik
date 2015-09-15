@@ -50,11 +50,19 @@ public:
     explicit WaylandClient(QObject *parent = 0);
     virtual ~WaylandClient();
 
+    const char* EGLErrorString(EGLint nErr) const;
+
+    // Wait for a display to be connected, and for us to have gotten a shell surface
+    // You don't need to explicitly call this function, as it is called elsewhere,
+    // but even then, i like the verbosity of it, so... public :)
+    void waitForReady();
     wl_display* display();
     bool hasShellSurface() const;
     EGLSurface getSurface(EGLDisplay display, EGLConfig config, int w, int h);
 
 private:
+    Q_SLOT void displayConnected();
+    bool m_displayConnected;
     void init();
     void setupRegistry(KWayland::Client::Registry *registry);
     QThread *m_connectionThread;
