@@ -66,6 +66,12 @@ ENDIF(DRM_FOUND)
 # ----------------------------------------------------------------
 # System settings
 
+if(COMMAND CMAKE_POLICY)
+    if (POLICY CMP0063)
+        cmake_policy(SET CMP0063 NEW)
+    endif()
+endif()
+
 # It is necessary to note that we have endian.h, which we do on all systems we
 # target otherwise the android code goes and redefines it all on us. Not so
 # great...
