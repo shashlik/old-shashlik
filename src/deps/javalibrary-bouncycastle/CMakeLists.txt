@@ -674,5 +674,6 @@ set(CMAKE_JAVA_COMPILE_FLAGS -J-Xmx2048M -target 1.5 -source 1.5 -encoding UTF-8
 add_jar(bouncycastle-prejarjar SOURCES ${bcprov_SRCS} ${bcprov_target_SRCS} INCLUDE_JARS core ${CMAKE_BINARY_DIR}/src/deps/javalibrary-conscrypt/conscrypt.jar)
 jarjar_process(bouncycastle-prejarjar "${REPO_PATH}/jarjar-rules.txt" "${CMAKE_CURRENT_BINARY_DIR}/bouncycastle-prejarjar.jar" "${CMAKE_CURRENT_BINARY_DIR}/bouncycastle.jar" "${CMAKE_CURRENT_BINARY_DIR}/bouncycastle-nojarjar.jar")
 add_jar(bouncycastle-bcprov SOURCES ${bcprov_SRCS} ${bcprov_host_SRCS} INCLUDE_JARS core ${CMAKE_BINARY_DIR}/src/deps/javalibrary-conscrypt/conscrypt.jar)
+add_dependencies(bouncycastle-bcprov conscrypt-prejarjar)
 add_jar(bouncycastle-bcpkix SOURCES ${bcpkix_SRCS} INCLUDE_JARS bouncycastle-bcprov)
 # install_jar(bouncycastle ${ANDROID_JAR_DIR})
