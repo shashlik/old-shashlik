@@ -576,7 +576,13 @@ set(ssl_SRCS
     ${REPO_PATH}/ssl/tls_srp.c
 )
 
+
 add_library(crypto SHARED ${crypto_SRCS} ${crypto_x86_SRCS})
+
+target_link_libraries(crypto
+    dl
+)
+
 target_include_directories(
     crypto
     PUBLIC

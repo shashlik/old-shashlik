@@ -53,6 +53,12 @@ set(surfaceflinger_SRCS
 )
 
 add_library(waylandthings STATIC ${waylandthings_SRCS})
+
+target_link_libraries(waylandthings
+    KF5WaylandClient
+    ${Wayland_LIBRARIES}
+)
+
 target_compile_definitions(waylandthings
     PUBLIC
     -DWL_EGL_PLATFORM
