@@ -79,7 +79,7 @@ public Q_SLOTS:
     void startAdbd();
 
     void stop();
-    void start() { startServicemanager(); startInstalld(); startSurfaceflinger(); startBootanimation(); /*startZygote(); startAdbd();*/ };
+    void start() { startServicemanager(); startInstalld(); startSurfaceflinger(); /*startBootanimation();*/ startZygote(); startAdbd(); };
     void restart() { stop(); start(); }
 
     void logSomething();
