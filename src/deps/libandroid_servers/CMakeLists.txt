@@ -61,5 +61,6 @@ target_link_libraries(android_servers
 #     suspend
 #     EGL
     GLESv2
+    waylandthings
 )
 install(TARGETS android_servers DESTINATION ${ANDROID_LIB_DIR})
