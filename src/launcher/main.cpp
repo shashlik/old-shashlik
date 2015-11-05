@@ -30,6 +30,9 @@
 
 #include "shashlikversion.h"
 #include "AppRuntime.h"
+#include "appthread.h"
+
+#include <QCoreApplication>
 
 #define PROGRAM_NAME "shashlik-launcher"
 
@@ -58,8 +61,10 @@ static void setArgv0(const char *argv0, const char *newArgv0)
 #endif
 }
 
-int main(int argc, char* const argv[])
+int main(int argc, char* argv[])
 {
+    InputArgs args = {argc, argv};
+    StartAppThread(args);
 #ifdef __arm__
     /*
      * b/7188322 - Temporarily revert to the compat memory layout
@@ -97,6 +102,9 @@ int main(int argc, char* const argv[])
 //     }
 //     mArgLen--;
 
+    while(!qApp) {
+        sleep(1);
+    }
     AppRuntime runtime;
     const char* argv0 = argv[0];
 

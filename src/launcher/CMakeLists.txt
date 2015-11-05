@@ -4,6 +4,7 @@ project(shashlik_launcher)
 #find_package(KF5DBusAddons NO_MODULE)
 #find_package(Qt5Network ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
 find_package(Qt5Core)
+find_package(Qt5Gui)
 
 add_definitions(-fPIC
                 -fpermissive    # For redeclaration of char32_t (among other things?)
@@ -26,6 +27,7 @@ include_directories(${LIBBINDER_INCLUDES}
 set(shashlik_launcher_SRCS
     main.cpp
     AppRuntime.cpp
+    appthread.cpp
 #     ProcessGlobals.cpp
 )
 
@@ -60,6 +62,8 @@ endif(FORCE_32BIT_BUILD)
 
 target_link_libraries(shashlik_launcher
                       dvm
+                      pthread
+                      ${QT5CORE32_LIBRARIES}
 )
 
 install(TARGETS shashlik_jni DESTINATION ${ANDROID_LIB_DIR})
