@@ -1,11 +1,14 @@
 project(utils)
 
+find_package(Qt5Core) # Yes, this is a hack. We need the 32bit libraries
+
 set(REPO_PATH ${ANDROID_CORE_PATH})
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${LIBCUTILS_INCLUDES}
     ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
+    ${QT5CORE32_INCLUDE_DIRS}
 )
 
 add_definitions(-DHAVE_POSIX_FILEMAP
@@ -100,7 +103,11 @@ add_library(utils SHARED ${utils_SRCS})
 if(FORCE_32BIT_BUILD)
     set_target_properties(utils PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
-target_link_libraries(utils pthread corkscrew)
+target_link_libraries(utils
+    pthread
+    corkscrew
+    ${QT5CORE32_LIBRARIES}
+)
 
 install(TARGETS utils DESTINATION ${ANDROID_LIB_DIR})
 install(FILES
