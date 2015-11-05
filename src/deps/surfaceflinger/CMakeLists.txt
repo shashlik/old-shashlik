@@ -61,12 +61,13 @@ target_compile_definitions(waylandthings
 target_include_directories(waylandthings
     PRIVATE
     ${CMAKE_CURRENT_SRC_DIR}
+    PUBLIC
     ${OPENGL_INCLUDES}
-    ${Wayland_INCLUDE_DIRS}
-    /usr/include/KF5/KWayland
     /usr/include/KF5
-    ${QT5CORE32_INCLUDE_DIRS}
+    /usr/include/KF5/KWayland
+    ${Wayland_INCLUDE_DIRS}
     ${QT5GUI32_INCLUDE_DIRS}
+    ${QT5CORE32_INCLUDE_DIRS}
 )
 
 add_library(libsurfaceflinger SHARED ${libsurfaceflinger_SRCS})

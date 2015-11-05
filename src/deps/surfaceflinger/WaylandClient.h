@@ -23,8 +23,12 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include <QObject>
 #include <EGL/egl.h>
 
+#include <Client/buffer.h>
+
 struct wl_display;
 struct wl_egl_window;
+struct wl_shm;
+class QImage;
 
 namespace KWayland
 {
@@ -59,9 +63,12 @@ public:
     wl_display* display();
     bool hasShellSurface() const;
     EGLSurface getSurface(EGLDisplay display, EGLConfig config, int w, int h);
+    wl_shm* getShm();
+    QSharedPointer<KWayland::Client::Buffer> getBuffer(const QImage &image);
 
 private:
     Q_SLOT void displayConnected();
+    Q_SLOT void processEvents();
     bool m_displayConnected;
     void init();
     void setupRegistry(KWayland::Client::Registry *registry);
