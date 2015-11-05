@@ -137,7 +137,7 @@ set(hwcomposer_drm_SRCS
 #     ${REPO_PATH}/libs/GLES_trace
 #     ${LIBUTILS_INCLUDES}
 #     ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified bionic_tls.h
-#     ${GENERAL_SOURCE_PATH}/libhardware/include
+#     ${GENERAL_SOURCE_PATH}/android-libhardware/include
 # )
 # target_compile_definitions(EGL
 #     PRIVATE
@@ -191,7 +191,7 @@ set(hwcomposer_drm_SRCS
 #     ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
 #     ${LIBCUTILS_INCLUDES}
 #     ${CMAKE_SOURCE_DIR}/src/deps/stripped_bionic # for the hackified bionic_tls.h
-#     ${GENERAL_SOURCE_PATH}/libhardware/include
+#     ${GENERAL_SOURCE_PATH}/android-libhardware/include
 # )
 
 add_library(gralloc.shashlik SHARED ${gralloc.shashlik_SRCS})

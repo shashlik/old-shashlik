@@ -18,7 +18,7 @@ target_include_directories(memtrack
     ${LIBLOG_INCLUDES}
     ${GENERAL_SOURCE_PATH}/bionic/libc/kernel/common
     ${GENERAL_SOURCE_PATH}/android-core/include
-    ${GENERAL_SOURCE_PATH}/libhardware/include
+    ${GENERAL_SOURCE_PATH}/android-libhardware/include
 )
 add_definitions(-Wall -Werror)
 install(TARGETS memtrack DESTINATION ${ANDROID_LIB_DIR})

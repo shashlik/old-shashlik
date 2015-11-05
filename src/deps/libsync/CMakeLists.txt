@@ -18,7 +18,7 @@ target_include_directories(sync
     ${ANDROID_FRAMEWORKS_NATIVE_PATH}/include
     ${GENERAL_SOURCE_PATH}/android-core/include
     ${GENERAL_SOURCE_PATH}/bionic/libc/kernel/common
-    ${GENERAL_SOURCE_PATH}/libhardware/include
+    ${GENERAL_SOURCE_PATH}/android-libhardware/include
 )
 
 install(TARGETS sync DESTINATION ${ANDROID_LIB_DIR})
