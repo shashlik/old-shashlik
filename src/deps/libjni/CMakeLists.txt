@@ -5,6 +5,7 @@ set(JNI_SOURCE_DIR ${ANDROID_FRAMEWORKS_BASE}/core/jni)
 #find_package(KF5Archive NO_MODULE)
 find_package(LibCAP REQUIRED) # required for zygote init, that is, sys/capability.h
 find_package (Wayland COMPONENTS Client Egl Cursor REQUIRED)
+find_package(KF5Wayland REQUIRED)
 
 add_definitions(-DHAVE_ANDROID_OS   # To make cutils/trace work.  FIXME: Check what other consequences this has.
                 -fpermissive  # FIXME: for pointer to int conversion in printf on x86_64
@@ -26,8 +27,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${ANDROID_FRAMEWORKS_BASE}/libs/hwui
                     ${OPENGL_INCLUDES}
                     ${ANDROID_FRAMEWORKS_NATIVE_PATH}/opengl/libs
-                    ${GENERAL_SOURCE_PATH}/libhardware/include
-                    ${GENERAL_SOURCE_PATH}/libhardware/modules
+                    ${GENERAL_SOURCE_PATH}/android-libhardware/include
+                    ${GENERAL_SOURCE_PATH}/android-libhardware/modules
                     ${HARFBUZZ_INCLUDE_DIRS}
                     ${SQLITE3_INCLUDES}
                     ${SKIA_INCLUDES}
@@ -46,7 +47,7 @@ set(GENTROID_DIR ${GENERAL_SOURCE_PATH}/gentroid-frameworks-base)
 
 set(libjni_SRCS
     ${GENTROID_DIR}/core/jni/WaylandClient.cpp
-    ${GENTROID_DIR}/core/jni/com_google_android_gles_jni_EGLImpl.cpp
+#     ${GENTROID_DIR}/core/jni/com_google_android_gles_jni_EGLImpl.cpp
     ${GENTROID_DIR}/core/jni/com_google_android_gles_jni_GLImpl.cpp
     ${GENTROID_DIR}/core/jni/android_app_NativeActivity.cpp
     ${GENTROID_DIR}/core/jni/android_opengl_EGL14.cpp
@@ -65,7 +66,7 @@ set(libjni_SRCS
     ${JNI_SOURCE_DIR}/AndroidRuntime.cpp
     ${JNI_SOURCE_DIR}/Time.cpp
     ${JNI_SOURCE_DIR}/com_android_internal_content_NativeLibraryHelper.cpp
-#     ${JNI_SOURCE_DIR}/com_google_android_gles_jni_EGLImpl.cpp
+    ${JNI_SOURCE_DIR}/com_google_android_gles_jni_EGLImpl.cpp
 #     ${JNI_SOURCE_DIR}/com_google_android_gles_jni_GLImpl.cpp
 #     ${JNI_SOURCE_DIR}/android_app_NativeActivity.cpp
 #     ${JNI_SOURCE_DIR}/android_opengl_EGL14.cpp
@@ -107,7 +108,7 @@ set(libjni_SRCS
     ${JNI_SOURCE_DIR}/android_os_MemoryFile.cpp
     ${JNI_SOURCE_DIR}/android_os_MessageQueue.cpp
     ${JNI_SOURCE_DIR}/android_os_Parcel.cpp
-#     ${JNI_SOURCE_DIR}/android_os_SELinux.cpp
+    ${JNI_SOURCE_DIR}/android_os_SELinux.cpp
     ${JNI_SOURCE_DIR}/android_os_SystemClock.cpp
     ${JNI_SOURCE_DIR}/android_os_SystemProperties.cpp
     ${JNI_SOURCE_DIR}/android_os_Trace.cpp
@@ -219,6 +220,7 @@ input
 shashlik_jni
 hwui
 emoji
+selinux
 #KF5::Archive
     GLESv1_CM
     EGL
@@ -228,6 +230,8 @@ emoji
 #    ${OPENGL_LIBRARIES} - included by skia
 			  #Qt5::Core
 			  ${Wayland_LIBRARIES}
+			  KF5WaylandClient
+			  waylandthings
 )
 
 install(TARGETS jni DESTINATION ${ANDROID_LIB_DIR})
