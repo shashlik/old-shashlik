@@ -66,6 +66,7 @@ add_subdirectory(javalibrary-frameworks)
 add_subdirectory(javalibrary-voip)
 add_subdirectory(javalibrary-telephony)
 add_subdirectory(javalibrary-settingsprovider)
+add_subdirectory(javalibrary-systemui)
 add_subdirectory(libjavacore)
 # add_subdirectory(javalibrary-packageinstaller)
 

@@ -47,7 +47,7 @@ target_include_directories(gui
     PRIVATE
     ${LIBUTILS_INCLUDES}
     ${LIBBINDER_INCLUDES}
-    ${GENERAL_SOURCE_PATH}/libhardware/include
+    ${GENERAL_SOURCE_PATH}/android-libhardware/include
     ${OPENGL_INCLUDES}
 )
 install(TARGETS gui DESTINATION ${ANDROID_LIB_DIR})

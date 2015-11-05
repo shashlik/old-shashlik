@@ -166,7 +166,7 @@ set(SKIA_INCLUDES ${SKIA_PATH}/include ${SKIA_PATH}/include/config ${SKIA_PATH}/
 
 # Tier2 libraries
 
-set(LIBHARDWARE_INCLUDES ${GENERAL_SOURCE_PATH}/libhardware/include)
+set(LIBHARDWARE_INCLUDES ${GENERAL_SOURCE_PATH}/android-libhardware/include)
 
 # Dalvik
 set(LIBDEX_INCLUDES ${DALVIK_PATH})

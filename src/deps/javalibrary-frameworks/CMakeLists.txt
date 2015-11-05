@@ -2603,11 +2603,11 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/inter
     COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal
     COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/src/com/android/internal/R.java ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/R.java
 )
-# add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/Manifest.java
-#     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml
-#     COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal
-#     COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/src/com/android/internal/Manifest.java ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/Manifest.java
-# )
+add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/Manifest.java
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml
+    COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal
+    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/src/com/android/internal/Manifest.java ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/Manifest.java
+)
 add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/common/R/android/R.java
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/public_resources.xml
     COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/common/R/android
@@ -2621,7 +2621,7 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/common/R/android/Manifest.
 
 set(framework_R_SRCS
     ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/R.java
-#     ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/Manifest.java
+    ${CMAKE_CURRENT_BINARY_DIR}/common/R/com/android/internal/Manifest.java
     ${CMAKE_CURRENT_BINARY_DIR}/common/R/android/R.java
     ${CMAKE_CURRENT_BINARY_DIR}/common/R/android/Manifest.java
 )

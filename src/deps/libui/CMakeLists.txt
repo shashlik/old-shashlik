@@ -27,7 +27,7 @@ target_include_directories(ui
     PRIVATE
     ${GENERAL_SOURCE_PATH}/android-core/include
 #     ${GENERAL_SOURCE_PATH}/bionic/libc/kernel/common
-    ${GENERAL_SOURCE_PATH}/libhardware/include
+    ${GENERAL_SOURCE_PATH}/android-libhardware/include
 )
 
 install(TARGETS ui DESTINATION ${ANDROID_LIB_DIR})

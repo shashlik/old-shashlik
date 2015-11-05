@@ -1,6 +1,6 @@
 project(libhardware)
 
-set(REPO_PATH ${GENERAL_SOURCE_PATH}/libhardware)
+set(REPO_PATH ${GENERAL_SOURCE_PATH}/android-libhardware)
 
 set(libhardware_SRCS
     hardware.c

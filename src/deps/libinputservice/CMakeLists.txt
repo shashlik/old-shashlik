@@ -33,6 +33,7 @@ target_include_directories(inputservice
 target_link_libraries(inputservice
     PRIVATE
     input
+    hardware_legacy
 )
 
 install(TARGETS inputservice DESTINATION ${ANDROID_LIB_DIR})

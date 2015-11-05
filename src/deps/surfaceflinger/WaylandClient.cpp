@@ -4,11 +4,12 @@
 
 // Qt
 #include <QCoreApplication>
+#include <QImage>
 #include <QThread>
+#include <QTimer>
 #include <QRegion>
 #include <QDebug>
 // KWin::Wayland
-#include <Client/buffer.h>
 #include <Client/compositor.h>
 #include <Client/connection_thread.h>
 #include <Client/event_queue.h>
@@ -34,8 +35,22 @@ WaylandClient::WaylandClient(QObject *parent)
     , m_derpySurface(EGL_NO_SURFACE)
     , m_derpyWindow(nullptr)
 {
+    qDebug() << Q_FUNC_INFO << "in application" << qApp;
+    moveToThread(qApp->thread());
+    m_connectionThread->moveToThread(qApp->thread());
+    QTimer* timer = new QTimer(this);
+    timer->moveToThread(qApp->thread());
+    timer->setInterval(100);
+    timer->setSingleShot(false);
+    connect(timer, SIGNAL(timeout()), this, SLOT(processEvents()));
+    QTimer::singleShot(0, timer, SLOT(start()));
     connect(m_connectionThreadObject, SIGNAL(connected()), this, SLOT(displayConnected()));
     init();
+}
+
+void WaylandClient::processEvents()
+{
+    qApp->processEvents();
 }
 
 WaylandClient::~WaylandClient()
@@ -73,9 +88,10 @@ void WaylandClient::displayConnected()
 
 void WaylandClient::waitForReady()
 {
-    while(!m_displayConnected && !hasShellSurface()) {
+    qDebug() << Q_FUNC_INFO;
+    while(!m_displayConnected && !hasShellSurface() && !m_shm) {
+        qDebug() << "Waiting for events to be processed so we can get displays connected, find a shell surface and acquire a shared memory manager...";
         qApp->processEvents(QEventLoop::WaitForMoreEvents);
-        qDebug() << "Waiting for events to be processed...";
     }
 }
 
@@ -93,6 +109,7 @@ bool WaylandClient::hasShellSurface() const
 
 EGLSurface WaylandClient::getSurface(EGLDisplay display, EGLConfig config, int w, int h)
 {
+    qDebug() << Q_FUNC_INFO;
     waitForReady();
     if(m_derpySurface == EGL_NO_SURFACE) {
         qDebug() << "No surface yet, let's create one";
@@ -106,6 +123,29 @@ EGLSurface WaylandClient::getSurface(EGLDisplay display, EGLConfig config, int w
     wl_egl_window_resize(m_derpyWindow, w, h, 0, 0);
     qDebug() << "Returning a window surface of size w*h:" << w << h;
     return m_derpySurface;
+}
+
+wl_shm* WaylandClient::getShm()
+{
+    qDebug() << Q_FUNC_INFO;
+    waitForReady();
+    return m_shm->shm();
+}
+
+QSharedPointer<KWayland::Client::Buffer> WaylandClient::getBuffer(const QImage &image)
+{
+    qDebug() << Q_FUNC_INFO;
+    waitForReady();
+    if(m_shm) {
+        QSharedPointer<KWayland::Client::Buffer> buffer = m_shm->createBuffer(image).toStrongRef();
+        if(buffer) {
+            buffer->setUsed(true);
+            qDebug() << "Returning a buffer, wooh!" << buffer;
+            return buffer;
+        }
+    }
+    qDebug() << "Failed to create a buffer, sadface...";
+    return QSharedPointer<KWayland::Client::Buffer>();
 }
 
 void WaylandClient::init()
@@ -125,12 +165,15 @@ void WaylandClient::init()
     m_connectionThread->start();
 
     m_connectionThreadObject->initConnection();
+    m_connectionThreadObject->flush();
 }
 
 void WaylandClient::setupRegistry(Registry *registry)
 {
+    qDebug() << Q_FUNC_INFO;
     connect(registry, &Registry::compositorAnnounced, this,
         [this, registry](quint32 name) {
+            qDebug() << "compositor announced...";
             m_compositor = registry->createCompositor(name, 1, this);
             m_surface = m_compositor->createSurface(this);
         },
@@ -138,9 +181,17 @@ void WaylandClient::setupRegistry(Registry *registry)
     );
     connect(registry, &Registry::shellAnnounced, this,
         [this, registry](quint32 name) {
+            qDebug() << "shell announced...";
             Shell *shell = registry->createShell(name, 1, this);
             m_shellSurface = shell->createSurface(m_surface, m_surface);
             m_shellSurface->setToplevel();
+        },
+        Qt::QueuedConnection
+    );
+    connect(registry, &Registry::shmAnnounced, this,
+        [this, registry](quint32 name) {
+            qDebug() << "shared memory pool announced, we can make buffers now!";
+            m_shm = registry->createShmPool(name, 1, this);
         },
         Qt::QueuedConnection
     );
@@ -148,4 +199,9 @@ void WaylandClient::setupRegistry(Registry *registry)
     registry->setEventQueue(m_eventQueue);
     registry->setup();
     m_connectionThreadObject->flush();
+    qDebug() << "Waiting for events";
+    for(int i = 0; i < 1000; ++i) {
+        qApp->processEvents();
+    }
+    qDebug() << "Registry setup completed";
 }

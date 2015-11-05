@@ -62,7 +62,7 @@ set(skia_noworkey_SRCS
     ${SKIA_SRC_PATH}/images/SkImageDecoder_libjpeg.cpp
     ${SKIA_SRC_PATH}/images/SkImageDecoder_libpng.cpp
     ${SKIA_SRC_PATH}/images/SkJpegUtility.cpp
-    ${SKIA_SRC_PATH}/gpu/gl/unix/SkNativeGLContext_unix.cpp
+#     ${SKIA_SRC_PATH}/gpu/gl/unix/SkNativeGLContext_unix.cpp
     ${SKIA_SRC_PATH}/pdf/SkPDFDevice.cpp
 )
 set(skia_noworkey2_SRCS
@@ -374,7 +374,8 @@ set(skia_SRCS
     ${SKIA_SRC_PATH}/pipe/SkGPipeRead.cpp
     ${SKIA_SRC_PATH}/pipe/SkGPipeWrite.cpp
     ${SKIA_SRC_PATH}/ports/SkDebug_android.cpp
-    ${SKIA_SRC_PATH}/ports/SkDiscardableMemory_ashmem.cpp
+#     ${SKIA_SRC_PATH}/ports/SkDiscardableMemory_ashmem.cpp
+    ${SKIA_SRC_PATH}/ports/SkDiscardableMemory_none.cpp
     ${SKIA_SRC_PATH}/ports/SkGlobalInitialization_default.cpp
 #     ${SKIA_SRC_PATH}/ports/SkFontConfigInterface_android.cpp
 #     ${SKIA_SRC_PATH}/ports/SkFontConfigParser_android.cpp
@@ -385,6 +386,7 @@ set(skia_SRCS
     ${SKIA_SRC_PATH}/ports/SkOSFile_posix.cpp
     ${SKIA_SRC_PATH}/ports/SkOSFile_stdio.cpp
 #     ${SKIA_SRC_PATH}/ports/SkPurgeableMemoryBlock_android.cpp
+    ${SKIA_SRC_PATH}/ports/SkPurgeableMemoryBlock_none.cpp
     ${SKIA_SRC_PATH}/ports/SkThread_pthread.cpp
     ${SKIA_SRC_PATH}/ports/SkTime_Unix.cpp
     ${SKIA_SRC_PATH}/ports/SkTLS_pthread.cpp
@@ -539,7 +541,7 @@ set(skia_gr_SRCS
     ${SKIA_SRC_PATH}/gpu/gl/GrGLBufferImpl.cpp
     ${SKIA_SRC_PATH}/gpu/gl/GrGLCaps.cpp
     ${SKIA_SRC_PATH}/gpu/gl/GrGLContext.cpp
-#     ${SKIA_SRC_PATH}/gpu/gl/GrGLDefaultInterface_native.cpp
+    ${SKIA_SRC_PATH}/gpu/gl/GrGLDefaultInterface_native.cpp
     ${SKIA_SRC_PATH}/gpu/gl/GrGLExtensions.cpp
     ${SKIA_SRC_PATH}/gpu/gl/GrGLIndexBuffer.cpp
     ${SKIA_SRC_PATH}/gpu/gl/GrGLInterface.cpp
@@ -559,11 +561,11 @@ set(skia_gr_SRCS
     ${SKIA_SRC_PATH}/gpu/gl/GrGLVertexBuffer.cpp
     ${SKIA_SRC_PATH}/gpu/gl/GrGpuGL.cpp
     ${SKIA_SRC_PATH}/gpu/gl/GrGpuGL_program.cpp
-    ${SKIA_SRC_PATH}/gpu/gl/mesa/GrGLCreateMesaInterface.cpp
-    ${SKIA_SRC_PATH}/gpu/gl/mesa/SkMesaGLContext.cpp
-    ${SKIA_SRC_PATH}/gpu/gl/GrGLDefaultInterface_none.cpp
-    ${SKIA_SRC_PATH}/gpu/gl/GrGLCreateNativeInterface_none.cpp
-#     ${SKIA_SRC_PATH}/gpu/gl/android/GrGLCreateNativeInterface_android.cpp
+#     ${SKIA_SRC_PATH}/gpu/gl/mesa/GrGLCreateMesaInterface.cpp
+#     ${SKIA_SRC_PATH}/gpu/gl/mesa/SkMesaGLContext.cpp
+#     ${SKIA_SRC_PATH}/gpu/gl/GrGLDefaultInterface_none.cpp
+#     ${SKIA_SRC_PATH}/gpu/gl/GrGLCreateNativeInterface_none.cpp
+    ${SKIA_SRC_PATH}/gpu/gl/android/GrGLCreateNativeInterface_android.cpp
 #     ${SKIA_SRC_PATH}/gpu/gl/unix/GrGLCreateNativeInterface_unix.cpp
 #     ${SKIA_SRC_PATH}/gpu/gl/unix/SkNativeGLContext_unix.cpp
     )
@@ -578,7 +580,6 @@ target_compile_definitions(skia
     -DSK_USE_FREETYPE_EMBOLDEN
     -DSK_BUILD_FOR_ANDROID
     -DSK_BUILD_FOR_ANDROID_FRAMEWORK
-    -DSK_MESA
     #Android provides at least FreeType 2.4.0 at runtime.
     -DSK_FONTHOST_FREETYPE_RUNTIME_VERSION=0x020400
     #Skia should not use dlopen on Android.
@@ -587,5 +588,21 @@ target_compile_definitions(skia
 if(FORCE_32BIT_BUILD)
     set_target_properties(skia PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
-target_link_libraries(skia ${HARFBUZZ_LIBRARIES} ${HARFBUZZ_ICU_LIBRARIES} z ${FONTCONFIG_LIBRARIES} ${FREETYPE_LIBRARIES} ${JPEG_LIBRARIES} ${GIF_LIBRARIES} ${WEBP_LIBRARIES} ${OPENGL_LIBS} OSMesa skia_hack skia_hack2 ${PNG_LIBRARIES})
+target_link_libraries(skia
+    skia_hack
+    skia_hack2
+
+    z
+    ${HARFBUZZ_LIBRARIES}
+    ${HARFBUZZ_ICU_LIBRARIES}
+    ${FONTCONFIG_LIBRARIES}
+    ${FREETYPE_LIBRARIES}
+    ${JPEG_LIBRARIES}
+    ${GIF_LIBRARIES}
+    ${WEBP_LIBRARIES}
+    ${OPENGL_LIBS}
+    OSMesa
+    epoxy
+    ${PNG_LIBRARIES}
+    )
 install(TARGETS skia DESTINATION ${ANDROID_LIB_DIR})

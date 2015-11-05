@@ -450,11 +450,11 @@ int register_android_graphics_pdf_PdfDocument(_JNIEnv*)
 // {
 //     return 0;
 // }
-
-int register_android_os_SELinux(_JNIEnv*)
-{
-    return 0;
-}
+// 
+// int register_android_os_SELinux(_JNIEnv*)
+// {
+//     return 0;
+// }
 // 
 // int register_android_os_Trace(_JNIEnv*)
 // {

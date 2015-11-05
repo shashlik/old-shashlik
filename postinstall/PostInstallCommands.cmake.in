@@ -255,6 +255,14 @@ process_jar_to_apk(
     ${CMAKE_BINARY_DIR}/src/deps/javalibrary-settingsprovider/package-export.apk
     ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
 
+process_jar_to_apk(
+    SystemUI
+    ${CMAKE_BINARY_DIR}/src/deps/javalibrary-systemui
+    ${ANDROID_ROOT}/system/app
+    ${GENERAL_SOURCE_PATH}/android-frameworks-base/packages/SystemUI
+    ${CMAKE_BINARY_DIR}/src/deps/javalibrary-systemui/package-export.apk
+    ${CMAKE_BINARY_DIR}/android_jar_processing_intermediary)
+
 # target Dex: SettingsProvider
 # out/host/linux-x86/bin/dx -JXms16M -JXmx2048M --dex --output=out/target/common/obj/APPS/SettingsProvider_intermediates/noproguard.classes-with-local.dex     out/target/common/obj/APPS/SettingsProvider_intermediates/noproguard.classes.jar
 # Copying: out/target/common/obj/APPS/SettingsProvider_intermediates/noproguard.classes.dex
