@@ -2,6 +2,7 @@ project(gralloc-shashlik)
 
 set(gralloc_shashlik_SRCS
     bufferhandler.c
+    framebuffer.cpp
     gralloc.cpp
     mapper.cpp
 )
@@ -34,4 +35,4 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(gralloc.shashlik PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 
-install(TARGETS gralloc.shashlik DESTINATION ${ANDROID_LIB_DIR}/hw)
+# install(TARGETS gralloc.shashlik DESTINATION ${ANDROID_LIB_DIR}/hw)

@@ -30,8 +30,9 @@
 #include <linux/fb.h>
 
 /*****************************************************************************/
-
+namespace android {
 struct WaylandClient;
+}
 struct wl_shm_pool;
 struct wl_buffer;
 struct private_module_t;
@@ -46,7 +47,7 @@ struct private_module_t {
     uint32_t bufferMask;
     pthread_mutex_t lock;
     buffer_handle_t currentBuffer;
-    WaylandClient* waylandClient;
+    android::WaylandClient* waylandClient;
     int pmem_master;
     void* pmem_master_base;
 
