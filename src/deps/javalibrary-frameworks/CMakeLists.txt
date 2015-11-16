@@ -253,6 +253,10 @@ set(aidl_entries_to_handle
 # find -L frameworks-base/wifi/java -name "*.java" >> javafiles-for-corestuffthing
 # find -L frameworks-base/keystore/java -name "*.java" >> javafiles-for-corestuffthing
 set(javalibrary_frameworks_SRCS
+    # Additional Shashlik components
+    ${REPO_PATH}/core/java/android/view/WaylandWindow.java
+    ${REPO_PATH}/core/java/android/view/WaylandClient.java
+
     ${REPO_PATH}/core/java/android/accessibilityservice/AccessibilityService.java
     ${REPO_PATH}/core/java/android/accessibilityservice/AccessibilityServiceInfo.java
     ${REPO_PATH}/core/java/android/accounts/AbstractAccountAuthenticator.java
