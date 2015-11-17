@@ -21,11 +21,11 @@ wl_shell_surface_listener WaylandWindow::mShellSurfaceListener = {
 
 void WaylandWindow::init()
 {
-    mClient = WaylandClient::getInstance();
+//     mClient = WaylandClient::getInstance();
 //     mSurface = AndroidRuntime::getWaylandClient()->surface();//wl_compositor_create_surface(mClient->getCompositor());
-    mSurface = wl_compositor_create_surface(mClient->getCompositor());
+    mSurface = wl_compositor_create_surface(WaylandClient::getInstance().getCompositor());
 //     mShellSurface = AndroidRuntime::getWaylandClient()->shellSurface();// wl_shell_get_shell_surface(mClient->getShell(), mSurface);
-    mShellSurface = wl_shell_get_shell_surface(mClient->getShell(), mSurface);
+    mShellSurface = wl_shell_get_shell_surface(WaylandClient::getInstance().getShell(), mSurface);
 
     if (mShellSurface) {
         wl_shell_surface_add_listener(mShellSurface, &mShellSurfaceListener, this);
