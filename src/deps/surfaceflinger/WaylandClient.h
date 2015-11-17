@@ -20,9 +20,14 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef WAYLANDCLIENT_H
 #define WAYLANDCLIENT_H
 
+#define QT_NO_KEYWORDS
+
 // #include <QObject>
 #include <stdio.h>
 #include <assert.h>
+
+#include <utils/Singleton.h>
+
 // #include <EGL/egl.h>
 // #include <EGL/eglplatform.h>
 #include <epoxy/egl.h>
@@ -32,10 +37,13 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace android {
 
-class WaylandClient
+class WaylandClient : public Singleton<WaylandClient>
 {
 public:
-    static WaylandClient *getInstance();
+    WaylandClient (WaylandClient &) { assert(0); }
+    WaylandClient & operator = (const WaylandClient &) { assert(0); }
+    WaylandClient();
+//     static WaylandClient *getInstance();
     void connect();
     void disconnect();
 //     WaylandWindow* createWindow(int width, int height);
@@ -47,7 +55,7 @@ public:
     wl_shm* getShm();
 private:
     wl_event_queue *mEventQueue;
-    static WaylandClient *sInstance;
+//     static WaylandClient *sInstance;
 	wl_display *mDisplay;
 	wl_registry *mRegistry;
 	wl_compositor *mCompositor;
@@ -67,9 +75,6 @@ private:
     static wl_touch_listener mTouchListener;
 
 
-	WaylandClient (WaylandClient &) { assert(0); }
-    WaylandClient & operator = (const WaylandClient &) { assert(0); }
-	WaylandClient();
 
 
 	static void sHandleRegistry(void * data, wl_registry *registry,

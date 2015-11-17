@@ -9,7 +9,8 @@
 
 namespace android {
 
-WaylandClient *WaylandClient::sInstance = NULL;
+ANDROID_SINGLETON_STATIC_INSTANCE(WaylandClient);
+// WaylandClient *WaylandClient::sInstance = NULL;
 
 wl_registry_listener WaylandClient::mRegistryListener = {
     WaylandClient::sHandleRegistry,
@@ -49,14 +50,14 @@ WaylandClient::WaylandClient() : mDisplay(NULL), mRegistry(NULL),
 }
 
 
-WaylandClient *WaylandClient::getInstance()
-{
-    if (sInstance == NULL ) {
-        sInstance = new WaylandClient();
-    }
-
-    return sInstance;
-}
+// WaylandClient *WaylandClient::getInstance()
+// {
+//     if (sInstance == NULL ) {
+//         sInstance = new WaylandClient();
+//     }
+// 
+//     return sInstance;
+// }
 
 wl_compositor* WaylandClient::getCompositor()
 {
