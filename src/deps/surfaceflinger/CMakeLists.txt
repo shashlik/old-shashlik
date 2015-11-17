@@ -13,6 +13,7 @@ add_definitions(-fvisibility=hidden -fpermissive -fPIC)
 
 set(waylandthings_SRCS
     WaylandClient.cpp
+    WaylandWindow.cpp
 )
 
 set(libsurfaceflinger_SRCS
@@ -55,6 +56,7 @@ set(surfaceflinger_SRCS
 add_library(waylandthings STATIC ${waylandthings_SRCS})
 
 target_link_libraries(waylandthings
+    log
     KF5WaylandClient
     ${Wayland_LIBRARIES}
 )
@@ -67,6 +69,7 @@ target_compile_definitions(waylandthings
 target_include_directories(waylandthings
     PRIVATE
     ${CMAKE_CURRENT_SRC_DIR}
+    ${LIBLOG_INCLUDES}
     PUBLIC
     ${OPENGL_INCLUDES}
     /usr/include/KF5

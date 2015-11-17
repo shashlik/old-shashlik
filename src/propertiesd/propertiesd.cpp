@@ -189,7 +189,7 @@ void Propertiesd::initProperties()
     writeProperty(QString::fromLatin1("ro.product.device"), QString::fromLatin1("generic"));
     writeProperty(QString::fromLatin1("ro.build.product"), QString::fromLatin1("generic"));
 
-    writeProperty(QString::fromLatin1("ro.kernel.qemu"), QString::fromLatin1("1"));
+    writeProperty(QString::fromLatin1("ro.kernel.qemu"), QString::fromLatin1("0"));
     writeProperty(QString::fromLatin1("ro.kernel.android.checkjni"), QString::fromLatin1("1"));
     writeProperty(QString::fromLatin1("ro.secure"), QString::fromLatin1("0"));
     writeProperty(QString::fromLatin1("ro.debuggable"), QString::fromLatin1("0"));
@@ -240,8 +240,8 @@ void Propertiesd::initProperties()
     writeProperty(QString::fromLatin1("ro.sf.lcd_density"), QString::fromLatin1("200"));
 
     writeProperty(QString::fromLatin1("system_init.startsensorservice"), QString::fromLatin1("1"));
-    writeProperty(QString::fromLatin1("sys.shutdown.requested"), QString::fromLatin1("1"));
-    writeProperty(QString::fromLatin1("config.disable_systemui"), QString::fromLatin1("1"));
+    writeProperty(QString::fromLatin1("sys.shutdown.requested"), QString::fromLatin1("0"));
+    writeProperty(QString::fromLatin1("config.disable_systemui"), QString::fromLatin1("0"));
 
     writeProperty(QString::fromLatin1("config.disable_storage"), QString::fromLatin1("1"));
     writeProperty(QString::fromLatin1("config.disable_media"), QString::fromLatin1("1"));

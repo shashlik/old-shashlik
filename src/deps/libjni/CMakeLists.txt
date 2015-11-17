@@ -11,6 +11,7 @@ add_definitions(-DHAVE_ANDROID_OS   # To make cutils/trace work.  FIXME: Check w
                 -fpermissive  # FIXME: for pointer to int conversion in printf on x86_64
 
                 -DHAVE_CONFIG_H -DKHTML_NO_EXCEPTIONS -DGKWQ_NO_JAVA -DUSE_OPENGL_RENDERER
+                -DHAVE_OOM_ADJ # Well... we do!
                 -DNO_SUPPORT_JS_BINDING -DQT_NO_WHEELEVENT -DKHTML_NO_XBL
 #                 -U__APPLE__
                 -DPACKED=""
@@ -46,44 +47,45 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 set(GENTROID_DIR ${GENERAL_SOURCE_PATH}/gentroid-frameworks-base)
 
 set(libjni_SRCS
-    ${GENTROID_DIR}/core/jni/WaylandClient.cpp
+#     ${GENTROID_DIR}/core/jni/WaylandClient.cpp
 #     ${GENTROID_DIR}/core/jni/com_google_android_gles_jni_EGLImpl.cpp
-    ${GENTROID_DIR}/core/jni/com_google_android_gles_jni_GLImpl.cpp
-    ${GENTROID_DIR}/core/jni/android_app_NativeActivity.cpp
-    ${GENTROID_DIR}/core/jni/android_opengl_EGL14.cpp
-    ${GENTROID_DIR}/core/jni/android_opengl_EGLExt.cpp
-    ${GENTROID_DIR}/core/jni/android_opengl_GLES20.cpp
-    ${GENTROID_DIR}/core/jni/android_opengl_GLES30.cpp
-    ${GENTROID_DIR}/core/jni/android_view_Wayland.cpp
-    ${GENTROID_DIR}/core/jni/android_view_DisplayEventReceiver.cpp
-    ${GENTROID_DIR}/core/jni/android_view_HardwareRenderer.cpp
-    ${GENTROID_DIR}/core/jni/android_view_GLES20DisplayList.cpp
+#     ${GENTROID_DIR}/core/jni/com_google_android_gles_jni_GLImpl.cpp
+#     ${GENTROID_DIR}/core/jni/android_app_NativeActivity.cpp
+#     ${GENTROID_DIR}/core/jni/android_opengl_EGL14.cpp
+#     ${GENTROID_DIR}/core/jni/android_opengl_EGLExt.cpp
+#     ${GENTROID_DIR}/core/jni/android_opengl_GLES20.cpp
+#     ${GENTROID_DIR}/core/jni/android_opengl_GLES30.cpp
+#     ${GENTROID_DIR}/core/jni/android_view_Wayland.cpp
+#     ${GENTROID_DIR}/core/jni/android_view_DisplayEventReceiver.cpp
+#     ${GENTROID_DIR}/core/jni/android_view_HardwareRenderer.cpp
+#     ${GENTROID_DIR}/core/jni/android_view_GLES20DisplayList.cpp
 #     ${GENTROID_DIR}/core/jni/android_view_GLES20Canvas.cpp
 #     ${GENTROID_DIR}/core/jni/android/opengl/poly_clip.cpp
 #     ${GENTROID_DIR}/core/jni/android/opengl/util.cpp
 
 
+    ${CMAKE_CURRENT_SOURCE_DIR}/android_view_Wayland.cpp
     ${JNI_SOURCE_DIR}/AndroidRuntime.cpp
     ${JNI_SOURCE_DIR}/Time.cpp
     ${JNI_SOURCE_DIR}/com_android_internal_content_NativeLibraryHelper.cpp
     ${JNI_SOURCE_DIR}/com_google_android_gles_jni_EGLImpl.cpp
-#     ${JNI_SOURCE_DIR}/com_google_android_gles_jni_GLImpl.cpp
-#     ${JNI_SOURCE_DIR}/android_app_NativeActivity.cpp
-#     ${JNI_SOURCE_DIR}/android_opengl_EGL14.cpp
-#     ${JNI_SOURCE_DIR}/android_opengl_EGLExt.cpp
+    ${JNI_SOURCE_DIR}/com_google_android_gles_jni_GLImpl.cpp
+    ${JNI_SOURCE_DIR}/android_app_NativeActivity.cpp
+    ${JNI_SOURCE_DIR}/android_opengl_EGL14.cpp
+    ${JNI_SOURCE_DIR}/android_opengl_EGLExt.cpp
     ${JNI_SOURCE_DIR}/android_opengl_GLES10.cpp
     ${JNI_SOURCE_DIR}/android_opengl_GLES10Ext.cpp
     ${JNI_SOURCE_DIR}/android_opengl_GLES11.cpp
     ${JNI_SOURCE_DIR}/android_opengl_GLES11Ext.cpp
-#     ${JNI_SOURCE_DIR}/android_opengl_GLES20.cpp
-#     ${JNI_SOURCE_DIR}/android_opengl_GLES30.cpp
+    ${JNI_SOURCE_DIR}/android_opengl_GLES20.cpp
+    ${JNI_SOURCE_DIR}/android_opengl_GLES30.cpp
     ${JNI_SOURCE_DIR}/android_database_CursorWindow.cpp
     ${JNI_SOURCE_DIR}/android_database_SQLiteCommon.cpp
     ${JNI_SOURCE_DIR}/android_database_SQLiteConnection.cpp
     ${JNI_SOURCE_DIR}/android_database_SQLiteGlobal.cpp
     ${JNI_SOURCE_DIR}/android_database_SQLiteDebug.cpp
     ${JNI_SOURCE_DIR}/android_emoji_EmojiFactory.cpp
-#     ${JNI_SOURCE_DIR}/android_view_DisplayEventReceiver.cpp
+    ${JNI_SOURCE_DIR}/android_view_DisplayEventReceiver.cpp
     ${JNI_SOURCE_DIR}/android_view_Surface.cpp
     ${JNI_SOURCE_DIR}/android_view_SurfaceControl.cpp
     ${JNI_SOURCE_DIR}/android_view_SurfaceSession.cpp
@@ -95,9 +97,9 @@ set(libjni_SRCS
     ${JNI_SOURCE_DIR}/android_view_InputQueue.cpp
     ${JNI_SOURCE_DIR}/android_view_KeyEvent.cpp
     ${JNI_SOURCE_DIR}/android_view_KeyCharacterMap.cpp
-#     ${JNI_SOURCE_DIR}/android_view_HardwareRenderer.cpp
+    ${JNI_SOURCE_DIR}/android_view_HardwareRenderer.cpp
     ${JNI_SOURCE_DIR}/android_view_GraphicBuffer.cpp
-#     ${JNI_SOURCE_DIR}/android_view_GLES20DisplayList.cpp
+    ${JNI_SOURCE_DIR}/android_view_GLES20DisplayList.cpp
     ${JNI_SOURCE_DIR}/android_view_GLES20Canvas.cpp
     ${JNI_SOURCE_DIR}/android_view_MotionEvent.cpp
     ${JNI_SOURCE_DIR}/android_view_PointerIcon.cpp

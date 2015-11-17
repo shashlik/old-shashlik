@@ -63,8 +63,8 @@ static void setArgv0(const char *argv0, const char *newArgv0)
 
 int main(int argc, char* argv[])
 {
-    InputArgs args = {argc, argv};
-    StartAppThread(args);
+//     InputArgs args = {argc, argv};
+//     StartAppThread(args);
 #ifdef __arm__
     /*
      * b/7188322 - Temporarily revert to the compat memory layout
@@ -102,9 +102,9 @@ int main(int argc, char* argv[])
 //     }
 //     mArgLen--;
 
-    while(!qApp) {
-        sleep(1);
-    }
+//     while(!qApp) {
+//         sleep(1);
+//     }
     AppRuntime runtime;
     const char* argv0 = argv[0];
 

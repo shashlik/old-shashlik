@@ -36,7 +36,7 @@ if(FORCE_32BIT_BUILD)
     set_target_properties(gui PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(FORCE_32BIT_BUILD)
 target_link_libraries(gui
-    GLESv2 EGL GLESv1_CM ${DRM_LIBRARIES} ui binder  hwui
+    GLESv2 EGL GLESv1_CM ${DRM_LIBRARIES} ui binder  hwui epoxy
 )
 target_compile_definitions(gui
     PRIVATE
