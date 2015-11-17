@@ -41,6 +41,7 @@
 #include <utils/Log.h>
 
 #include "WaylandWindow.h"
+#include "WaylandClient.h"
 
 // ----------------------------------------------------------------------------
 
@@ -73,27 +74,35 @@ static jlong nativeCreateWindow(JNIEnv* env, jclass clazz, jint width, jint heig
     return (jlong)window;
 }
 
+static void nativeClearInstance(JNIEnv* env, jclass clazz)
+{
+    ALOGE("Clearing WaylandClient instance %p in %d", &WaylandClient::getInstance(), getpid());
+    WaylandClient::clearInstance();
+}
+
 static void nativeConnect(JNIEnv* env, jclass clazz)
 {
-    WaylandClient *client = WaylandClient::getInstance();
-    client->connect();
+    ALOGE("Connecting up the WaylandClient instance %p in %d", &WaylandClient::getInstance(), getpid());
+//     WaylandClient *client = WaylandClient::getInstance();
+    WaylandClient::getInstance().connect();
 }
 
 static jint nativeDispatch(JNIEnv* env, jclass clazz)
 {
-    WaylandClient *client = WaylandClient::getInstance();
-    return wl_display_dispatch(client->getDisplay());
+//     WaylandClient *client = WaylandClient::getInstance();
+    return wl_display_dispatch(WaylandClient::getInstance().getDisplay());
 }
 
 static jlong nativeEGLDisplay(JNIEnv* env, jclass clazz)
 {
-    return (jlong)WaylandClient::getInstance()->getDisplay();
+    return (jlong)WaylandClient::getInstance().getDisplay();
 }
 
 // ----------------------------------------------------------------------------
 
 static JNINativeMethod gWaylandMethods[] = {
         {"nativeCreateWindow", "(II)J", (void*)nativeCreateWindow },
+        {"nativeClearInstance", "()V", (void*)nativeClearInstance },
         {"nativeConnect", "()V", (void*)nativeConnect },
         {"nativeDispatch", "()I", (void*)nativeDispatch },
         {"nativeEGLDisplay", "()J", (void*)nativeEGLDisplay }
