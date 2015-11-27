@@ -15,6 +15,7 @@ find_path(QT5GUI32_INCLUDE_DIR NAMES QtGuiVersion
     /usr/include
     /usr/include/QtGui
     /usr/include/qt5/QtGui
+    /usr/include/qt/QtGui
     )
 find_path(QT5GUI32_BASE_INCLUDE_DIR NAMES QtGui/QtGuiVersion
     PATHS
@@ -23,6 +24,7 @@ find_path(QT5GUI32_BASE_INCLUDE_DIR NAMES QtGui/QtGuiVersion
     ${KDE4_INCLUDE_DIR}
     /usr/include
     /usr/include/qt5
+    /usr/include/qt
     )
 find_library(QT5GUI32_LIBRARIES NAMES Qt5Gui libQt5Gui PATHS /usr/lib /usr/lib/i386-linux-gnu/)
 SET(QT5GUI32_INCLUDE_DIRS "${QT5GUI32_INCLUDE_DIR};${QT5GUI32_BASE_INCLUDE_DIR}")
