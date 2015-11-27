@@ -15,6 +15,7 @@ find_path(QT5X11EXTRAS32_INCLUDE_DIR NAMES QtX11ExtrasVersion
     /usr/include
     /usr/include/QtX11Extras
     /usr/include/qt5/QtX11Extras
+    /usr/include/qt/QtX11Extras
     )
 find_path(QT5X11EXTRAS32_BASE_INCLUDE_DIR NAMES QtX11Extras/QtX11ExtrasVersion
     PATHS
@@ -23,6 +24,7 @@ find_path(QT5X11EXTRAS32_BASE_INCLUDE_DIR NAMES QtX11Extras/QtX11ExtrasVersion
     ${KDE4_INCLUDE_DIR}
     /usr/include
     /usr/include/qt5
+    /usr/include/qt
     )
 find_library(QT5X11EXTRAS32_LIBRARIES NAMES Qt5X11Extras libQt5X11Extras libQt5X11Extras.so.5 PATHS /usr/lib /usr/lib/i386-linux-gnu/)
 SET(QT5X11EXTRAS32_INCLUDE_DIRS "${QT5X11EXTRAS32_INCLUDE_DIR};${QT5X11EXTRAS32_BASE_INCLUDE_DIR}")
