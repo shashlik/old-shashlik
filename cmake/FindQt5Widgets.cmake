@@ -15,6 +15,7 @@ find_path(QT5WIDGETS32_INCLUDE_DIR NAMES QtWidgetsVersion
     /usr/include
     /usr/include/QtWidgets
     /usr/include/qt5/QtWidgets
+    /usr/include/qt/QtWidgets
     )
 find_path(QT5WIDGETS32_BASE_INCLUDE_DIR NAMES QtWidgets/QtWidgetsVersion
     PATHS
@@ -23,6 +24,7 @@ find_path(QT5WIDGETS32_BASE_INCLUDE_DIR NAMES QtWidgets/QtWidgetsVersion
     ${KDE4_INCLUDE_DIR}
     /usr/include
     /usr/include/qt5
+    /usr/include/qt
     )
 find_library(QT5WIDGETS32_LIBRARIES NAMES Qt5Widgets libQt5Widgets PATHS /usr/lib /usr/lib/i386-linux-gnu/)
 SET(QT5WIDGETS32_INCLUDE_DIRS "${QT5WIDGETS32_INCLUDE_DIR};${QT5WIDGETS32_BASE_INCLUDE_DIR}")
