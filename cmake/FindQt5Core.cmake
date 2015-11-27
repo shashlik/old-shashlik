@@ -16,6 +16,7 @@ find_path(QT5CORE32_INCLUDE_DIR NAMES QtCoreVersion
     /usr/include/qt5/QtCore
     /usr/include
     /usr/include/QtCore
+    /usr/include/qt/QtCore
     )
 find_path(QT5CORE32_BASE_INCLUDE_DIR NAMES QtCore/QtCoreVersion
     PATHS
@@ -25,6 +26,7 @@ find_path(QT5CORE32_BASE_INCLUDE_DIR NAMES QtCore/QtCoreVersion
     ${KDE4_INCLUDE_DIR}
     /usr/include/qt5
     /usr/include
+    /usr/include/qt
     )
 find_library(QT5CORE32_LIBRARIES NAMES Qt5Core libQt5Core PATHS /usr/lib /usr/lib/i386-linux-gnu/)
 SET(QT5CORE32_INCLUDE_DIRS "${QT5CORE32_INCLUDE_DIR};${QT5CORE32_BASE_INCLUDE_DIR}")
